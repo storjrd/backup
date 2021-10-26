@@ -8,7 +8,9 @@
 		"serve": "vue-cli-service serve",
 		"build": "vue-cli-service build",
 		"start": "electron .",
-		"test": "echo \"Error: no test specified\" && exit 1"
+		"test": "echo \"Error: no test specified\" && exit 1",
+		"pack": "electron-builder --dir",
+		"dist": "electron-builder -wl"
 	},
 	"main": "index.js",
 	"dependencies": {
@@ -29,8 +31,18 @@
 		"@vue/cli-service": "~4.5.0",
 		"@vue/compiler-sfc": "^3.0.0",
 		"electron": "^15.3.0",
+		"electron-builder": "^22.13.1",
 		"prettier": "^2.4.1",
 		"typescript": "~4.1.5"
+	},
+	"build": {
+		"appId": "storjrd.backup",
+		"directories": {
+			"output": "bin"
+		},
+		"mac": {
+			"category": "storjrd.backup.category.type"
+		}
 	},
 	"browserslist": [
 		"> 1%",
