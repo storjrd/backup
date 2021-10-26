@@ -1,14 +1,18 @@
 const { app, BrowserWindow } = require("electron");
+const serve = require("electron-serve");
 
-function createWindow() {
-	const win = new BrowserWindow({
-		width: 800,
-		height: 600
-	});
+const loadURL = serve({directory: 'dist'});
 
-	win.loadFile("dist/index.html");
-}
+let mainWindow;
 
-app.whenReady().then(() => {
-	createWindow();
-});
+(async () => {
+	await app.whenReady();
+
+	mainWindow = new BrowserWindow();
+
+	await loadURL(mainWindow);
+
+	// The above is equivalent to this:
+	await mainWindow.loadURL('app://-');
+	// The `-` is just the required hostname
+})();
