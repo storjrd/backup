@@ -12,6 +12,8 @@
 	},
 	"main": "index.js",
 	"dependencies": {
+		"@tailwindcss/aspect-ratio": "^0.3.0",
+		"@tailwindcss/forms": "^0.3.4",
 		"autoprefixer": "^9.8.8",
 		"electron-serve": "^1.1.0",
 		"postcss": "^7.0.39",
