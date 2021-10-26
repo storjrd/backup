@@ -2,4 +2,4 @@ default:
 	npm run build; npm start
 
 prettier:
-	npx prettier --write .
+	npx prettier --write . !dist
