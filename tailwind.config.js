@@ -4,7 +4,7 @@ module.exports = {
 	theme: {
 		extend: {
 			colors: {
-				storjBlue: "#0149FF",
+				storjBlue: "#0149FF"
 			}
 		}
 	},
