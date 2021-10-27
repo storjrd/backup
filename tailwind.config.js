@@ -2,13 +2,16 @@ module.exports = {
 	purge: [],
 	darkMode: false, // or 'media' or 'class'
 	theme: {
-		extend: {}
+		extend: {
+			colors: {
+				storjBlue: "#0149FF",
+			}
+		}
 	},
 	variants: {
 		extend: {}
 	},
 	plugins: [
-		require("@tailwindcss/aspect-ratio"),
 		require("@tailwindcss/forms")
 	]
 };
