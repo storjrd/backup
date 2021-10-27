@@ -10,11 +10,11 @@ let mainWindow;
 
 	mainWindow = new BrowserWindow({
 		width: 700,
-    height: 500,
-    minWidth: 700,
-    minHeight: 500,
-    maxWidth: 700,
-    maxHeight: 500,
+		height: 500,
+		minWidth: 700,
+		minHeight: 500,
+		maxWidth: 700,
+		maxHeight: 500
 	});
 
 	await loadURL(mainWindow);
