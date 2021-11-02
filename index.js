@@ -1,3 +1,4 @@
+const net = require("net");
 const { app, BrowserWindow } = require("electron");
 const serve = require("electron-serve");
 
@@ -17,9 +18,38 @@ let mainWindow;
 		maxHeight: 500
 	});
 
-	await loadURL(mainWindow);
+	if (process.env.STORJ_BACKUP_DEV !== "true") {
+		// load from directory
+		await loadURL(mainWindow);
 
-	// The above is equivalent to this:
-	await mainWindow.loadURL("app://-");
-	// The `-` is just the required hostname
+		await mainWindow.loadURL("app://-");
+	} else {
+		const vueServePort = 8080;
+
+		// wait for dev server to start
+		for (;;) {
+			const ready = await new Promise((resolve) => {
+				const socket = net.createConnection({
+					port: vueServePort
+				});
+
+				socket.on("connect", () => {
+					resolve(true);
+				});
+
+				socket.on("error", () => {
+					resolve(false);
+				});
+			});
+
+			if (ready === true) {
+				break;
+			}
+
+			await new Promise((resolve) => setTimeout(resolve, 500));
+		}
+
+		// load from vue serve
+		mainWindow.loadURL(`http://127.0.0.1:${vueServePort}`);
+	}
 })();
