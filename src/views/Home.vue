@@ -1,14 +1,9 @@
 <template>
-	<div class="grid grid-cols-2 bg-white m-auto overflow-hidden">
-		<div>
-			<div class="p-5">
-				<img class="h-auto w-3/5" src="@/assets/logo.svg" />
-			</div>
-			<div class="mt-20 mr-10">
-				<img class="w-auto h-auto" src="@/assets/artifacts.svg" />
-			</div>
+	<div class="grid grid-cols-2 mt-20">
+		<div class="mt-8 mr-10">
+			<img class="w-auto h-auto" src="@/assets/artifacts.svg" />
 		</div>
-		<div class="mt-20">
+		<div>
 			<div class="space-y-1 mb-4">
 				<h1 class="font-bold text-lg">{{ headerText }}</h1>
 				<p class="text-sm">
@@ -20,8 +15,8 @@
 					>
 				</p>
 			</div>
-			<div class="space-y-5 max-w-lg">
-				<div class="mr-14">
+			<div class="space-y-5 max-w-lg mr-14">
+				<div>
 					<label
 						for="email"
 						class="block text-sm font-medium text-gray-700"
@@ -46,7 +41,7 @@
 						/>
 					</div>
 				</div>
-				<div class="mr-14">
+				<div>
 					<label
 						for="password"
 						class="block text-sm font-medium text-gray-700"
@@ -108,49 +103,49 @@ export default defineComponent({
 		password: ""
 	}),
 	computed: {
-		signInView() {
+		signInView(): boolean {
 			return this.view === "SIGN_IN";
 		},
 
-		signUpView() {
+		signUpView(): boolean {
 			return this.view === "SIGN_UP";
 		},
 
-		headerText() {
+		headerText(): string {
 			if (this.signInView) {
 				return "Create account";
-			} else if (this.signUpView) {
+			} else {
 				return "Sign in";
 			}
 		},
 
-		subheadingText() {
+		subheadingText(): string {
 			if (this.signInView) {
 				return "sign in";
-			} else if (this.signUpView) {
+			} else {
 				return "create your account";
 			}
 		},
 
-		buttonText() {
+		buttonText(): string {
 			if (this.signInView) {
 				return "Create my account";
-			} else if (this.signUpView) {
+			} else {
 				return "Sign in";
 			}
 		}
 	},
 	methods: {
-		toggleView() {
+		toggleView(): void {
 			if (this.signInView) {
 				this.view = "SIGN_UP";
-			} else if (this.signUpView) {
+			} else {
 				this.view = "SIGN_IN";
 			}
 		},
 
-		buttonClick() {
-			console.log("Submitted");
+		buttonClick(): void {
+			this.$router.push("/app");
 		}
 	}
 });
