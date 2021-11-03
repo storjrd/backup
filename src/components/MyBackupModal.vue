@@ -4,19 +4,26 @@
 			<div class="">
 				<div v-if="backupNameInputOpen">
 					<div class="mb-2 flex space-x-2">
-						<input type="text" name="backupName" id="backupName" v-model="temporaryBackupName" :class="backupNameInputClass" :placeholder="backupName" />
+						<input
+							type="text"
+							name="backupName"
+							id="backupName"
+							v-model="temporaryBackupName"
+							:class="backupNameInputClass"
+							:placeholder="backupName"
+						/>
 						<div
 							v-on:click="saveBackupNameChange"
 							class="
-							bg-green-100
-							p-1
-							rounded-full
-							w-5
-							h-5
-							flex
-							self-center
-							cursor-pointer
-						"
+								bg-green-100
+								p-1
+								rounded-full
+								w-5
+								h-5
+								flex
+								self-center
+								cursor-pointer
+							"
 						>
 							<CheckIcon class="w-3 h-3 text-green-700" />
 						</div>
@@ -38,7 +45,9 @@
 					</div>
 				</div>
 				<div v-else class="flex space-x-2">
-					<h1 class="text-left font-bold text-xl">{{ backupName }}</h1>
+					<h1 class="text-left font-bold text-xl">
+						{{ backupName }}
+					</h1>
 					<div
 						v-on:click="changeBackupName"
 						class="
@@ -90,7 +99,9 @@
 								Delete
 							</p>
 						</div>
-						<p class="text-left">{{ folderUploadMetaData(folder) }}</p>
+						<p class="text-left">
+							{{ folderUploadMetaData(folder) }}
+						</p>
 					</div>
 					<div
 						v-if="!foldersExist"
@@ -149,21 +160,55 @@
 				</div>
 			</div>
 			<div v-else>
-				<p class="mt-2 text-left">Select how frequent you want Storj to sync folders:
+				<p class="mt-2 text-left">
+					Select how frequent you want Storj to sync folders:
 				</p>
 				<div class="w-1/2">
-					<select id="location" name="location" class="mt-1 block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-storjBlue focus:border-storjBluesm:text-sm rounded-md" v-model=selectedFrequency>
-						<option v-for="frequency in
-						frequencyOptions">{{ frequency }}</option>
+					<select
+						id="location"
+						name="location"
+						class="
+							mt-1
+							block
+							w-full
+							pl-3
+							pr-10
+							py-2
+							text-base
+							border-gray-300
+							focus:outline-none
+							focus:ring-storjBlue
+							focus:border-storjBluesm:text-sm
+							rounded-md
+						"
+						v-model="selectedFrequency"
+					>
+						<option v-for="frequency in frequencyOptions">
+							{{ frequency }}
+						</option>
 					</select>
 				</div>
 				<div class="flex justify-between mt-6">
-					<p class="text-left">Create a passphrase to encrypt it:
-					</p>
+					<p class="text-left">Create a passphrase to encrypt it:</p>
 					<p class="text-sm text-gray-300">(optional)</p>
 				</div>
 				<div class="mt-1 h-24">
-					<input type="text" name="passphrase" id="passphrase" class="shadow-sm focus:ring-storjBlue focus:border-storjBlue block w-full sm:text-sm border-gray-300 rounded-md placeholder-gray-300" placeholder="Ex: secureP4ssphrase678#" />
+					<input
+						type="text"
+						name="passphrase"
+						id="passphrase"
+						class="
+							shadow-sm
+							focus:ring-storjBlue focus:border-storjBlue
+							block
+							w-full
+							sm:text-sm
+							border-gray-300
+							rounded-md
+							placeholder-gray-300
+						"
+						placeholder="Ex: secureP4ssphrase678#"
+					/>
 				</div>
 			</div>
 			<div class="flex justify-start space-x-2 mt-2">
@@ -242,7 +287,7 @@
 <script lang="ts">
 import { defineComponent } from "vue";
 import prettyBytes from "pretty-bytes";
-import { CheckIcon, XIcon } from '@heroicons/vue/solid'
+import { CheckIcon, XIcon } from "@heroicons/vue/solid";
 
 interface IMediaTypes {
 	photosOrVideos: number;
@@ -305,7 +350,9 @@ export default defineComponent({
 		},
 
 		backupNameInputClass(): string {
-			return this.validBackupName ? "shadow-sm focus:ring-storjBlue focus:border-storjBlue block sm:text-sm border-gray-300 rounded-md w-1/3" : "shadow-sm focus:ring-red-400 focus:border-red-400 ring-red-400 border-red-400 block sm:text-sm border-gray-300 rounded-md w-1/3";
+			return this.validBackupName
+				? "shadow-sm focus:ring-storjBlue focus:border-storjBlue block sm:text-sm border-gray-300 rounded-md w-1/3"
+				: "shadow-sm focus:ring-red-400 focus:border-red-400 ring-red-400 border-red-400 block sm:text-sm border-gray-300 rounded-md w-1/3";
 		}
 	},
 	methods: {
@@ -539,7 +586,7 @@ export default defineComponent({
 
 		deleteFolder(folderName: string): void {
 			delete (this.folders as any)[folderName];
-		},
+		}
 	}
 });
 </script>
