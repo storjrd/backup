@@ -194,6 +194,7 @@
 				</div>
 				<div class="mt-1 h-24">
 					<input
+						v-model="passphrase"
 						type="text"
 						name="passphrase"
 						id="passphrase"
@@ -322,7 +323,8 @@ export default defineComponent({
 			"Quarterly",
 			"Yearly"
 		],
-		selectedFrequency: "Daily"
+		selectedFrequency: "Daily",
+		passphrase: ""
 	}),
 	computed: {
 		foldersArr(): string[] {
