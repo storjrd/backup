@@ -150,6 +150,10 @@
 							<div class="flex justify-between">
 								<p class="text-left">
 									{{ backupMetadata(backup) }}
+
+									<br />
+
+									<i>{{ backup.hostname }}</i>
 								</p>
 								<p
 									class="
@@ -263,7 +267,14 @@ import {
 interface IBackup {
 	name: string;
 	progress: number;
-	size: number;
+	// size: number;
+	hostname: string;
+}
+
+interface Snapshot {
+	hostname: string;
+	time: string;
+	paths: string[];
 }
 
 export default defineComponent({
@@ -281,12 +292,23 @@ export default defineComponent({
 		modalOpen: false
 	}),
 	computed: {
+		// snapshots from restic
+		snapshots(): Snapshot[] {
+			// @ts-ignore
+			const snapshots = this.$store.state.snapshots;
+
+			return snapshots as Snapshot[];
+		},
+
 		// retrieve the backups from the store
 		backups(): IBackup[] {
-			return [
-				{ name: "My Backup", progress: 40, size: 380901 },
-				{ name: "Family videos", progress: 100, size: 1050901 }
-			];
+			return this.snapshots.map(
+				(snapshot: Snapshot): IBackup => ({
+					name: snapshot.paths.join(", "),
+					progress: 100,
+					hostname: snapshot.hostname
+				})
+			);
 		},
 
 		// where we would check if the user has created any backups
@@ -323,9 +345,7 @@ export default defineComponent({
 		},
 
 		backupMetadata(backup: IBackup): string {
-			return `${
-				backup.progress === 100 ? "Synced" : "Syncing"
-			} ${prettyBytes(backup.size)}`;
+			return `${backup.progress === 100 ? "Synced" : "Syncing"}`;
 		}
 	}
 });
