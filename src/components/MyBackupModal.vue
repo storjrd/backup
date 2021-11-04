@@ -86,7 +86,7 @@
 									class="w-5 h-5 fill-current text-black mr-2"
 									src="@/assets/folderIcon.svg"
 								/>
-								<p class="text-xl">{{ folder }}</p>
+								<p class="text-lg">{{ folder }}</p>
 							</div>
 							<p
 								class="
@@ -151,9 +151,8 @@
 							focus:outline-none focus:ring-2 focus:ring-offset-2
 						"
 					>
-						<img
-							src="@/assets/addIcon.svg"
-							class="w-5 h-5 mr-2 font-bold"
+						<PlusCircleIcon
+							class="w-5 h-5 mr-2 font-bold text-gray-500"
 						/>
 						Add folder
 					</button>
@@ -289,6 +288,7 @@
 import { defineComponent } from "vue";
 import prettyBytes from "pretty-bytes";
 import { CheckIcon, XIcon } from "@heroicons/vue/solid";
+import { PlusCircleIcon } from "@heroicons/vue/outline";
 
 interface IMediaTypes {
 	photosOrVideos: number;
@@ -307,7 +307,8 @@ export default defineComponent({
 	props: ["modalOpen"],
 	components: {
 		CheckIcon,
-		XIcon
+		XIcon,
+		PlusCircleIcon
 	},
 	data: () => ({
 		backupName: "My Backup",
