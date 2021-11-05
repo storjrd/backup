@@ -1,6 +1,8 @@
 import { createRouter, createWebHashHistory, RouteRecordRaw } from "vue-router";
 import Home from "../views/Home.vue";
 import Dashboard from "../views/Dashboard.vue";
+import Backups from "../components/Backups.vue";
+import Settings from "../components/Settings.vue";
 
 const routes: Array<RouteRecordRaw> = [
 	{
@@ -11,7 +13,19 @@ const routes: Array<RouteRecordRaw> = [
 	{
 		path: "/app",
 		name: "Dashboard",
-		component: Dashboard
+		component: Dashboard,
+		children: [
+			{
+				name: "Backups",
+				path: "backups",
+				component: Backups
+			},
+			{
+				name: "Settings",
+				path: "settings",
+				component: Settings
+			}
+		]
 	}
 ];
 

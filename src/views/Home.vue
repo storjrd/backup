@@ -145,7 +145,7 @@ export default defineComponent({
 		},
 
 		buttonClick(): void {
-			this.$router.push("/app");
+			this.$router.push("/app/backups");
 		}
 	}
 });
