@@ -1,12 +1,35 @@
+const os = require("os");
 const net = require("net");
-const { app, BrowserWindow } = require("electron");
+const { app, BrowserWindow, ipcMain } = require("electron");
 const serve = require("electron-serve");
+const createRestic = require("./lib/createRestic");
 
 const loadURL = serve({ directory: "dist" });
 
 let mainWindow;
 
 (async () => {
+	const restic = createRestic({
+		repository: `${os.homedir()}/storj-backup-test`,
+		password: "a"
+	});
+
+	try {
+		await restic.init();
+	} catch (err) {
+		console.warn(err);
+	}
+
+	ipcMain.handle("snapshots", async () => restic.snapshots());
+
+	ipcMain.handle("backup", async (dir) => {
+		for await (const event of restic.backup(dir)) {
+			ipcMain.send("backup-status", event);
+		}
+	});
+
+	console.log("ready");
+
 	await app.whenReady();
 
 	mainWindow = new BrowserWindow({
@@ -15,7 +38,11 @@ let mainWindow;
 		minWidth: 700,
 		minHeight: 500,
 		maxWidth: 700,
-		maxHeight: 500
+		maxHeight: 500,
+		webPreferences: {
+			nodeIntegration: false,
+			preload: `${__dirname}/preload.js`
+		}
 	});
 
 	if (process.env.STORJ_BACKUP_DEV !== "true") {
@@ -51,5 +78,6 @@ let mainWindow;
 
 		// load from vue serve
 		mainWindow.loadURL(`http://127.0.0.1:${vueServePort}`);
+		mainWindow.webContents.openDevTools();
 	}
 })();
