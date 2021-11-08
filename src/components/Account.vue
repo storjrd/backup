@@ -1,5 +1,5 @@
 <template>
-  <div class="p-8">
+	<div class="p-8">
 		<div class="flex items-center space-x-2">
 			<ArrowLeftIcon
 				class="w-4 h-4 cursor-pointer"
@@ -13,16 +13,31 @@
 				<div class="flex items-center">
 					<p class="text-gray-700 text-sm">{{ account }}</p>
 				</div>
-				<p class="text-storjBlue cursor-pointer text-sm" v-on:click="disconnectAccount">Disconnect account</p>
+				<p
+					class="text-storjBlue cursor-pointer text-sm"
+					v-on:click="disconnectAccount"
+				>
+					Disconnect account
+				</p>
 			</div>
 		</div>
-    <div class="mt-5 border-b border-gray-100 pb-3">
+		<div class="mt-5 border-b border-gray-100 pb-3">
 			<h2 class="text-lg font-medium">Storage usage</h2>
 			<div class="flex justify-start">
 				<p class="text-gray-700 text-sm">{{ usingDisplay }}</p>
 			</div>
 			<div class="relative pt-1">
-				<div class="overflow-hidden h-2 mb-4 text-xs flex rounded bg-gray-200">
+				<div
+					class="
+						overflow-hidden
+						h-2
+						mb-4
+						text-xs
+						flex
+						rounded
+						bg-gray-200
+					"
+				>
 					<div
 						v-bind:style="{
 							width: `${videosUsagePercentage}%`
@@ -107,13 +122,11 @@
 						<div class="h-3 w-3 rounded-sm bg-gray-200"></div>
 						<p class="text-sm">Available space</p>
 					</div>
-					<div>
-
-					</div>
+					<div></div>
 				</div>
 			</div>
 		</div>
-    <div class="mt-5 border-b border-gray-100 pb-3">
+		<div class="mt-5 border-b border-gray-100 pb-3">
 			<h2 class="text-lg font-medium">Charges</h2>
 			<div class="flex justify-start">
 				<p class="text-gray-700 text-sm">{{ chargesDisplay }}</p>
@@ -161,34 +174,34 @@ export default defineComponent({
 		ArrowLeftIcon
 	},
 	data: () => ({}),
-  computed: {
+	computed: {
 		account(): string {
 			return store.state.account;
 		},
 
-    accountType(): string {
+		accountType(): string {
 			return store.state.accountType;
-    },
+		},
 
-    plan(): number {
-      return store.state.plan;
-    },
+		plan(): number {
+			return store.state.plan;
+		},
 
-    videosUsage(): number {
-      return store.state.videosUsage;
-    },
+		videosUsage(): number {
+			return store.state.videosUsage;
+		},
 
-    picturesUsage(): number {
-      return store.state.picturesUsage;
-    },
+		picturesUsage(): number {
+			return store.state.picturesUsage;
+		},
 
-    documentsUsage(): number {
-      return store.state.documentsUsage;
-    },
+		documentsUsage(): number {
+			return store.state.documentsUsage;
+		},
 
-    othersUsage(): number {
-      return store.state.othersUsage;
-    },
+		othersUsage(): number {
+			return store.state.othersUsage;
+		},
 
 		videosUsagePercentage(): number {
 			return this.usagePercentage(this.videosUsage);
@@ -206,30 +219,39 @@ export default defineComponent({
 			return this.usagePercentage(this.othersUsage);
 		},
 
-    using(): number {
-      return (this.videosUsage + this.picturesUsage + this.documentsUsage + this.othersUsage);
-    },
+		using(): number {
+			return (
+				this.videosUsage +
+				this.picturesUsage +
+				this.documentsUsage +
+				this.othersUsage
+			);
+		},
 
-    usingDisplay(): string {
-      return `Using ${prettyBytes(this.using)} of ${prettyBytes(this.plan)}`;
-    },
+		usingDisplay(): string {
+			return `Using ${prettyBytes(this.using)} of ${prettyBytes(
+				this.plan
+			)}`;
+		},
 
-    availableSpace(): number {
-      return this.plan - this.using;
-    },
+		availableSpace(): number {
+			return this.plan - this.using;
+		},
 
-    charges(): number {
-      return 0;
-    },
+		charges(): number {
+			return 0;
+		},
 
-    chargesDisplay(): string {
-      if (this.accountType === store.getters["accountTypes"].freeAccount) {
-        return `${this.accountType} Account - no charges.`;
-      } else {
-        return `${this.accountType} - ${this.charges}`;
-      }
-    }
-  },
+		chargesDisplay(): string {
+			if (
+				this.accountType === store.getters["accountTypes"].freeAccount
+			) {
+				return `${this.accountType} Account - no charges.`;
+			} else {
+				return `${this.accountType} - ${this.charges}`;
+			}
+		}
+	},
 	methods: {
 		goBackToBackups(): void {
 			this.$router.push("/app/backups");
@@ -239,7 +261,7 @@ export default defineComponent({
 			return (usage / this.plan) * 100;
 		},
 
-    disconnectAccount(): void {},
+		disconnectAccount(): void {},
 
 		upgradePlan(): void {}
 	}

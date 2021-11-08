@@ -44,7 +44,10 @@
 						cursor-pointer
 					"
 				>
-					<UserIcon v-on:click="goToAccountPage" class="text-gray-500" />
+					<UserIcon
+						v-on:click="goToAccountPage"
+						class="text-gray-500"
+					/>
 				</div>
 			</div>
 		</div>

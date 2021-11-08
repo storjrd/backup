@@ -4,15 +4,15 @@ const store = createStore({
 	state: {
 		snapshots: [],
 		account: "david@gmail.com",
-		plan: 1.5e+11,
+		plan: 1.5e11,
 		accountType: "Free",
 		accountTypes: {
 			freeAccount: "Free"
 		},
-		videosUsage: 3e+10,
-		picturesUsage: 7.5e+9,
-		documentsUsage: 6e+9,
-		othersUsage: 4e+9,
+		videosUsage: 3e10,
+		picturesUsage: 7.5e9,
+		documentsUsage: 6e9,
+		othersUsage: 4e9,
 		backupLocation: "/Volumes/StorjBackup",
 		localCachedDirectory: "/Volumes/StorjBackup",
 		preferences: true
