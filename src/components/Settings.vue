@@ -7,26 +7,26 @@
 			/>
 			<h1 class="text-lg font-bold">Settings</h1>
 		</div>
-		<div class="mt-5 border-b pb-3">
+		<div class="mt-5 border-b border-gray-100 pb-3">
 			<h2 class="text-lg">Storj Backup folder location</h2>
 			<div class="flex justify-between">
 				<div class="flex items-center">
 					<img class="mr-2 w-5 h-5" src="@/assets/folderIcon.svg" />
-					<p class="text-gray-600 text-sm">{{ backupLocation }}</p>
+					<p class="text-gray-700 text-sm">{{ backupLocation }}</p>
 				</div>
-				<p class="text-storjBlue cursor-pointer">Change</p>
+				<p class="text-storjBlue cursor-pointer text-sm">Change</p>
 			</div>
 		</div>
-		<div class="mt-5 border-b pb-3">
+		<div class="mt-5 border-b border-gray-100 pb-3">
 			<h2 class="text-lg">Local cached files directory</h2>
 			<div class="flex justify-between">
 				<div class="flex items-center">
 					<img class="mr-2 w-5 h-5" src="@/assets/folderIcon.svg" />
-					<p class="text-gray-600 text-sm">
+					<p class="text-gray-700 text-sm">
 						{{ localCachedDirectory }}
 					</p>
 				</div>
-				<p class="text-storjBlue cursor-pointer">Change</p>
+				<p class="text-storjBlue cursor-pointer text-sm">Change</p>
 			</div>
 		</div>
 		<div>
@@ -87,6 +87,7 @@
 
 <script lang="ts">
 import { defineComponent } from "vue";
+import store from "../store/index";
 import { ArrowLeftIcon } from "@heroicons/vue/solid";
 
 export default defineComponent({
@@ -94,11 +95,20 @@ export default defineComponent({
 	components: {
 		ArrowLeftIcon
 	},
-	data: () => ({
-		backupLocation: "/Volumes/StorjBackup",
-		localCachedDirectory: "/Volumes/StorjBackup",
-		preferences: true
-	}),
+	data: () => ({}),
+	computed: {
+		backupLocation(): string {
+			return store.state.backupLocation;
+		},
+
+		localCachedDirectory(): string {
+			return store.state.localCachedDirectory;
+		},
+
+		preferences(): boolean {
+			return store.state.preferences;
+		}
+	},
 	methods: {
 		goBackToBackups(): void {
 			this.$router.push("/app/backups");

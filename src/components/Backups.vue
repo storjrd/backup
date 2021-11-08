@@ -44,7 +44,7 @@
 						cursor-pointer
 					"
 				>
-					<UserIcon class="text-gray-500" />
+					<UserIcon v-on:click="goToAccountPage" class="text-gray-500" />
 				</div>
 			</div>
 		</div>
@@ -108,6 +108,7 @@
 										justify-start
 										content-center
 										items-center
+										overflow-ellipsis
 									"
 								>
 									<img
@@ -353,6 +354,10 @@ export default defineComponent({
 
 		goToSettingsPage(): void {
 			this.$router.push("/app/settings");
+		},
+
+		goToAccountPage(): void {
+			this.$router.push("/app/account");
 		}
 	}
 });

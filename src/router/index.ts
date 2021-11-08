@@ -3,6 +3,7 @@ import Home from "../views/Home.vue";
 import Dashboard from "../views/Dashboard.vue";
 import Backups from "../components/Backups.vue";
 import Settings from "../components/Settings.vue";
+import Account from "../components/Account.vue";
 
 const routes: Array<RouteRecordRaw> = [
 	{
@@ -24,6 +25,11 @@ const routes: Array<RouteRecordRaw> = [
 				name: "Settings",
 				path: "settings",
 				component: Settings
+			},
+			{
+				name: "Account",
+				path: "account",
+				component: Account
 			}
 		]
 	}
