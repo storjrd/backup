@@ -67,7 +67,7 @@
 					</div>
 				</div>
 				<button
-					v-on:click="buttonClick"
+					v-on:click="login"
 					type="button"
 					class="
 						inline-flex
@@ -93,60 +93,72 @@
 </template>
 
 <script lang="ts">
-import { defineComponent } from "vue";
+import { defineComponent, ref, computed } from "vue";
+import { useStore } from "@/store";
+import { useRouter } from "vue-router";
+
+const setupViews = () => {
+	const store = useStore();
+
+	const signInView = ref<boolean>(true);
+
+	const signUpView = computed(() => !signInView.value);
+
+	const headerText = computed(() =>
+		signInView.value ? "Create account" : "Sign in"
+	);
+
+	const subheadingText = computed(() =>
+		signInView.value ? "sign in" : "create your account"
+	);
+
+	const buttonText = computed(() =>
+		signInView.value ? "Create my account" : "Sign in"
+	);
+
+	const toggleView = () => {
+		signInView.value = !signInView.value;
+	};
+
+	return {
+		signInView,
+		signUpView,
+		headerText,
+		subheadingText,
+		buttonText,
+		toggleView
+	};
+};
+
+const setupLogin = () => {
+	const store = useStore();
+	const router = useRouter();
+
+	const email = ref<string>("");
+	const password = ref<string>("");
+
+	const login = async () => {
+		await store.dispatch("login", {
+			email: email.value,
+			password: password.value
+		});
+
+		router.push("/app/backups");
+	};
+
+	return {
+		email,
+		password,
+		login
+	};
+};
 
 export default defineComponent({
 	name: "Home",
-	data: () => ({
-		view: "SIGN_IN",
-		email: "",
-		password: ""
-	}),
-	computed: {
-		signInView(): boolean {
-			return this.view === "SIGN_IN";
-		},
 
-		signUpView(): boolean {
-			return this.view === "SIGN_UP";
-		},
-
-		headerText(): string {
-			if (this.signInView) {
-				return "Create account";
-			} else {
-				return "Sign in";
-			}
-		},
-
-		subheadingText(): string {
-			if (this.signInView) {
-				return "sign in";
-			} else {
-				return "create your account";
-			}
-		},
-
-		buttonText(): string {
-			if (this.signInView) {
-				return "Create my account";
-			} else {
-				return "Sign in";
-			}
-		}
-	},
-	methods: {
-		toggleView(): void {
-			if (this.signInView) {
-				this.view = "SIGN_UP";
-			} else {
-				this.view = "SIGN_IN";
-			}
-		},
-
-		buttonClick(): void {
-			this.$router.push("/app/backups");
-		}
-	}
+	setup: () => ({
+		...setupViews(),
+		...setupLogin()
+	})
 });
 </script>

@@ -3,7 +3,7 @@
 		<div class="flex items-center space-x-2">
 			<ArrowLeftIcon
 				class="w-4 h-4 cursor-pointer"
-				v-on:click="goBackToBackups"
+				v-on:click="goToBackups"
 			/>
 			<h1 class="text-lg font-bold">Settings</h1>
 		</div>
@@ -86,8 +86,10 @@
 </template>
 
 <script lang="ts">
-import { defineComponent } from "vue";
-import store from "../store/index";
+import { defineComponent, computed } from "vue";
+import { useStore } from "@/store";
+import { useRouter } from "vue-router";
+
 import { ArrowLeftIcon } from "@heroicons/vue/solid";
 
 export default defineComponent({
@@ -95,26 +97,23 @@ export default defineComponent({
 	components: {
 		ArrowLeftIcon
 	},
-	data: () => ({}),
-	computed: {
-		backupLocation(): string {
-			return store.state.backupLocation;
-		},
+	setup: () => {
+		const store = useStore();
+		const router = useRouter();
 
-		localCachedDirectory(): string {
-			return store.state.localCachedDirectory;
-		},
+		return {
+			backupLocation: computed(() => store.state.backupLocation),
+			localCachedDirectory: computed(
+				() => store.state.localCachedDirectory
+			),
+			preferences: computed(() => store.state.preferences),
 
-		preferences(): boolean {
-			return store.state.preferences;
-		}
-	},
-	methods: {
-		goBackToBackups(): void {
-			this.$router.push("/app/backups");
-		},
+			goToBackups: () => {
+				router.push("/app/backups");
+			},
 
-		save(): void {}
+			save: () => {}
+		};
 	}
 });
 </script>

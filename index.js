@@ -4,31 +4,45 @@ const { app, BrowserWindow, ipcMain } = require("electron");
 const serve = require("electron-serve");
 const createRestic = require("./lib/createRestic");
 
-const loadURL = serve({ directory: "dist" });
+const loadURL = serve({ directory: `${__dirname}/dist` });
 
 let mainWindow;
 
 (async () => {
-	const restic = createRestic({
-		repository: `${os.homedir()}/storj-backup-test`,
-		password: "a"
-	});
+	ipcMain.handle(
+		"setup",
+		async function (event, { endpoint, bucket, accessKey, secretKey }) {
+			console.log("setup()", ...arguments);
 
-	try {
-		await restic.init();
-	} catch (err) {
-		console.warn(err);
-	}
+			const restic = createRestic({
+				endpoint,
+				bucket,
+				accessKey,
+				secretKey,
+				password: "a"
+			});
 
-	ipcMain.handle("snapshots", async () => restic.snapshots());
+			try {
+				await restic.init();
+			} catch (err) {
+				console.warn(err);
+			}
 
-	ipcMain.handle("backup", async (dir) => {
-		for await (const event of restic.backup(dir)) {
-			ipcMain.send("backup-status", event);
+			ipcMain.handle("snapshots", async () => restic.snapshots());
+
+			const backupEvents = [];
+
+			ipcMain.handle("backup", async (event, { directories }) => {
+				console.log({ directories });
+
+				for await (const event of restic.backup(directories[0])) {
+					backupEvents.push(event);
+				}
+			});
+
+			ipcMain.handle("get-backup-events", () => backupEvents.splice(0));
 		}
-	});
-
-	console.log("ready");
+	);
 
 	await app.whenReady();
 
@@ -50,6 +64,7 @@ let mainWindow;
 		await loadURL(mainWindow);
 
 		await mainWindow.loadURL("app://-");
+		await mainWindow.focus();
 	} else {
 		const vueServePort = 8080;
 
@@ -77,7 +92,9 @@ let mainWindow;
 		}
 
 		// load from vue serve
-		mainWindow.loadURL(`http://127.0.0.1:${vueServePort}`);
+		await mainWindow.loadURL(`http://127.0.0.1:${vueServePort}`);
+		await mainWindow.focus();
+
 		mainWindow.webContents.openDevTools();
 	}
 })();
