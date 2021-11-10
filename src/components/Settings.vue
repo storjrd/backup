@@ -3,7 +3,7 @@
 		<div class="flex items-center space-x-2">
 			<ArrowLeftIcon
 				class="w-4 h-4 cursor-pointer"
-				v-on:click="goBackToBackups"
+				v-on:click="goToBackups"
 			/>
 			<h1 class="text-lg font-bold">Settings</h1>
 		</div>
@@ -106,7 +106,7 @@ export default defineComponent({
 			localCachedDirectory: computed(
 				() => store.state.localCachedDirectory
 			),
-			preferenced: computed(() => store.state.preferences),
+			preferences: computed(() => store.state.preferences),
 
 			goToBackups: () => {
 				router.push("/app/backups");
