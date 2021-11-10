@@ -1,6 +1,12 @@
 import { InjectionKey } from "vue";
 import { Store, createStore, useStore as baseUseStore } from "vuex";
-import type { Snapshot } from "@/types";
+import * as R from "ramda";
+import type {
+	Snapshot,
+	BackupEvent,
+	BackupStatusEvent,
+	BackupSummaryEvent
+} from "@/types";
 
 interface Backend {
 	invoke: (fn: string, args?: any) => Promise<any>;
@@ -27,6 +33,7 @@ export interface State {
 	backupLocation: string;
 	localCachedDirectory: string;
 	preferences: boolean;
+	backupEvents: any[];
 }
 
 export const key: InjectionKey<Store<State>> = Symbol();
@@ -46,16 +53,52 @@ export const store = createStore<State>({
 		othersUsage: 4e9,
 		backupLocation: "/Volumes/StorjBackup",
 		localCachedDirectory: "/Volumes/StorjBackup",
-		preferences: true
+		preferences: true,
+		backupEvents: []
 	},
 	getters: {
 		accountTypes(state) {
 			return state.accountTypes;
-		}
+		},
+
+		lastStatusEvent: (state): BackupStatusEvent | undefined => {
+			const isStatusEvent = (event: BackupEvent): boolean =>
+				event.message_type === "status";
+
+			const event = R.findLast(isStatusEvent)(state.backupEvents);
+
+			return event as unknown as BackupStatusEvent | undefined;
+		},
+
+		lastSummaryEvent: (state): BackupSummaryEvent | undefined => {
+			const isSummaryEvent = (event: BackupEvent): boolean =>
+				event.message_type === "summary";
+
+			const event = R.findLast(isSummaryEvent)(state.backupEvents);
+
+			return event as unknown as BackupSummaryEvent | undefined;
+		},
+
+		backupStarted: (state, getters): boolean =>
+			getters.lastStatusEvent !== undefined,
+		backupFinished: (state, getters): boolean =>
+			getters.lastSummaryEvent !== undefined
 	},
 	mutations: {
 		setSnapshots(state, snapshots) {
 			state.snapshots = snapshots;
+		},
+
+		pushBackupEvents(state, events) {
+			state.backupEvents = [...state.backupEvents, ...events];
+
+			if (state.backupEvents.length > 5) {
+				state.backupEvents.splice(0, state.backupEvents.length - 5);
+			}
+		},
+
+		clearBackupEvents(state) {
+			state.backupEvents.splice(0);
 		}
 	},
 	actions: {
@@ -89,10 +132,30 @@ export const store = createStore<State>({
 			});
 		},
 
-		async backup({ dispatch }, { directories }: { directories: string[] }) {
-			await backend.invoke("backup", {
+		async backup(
+			{ dispatch, commit, getters },
+			{ directories }: { directories: string[] }
+		) {
+			backend.invoke("backup", {
 				directories
 			});
+
+			commit("clearBackupEvents");
+
+			console.log("events", getters.lastSummaryEvent);
+
+			while (getters.lastSummaryEvent === undefined) {
+				commit(
+					"pushBackupEvents",
+					await backend.invoke("get-backup-events")
+				);
+
+				console.log("summary event", getters.lastSummaryEvent);
+
+				await new Promise((resolve) => setTimeout(resolve, 100));
+			}
+
+			console.log("backup finished");
 
 			dispatch("getSnapshots");
 		}

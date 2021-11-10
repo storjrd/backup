@@ -256,7 +256,7 @@
 import { defineComponent, ref, computed } from "vue";
 import prettyBytes from "pretty-bytes";
 
-import type { Snapshot } from "@/types";
+import type { Snapshot, BackupStatusEvent, BackupSummaryEvent } from "@/types";
 import MyBackupModal from "@/components/MyBackupModal.vue";
 
 import {
@@ -288,17 +288,31 @@ const setupBackups = () => {
 	);
 
 	const backups = computed((): IBackup[] => {
-		if (snapshots.value != null) {
-			return snapshots.value.map(
-				(snapshot: Snapshot): IBackup => ({
-					name: snapshot.paths.join(", "),
-					progress: 100,
-					hostname: snapshot.hostname
-				})
+		const arr: IBackup[] = [];
+
+		if (store.getters.lastStatusEvent !== undefined) {
+			arr.push({
+				name: "",
+				progress: store.getters.lastStatusEvent.percent_done * 100,
+				hostname: ""
+			});
+		}
+
+		if (snapshots.value !== null) {
+			arr.push(
+				...snapshots.value
+					.map(
+						(snapshot: Snapshot): IBackup => ({
+							name: snapshot.paths.join(", "),
+							progress: 100,
+							hostname: snapshot.hostname
+						})
+					)
+					.reverse()
 			);
 		}
 
-		return [] as IBackup[];
+		return arr as IBackup[];
 	});
 
 	const backupsExist = computed(
@@ -315,12 +329,19 @@ const setupBackups = () => {
 		() => !displayBackups.value && !modalOpen.value
 	);
 
-	const areFilesSyncing = computed(() => true);
+	const areFilesSyncing = computed(() => store.getters.backupStarted);
 
 	const syncingFilesDisplay = computed(() => {
-		const files: number = 239;
+		const event: BackupStatusEvent | undefined =
+			store.getters.lastStatusEvent;
 
-		return `Syncing ${files} ${files > 1 ? "files" : "file"}`;
+		if (event === undefined) {
+			return 0;
+		}
+
+		console.log("syncingfilesdisplay", event);
+
+		return `${event.files_done} / ${event.total_files}`;
 	});
 
 	const openModal = () => {

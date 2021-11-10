@@ -30,14 +30,17 @@ let mainWindow;
 
 			ipcMain.handle("snapshots", async () => restic.snapshots());
 
+			const backupEvents = [];
+
 			ipcMain.handle("backup", async (event, { directories }) => {
 				console.log({ directories });
 
 				for await (const event of restic.backup(directories[0])) {
-					// ipcMain.send("backup-status", event);
-					console.log({ event });
+					backupEvents.push(event);
 				}
 			});
+
+			ipcMain.handle("get-backup-events", () => backupEvents.splice(0));
 		}
 	);
 
