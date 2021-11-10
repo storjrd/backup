@@ -14,7 +14,7 @@
 </style>
 
 <template>
-	<div class="bg-world-map bg-contain bg-no-repeat h-screen">
+	<div class="bg-world-map bg-contain bg-no-repeat h-full overflow-hidden">
 		<div class="absolute top-0 right-0 mt-5 mr-5">
 			<div class="flex space-x-3">
 				<div
@@ -27,11 +27,9 @@
 						p-2
 						cursor-pointer
 					"
+					v-on:click="goToSettingsPage"
 				>
-					<CogIcon
-						v-on:click="goToSettingsPage"
-						class="text-gray-500"
-					/>
+					<CogIcon class="text-gray-500" />
 				</div>
 				<div
 					class="
@@ -43,11 +41,9 @@
 						p-2
 						cursor-pointer
 					"
+					v-on:click="goToAccountPage"
 				>
-					<UserIcon
-						v-on:click="goToAccountPage"
-						class="text-gray-500"
-					/>
+					<UserIcon class="text-gray-500" />
 				</div>
 			</div>
 		</div>
@@ -95,7 +91,7 @@
 		</div>
 		<div v-if="displayBackups" class="flex h-screen">
 			<div class="w-screen m-auto mt-20 h-screen">
-				<div class="h-full">
+				<div class="h-full overflow-hidden">
 					<h1 class="px-7">Last activities</h1>
 					<div
 						class="max-h-60 overflow-auto space-y-2 pb-4 pt-2 px-7"
@@ -233,10 +229,9 @@
 					</div>
 				</div>
 			</div>
-			<!-- <div class="relative h-32 w-32"> -->
 			<div
 				v-if="areFilesSyncing"
-				class="absolute inset-x-0 bottom-0 h-14 border"
+				class="absolute inset-x-0 bottom-0 border-t"
 			>
 				<div
 					class="h-14 flex content-center items-center space-x-2 mx-5"
@@ -247,7 +242,6 @@
 					</p>
 				</div>
 			</div>
-			<!-- </div> -->
 		</div>
 		<div v-if="modalOpen" class="unclickable">
 			<my-backup-modal

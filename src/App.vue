@@ -1,5 +1,5 @@
 <template>
-	<div>
+	<div class="overflow-hidden h-screen">
 		<img
 			v-if="logoPath"
 			class="absolute p-5 inset-0 h-auto w-1/3"
