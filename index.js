@@ -39,6 +39,7 @@ let mainWindow;
 		minHeight: 500,
 		maxWidth: 700,
 		maxHeight: 500,
+		autoHideMenuBar: true,
 		webPreferences: {
 			nodeIntegration: false,
 			preload: `${__dirname}/preload.js`
