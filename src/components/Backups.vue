@@ -253,9 +253,12 @@
 </template>
 
 <script lang="ts">
-import { defineComponent } from "vue";
-import MyBackupModal from "../components/MyBackupModal.vue";
+import { defineComponent, ref, computed } from "vue";
 import prettyBytes from "pretty-bytes";
+
+import type { Snapshot } from "@/types";
+import MyBackupModal from "@/components/MyBackupModal.vue";
+
 import {
 	PlusCircleIcon,
 	ExclamationCircleIcon,
@@ -265,6 +268,9 @@ import {
 	UserIcon
 } from "@heroicons/vue/outline";
 
+import router from "@/router";
+import { useStore } from "@/store";
+
 interface IBackup {
 	name: string;
 	progress: number;
@@ -272,11 +278,88 @@ interface IBackup {
 	hostname: string;
 }
 
-interface Snapshot {
-	hostname: string;
-	time: string;
-	paths: string[];
-}
+const setupBackups = () => {
+	const store = useStore();
+
+	store.dispatch("getSnapshots");
+
+	const snapshots = computed(
+		() => store.state.snapshots as Snapshot[] | null
+	);
+
+	const backups = computed((): IBackup[] => {
+		if (snapshots.value != null) {
+			return snapshots.value.map(
+				(snapshot: Snapshot): IBackup => ({
+					name: snapshot.paths.join(", "),
+					progress: 100,
+					hostname: snapshot.hostname
+				})
+			);
+		}
+
+		return [] as IBackup[];
+	});
+
+	const backupsExist = computed(
+		() => snapshots.value !== null && snapshots.value.length > 0
+	);
+
+	const modalOpen = ref<boolean>(false);
+
+	const displayBackups = computed(
+		() => snapshots.value === null || backupsExist.value === true
+	);
+
+	const displayWelcomeScreen = computed(
+		() => !displayBackups.value && !modalOpen.value
+	);
+
+	const areFilesSyncing = computed(() => true);
+
+	const syncingFilesDisplay = computed(() => {
+		const files: number = 239;
+
+		return `Syncing ${files} ${files > 1 ? "files" : "file"}`;
+	});
+
+	const openModal = () => {
+		modalOpen.value = true;
+	};
+
+	const closeModal = () => {
+		modalOpen.value = false;
+	};
+
+	const backupMetadata = (backup: IBackup): string => {
+		return `${backup.progress === 100 ? "Synced" : "Syncing"}`;
+	};
+
+	const goToSettingsPage = () => {
+		router.push("/app/settings");
+	};
+
+	const goToAccountPage = () => {
+		router.push("/app/account");
+	};
+
+	return {
+		backups,
+		backupsExist,
+		displayBackups,
+
+		modalOpen,
+		displayWelcomeScreen,
+		areFilesSyncing,
+		syncingFilesDisplay,
+
+		openModal,
+		closeModal,
+		backupMetadata,
+		goToSettingsPage,
+		goToAccountPage
+	};
+};
 
 export default defineComponent({
 	name: "Backups",
@@ -289,73 +372,8 @@ export default defineComponent({
 		CogIcon,
 		UserIcon
 	},
-	data: () => ({
-		modalOpen: false
-	}),
-	computed: {
-		// snapshots from restic
-		snapshots(): Snapshot[] {
-			// @ts-ignore
-			const snapshots = this.$store.state.snapshots;
-
-			return snapshots as Snapshot[];
-		},
-
-		// retrieve the backups from the store
-		backups(): IBackup[] {
-			return this.snapshots.map(
-				(snapshot: Snapshot): IBackup => ({
-					name: snapshot.paths.join(", "),
-					progress: 100,
-					hostname: snapshot.hostname
-				})
-			);
-		},
-
-		// where we would check if the user has created any backups
-		backupsExist(): boolean {
-			return this.backups.length > 0;
-		},
-
-		displayWelcomeScreen(): boolean {
-			return !this.backupsExist && !this.modalOpen;
-		},
-
-		displayBackups(): boolean {
-			return this.backupsExist && !this.modalOpen;
-		},
-
-		// check if files are syncing from store
-		areFilesSyncing(): boolean {
-			return true;
-		},
-
-		// get all files that are syncing from store
-		syncingFilesDisplay(): string {
-			const files: number = 239;
-			return `Syncing ${files} ${files > 1 ? "files" : "file"}`;
-		}
-	},
-	methods: {
-		openModal(): void {
-			this.modalOpen = true;
-		},
-
-		closeModal(): void {
-			this.modalOpen = false;
-		},
-
-		backupMetadata(backup: IBackup): string {
-			return `${backup.progress === 100 ? "Synced" : "Syncing"}`;
-		},
-
-		goToSettingsPage(): void {
-			this.$router.push("/app/settings");
-		},
-
-		goToAccountPage(): void {
-			this.$router.push("/app/account");
-		}
-	}
+	setup: () => ({
+		...setupBackups()
+	})
 });
 </script>

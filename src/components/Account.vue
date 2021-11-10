@@ -164,7 +164,7 @@
 
 <script lang="ts">
 import { defineComponent } from "vue";
-import store from "../store/index";
+import { store } from "../store/index";
 import { ArrowLeftIcon } from "@heroicons/vue/solid";
 import prettyBytes from "pretty-bytes";
 

@@ -289,6 +289,7 @@ import { defineComponent } from "vue";
 import prettyBytes from "pretty-bytes";
 import { CheckIcon, XIcon } from "@heroicons/vue/solid";
 import { PlusCircleIcon } from "@heroicons/vue/outline";
+import { store } from "@/store";
 
 interface IMediaTypes {
 	photosOrVideos: number;
@@ -383,6 +384,15 @@ export default defineComponent({
 			if (this.selectFolderView) {
 				this.view = "FREQUENCY";
 			} else {
+				store.dispatch("backup", {
+					directories:
+						// @ts-ignore
+						Object.values(this.folders).map(
+							// @ts-ignore
+							(folder: IFolder) => folder.absolutePath
+						)
+				});
+
 				this.closeModal();
 			}
 		},

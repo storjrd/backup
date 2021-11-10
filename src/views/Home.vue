@@ -94,17 +94,17 @@
 
 <script lang="ts">
 import { defineComponent, ref, computed } from "vue";
-import router from "@/router";
-import store from "@/store";
+import { useStore } from "@/store";
+import { useRouter } from "vue-router";
 
 const setupViews = () => {
-	const view = ref("SIGN_IN");
+	const store = useStore();
 
-	const signInView = computed(() => view.value === "SIGN_IN");
+	const signInView = ref<boolean>(true);
 
-	const signUpView = computed(() => view.value === "SIGN_UP");
+	const signUpView = computed(() => !signInView.value);
 
-	const headingText = computed(() =>
+	const headerText = computed(() =>
 		signInView.value ? "Create account" : "Sign in"
 	);
 
@@ -117,14 +117,13 @@ const setupViews = () => {
 	);
 
 	const toggleView = () => {
-		view.value = signInView.value ? "SIGN_UP" : "SIGN_IN";
+		signInView.value = !signInView.value;
 	};
 
 	return {
-		view,
 		signInView,
 		signUpView,
-		headingText,
+		headerText,
 		subheadingText,
 		buttonText,
 		toggleView
@@ -132,8 +131,11 @@ const setupViews = () => {
 };
 
 const setupLogin = () => {
-	const email = ref("");
-	const password = ref("");
+	const store = useStore();
+	const router = useRouter();
+
+	const email = ref<string>("");
+	const password = ref<string>("");
 
 	const login = async () => {
 		await store.dispatch("login", {
