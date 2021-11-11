@@ -283,14 +283,12 @@ const setupBackups = () => {
 
 	store.dispatch("getSnapshots");
 
-	const snapshots = computed(
-		() => store.state.snapshots as Snapshot[] | null
-	);
+	const snapshots = computed(() => store.state.snapshots);
 
 	const backups = computed((): IBackup[] => {
 		const arr: IBackup[] = [];
 
-		if (store.getters.lastStatusEvent !== undefined) {
+		if (store.getters.backupStarted && !store.getters.backupFinished) {
 			arr.push({
 				name: "",
 				progress: store.getters.lastStatusEvent.percent_done * 100,
@@ -312,7 +310,7 @@ const setupBackups = () => {
 			);
 		}
 
-		return arr as IBackup[];
+		return arr;
 	});
 
 	const backupsExist = computed(
