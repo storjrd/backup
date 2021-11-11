@@ -321,15 +321,18 @@ const setupBackups = () => {
 
 	const modalOpen = ref<boolean>(false);
 
+	const areFilesSyncing = computed(() => store.getters.backupStarted);
+
 	const displayBackups = computed(
-		() => snapshots.value === null || backupsExist.value === true
+		() =>
+			areFilesSyncing.value ||
+			snapshots.value === null ||
+			backupsExist.value
 	);
 
 	const displayWelcomeScreen = computed(
 		() => !displayBackups.value && !modalOpen.value
 	);
-
-	const areFilesSyncing = computed(() => store.getters.backupStarted);
 
 	const syncingFilesDisplay = computed(() => {
 		const event: BackupStatusEvent | undefined =
