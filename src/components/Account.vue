@@ -15,9 +15,9 @@
 				</div>
 				<p
 					class="text-storjBlue cursor-pointer text-sm"
-					v-on:click="disconnectAccount"
+					v-on:click="logout"
 				>
-					Disconnect account
+					Logout
 				</p>
 			</div>
 		</div>
@@ -261,7 +261,9 @@ export default defineComponent({
 			return (usage / this.plan) * 100;
 		},
 
-		disconnectAccount(): void {},
+		logout(): void {
+			this.$router.push("/");
+		},
 
 		upgradePlan(): void {}
 	}
