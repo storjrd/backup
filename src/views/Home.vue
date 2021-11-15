@@ -105,15 +105,15 @@ const setupViews = () => {
 	const signUpView = computed(() => !signInView.value);
 
 	const headerText = computed(() =>
-		signInView.value ? "Create account" : "Sign in"
+		signInView.value ? "Sign in" : "Create account"
 	);
 
 	const subheadingText = computed(() =>
-		signInView.value ? "sign in" : "create your account"
+		signInView.value ? "create your account" : "sign in"
 	);
 
 	const buttonText = computed(() =>
-		signInView.value ? "Create my account" : "Sign in"
+		signInView.value ? "Sign in" : "Create my account"
 	);
 
 	const toggleView = () => {
