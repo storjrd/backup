@@ -86,6 +86,22 @@
 					"
 				>
 					{{ buttonText }}
+
+					<div
+						v-if="isLoading"
+						class="flex justify-center items-center"
+					>
+						<div
+							class="
+								animate-spin
+								rounded-full
+								h-2
+								w-2
+								border-b-2 border-green
+								ml-3
+							"
+						></div>
+					</div>
 				</button>
 			</div>
 		</div>
@@ -137,11 +153,17 @@ const setupLogin = () => {
 	const email = ref<string>("");
 	const password = ref<string>("");
 
+	const isLoading = ref<boolean>(false);
+
 	const login = async () => {
+		isLoading.value = true;
+
 		await store.dispatch("login", {
 			email: email.value,
 			password: password.value
 		});
+
+		isLoading.value = false;
 
 		router.push("/app/backups");
 	};
@@ -149,6 +171,7 @@ const setupLogin = () => {
 	return {
 		email,
 		password,
+		isLoading,
 		login
 	};
 };
