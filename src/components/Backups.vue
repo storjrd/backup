@@ -47,6 +47,21 @@
 				</div>
 			</div>
 		</div>
+
+		<div v-if="isLoading" class="flex h-screen justify-center items-center">
+			<div class="flex justify-center items-center">
+				<div
+					class="
+						animate-spin
+						rounded-full
+						h-32
+						w-32
+						border-b-2 border-gray-900
+					"
+				></div>
+			</div>
+		</div>
+
 		<div
 			v-if="displayWelcomeScreen"
 			class="flex h-screen justify-center items-center"
@@ -89,6 +104,7 @@
 				</div>
 			</div>
 		</div>
+
 		<div v-if="displayBackups" class="flex h-screen">
 			<div class="w-screen m-auto mt-20 h-screen">
 				<div class="h-full overflow-hidden">
@@ -283,7 +299,9 @@ const setupBackups = () => {
 
 	store.dispatch("getSnapshots");
 
-	const snapshots = computed(() => store.state.snapshots);
+	const snapshots = computed<Snapshot[]>(() =>
+		store.state.snapshots === null ? [] : store.state.snapshots
+	);
 
 	const backups = computed((): IBackup[] => {
 		const arr: IBackup[] = [];
@@ -313,8 +331,10 @@ const setupBackups = () => {
 		return arr;
 	});
 
+	const isLoading = computed(() => store.state.snapshots === null);
+
 	const backupsExist = computed(
-		() => snapshots.value !== null && snapshots.value.length > 0
+		() => !isLoading.value && snapshots.value.length > 0
 	);
 
 	const modalOpen = ref<boolean>(false);
@@ -322,14 +342,11 @@ const setupBackups = () => {
 	const areFilesSyncing = computed(() => store.getters.backupStarted);
 
 	const displayBackups = computed(
-		() =>
-			areFilesSyncing.value ||
-			snapshots.value === null ||
-			backupsExist.value
+		() => areFilesSyncing.value || backupsExist.value
 	);
 
 	const displayWelcomeScreen = computed(
-		() => !displayBackups.value && !modalOpen.value
+		() => !isLoading.value && !displayBackups.value && !modalOpen.value
 	);
 
 	const syncingFilesDisplay = computed(() => {
@@ -366,6 +383,7 @@ const setupBackups = () => {
 	};
 
 	return {
+		isLoading,
 		backups,
 		backupsExist,
 		displayBackups,
