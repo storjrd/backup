@@ -42,11 +42,25 @@
 	"build": {
 		"appId": "storjrd.backup",
 		"directories": {
-			"output": "bin"
+			"output": "output"
 		},
 		"mac": {
 			"category": "storjrd.backup.category.type"
-		}
+		},
+		"files": [
+			"node_modules",
+			"bin",
+			"dist",
+			"lib",
+			"*.js",
+			"package.json"
+		],
+		"extraResources": [
+			{
+				"from": "restic",
+				"to": "restic"
+			}
+		]
 	},
 	"browserslist": [
 		"> 1%",
