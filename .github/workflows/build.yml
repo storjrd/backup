@@ -30,3 +30,10 @@ jobs:
               with:
                   name: "backup Setup 1.0.0.exe"
                   path: "output/backup Setup 1.0.0.exe"
+
+            - uses: softprops/action-gh-release@v1
+              with:
+                  files: |
+                      output/backup-1.0.0.AppImage
+                      output/backup_1.0.0_amd64.snap
+                      output/backup Setup 1.0.0.exe
