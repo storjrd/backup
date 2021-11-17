@@ -32,6 +32,7 @@ jobs:
                   path: "output/backup Setup 1.0.0.exe"
 
             - uses: softprops/action-gh-release@v1
+              if: startsWith(github.ref, 'refs/tags/')
               with:
                   files: |
                       output/backup-1.0.0.AppImage
