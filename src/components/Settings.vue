@@ -86,18 +86,27 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, computed } from "vue";
+import { defineComponent, Ref, computed } from "vue";
 import { useStore } from "@/store";
 import { useRouter } from "vue-router";
 
 import { ArrowLeftIcon } from "@heroicons/vue/solid";
+
+interface Properties {
+	backupLocation: Ref<string>;
+	localCachedDirectory: Ref<string>;
+	preferences: Ref<boolean>;
+
+	goToBackups: () => void;
+	save: () => void;
+}
 
 export default defineComponent({
 	name: "Settings",
 	components: {
 		ArrowLeftIcon
 	},
-	setup: () => {
+	setup: (): Properties => {
 		const store = useStore();
 		const router = useRouter();
 

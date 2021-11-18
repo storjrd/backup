@@ -269,7 +269,7 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, ref, computed } from "vue";
+import { defineComponent, ref, Ref, computed } from "vue";
 import prettyBytes from "pretty-bytes";
 
 import type { Snapshot, BackupStatusEvent, BackupSummaryEvent } from "@/types";
@@ -290,11 +290,29 @@ import { useStore } from "@/store";
 interface IBackup {
 	name: string;
 	progress: number;
-	// size: number;
 	hostname: string;
 }
 
-const setupBackups = () => {
+interface Properties {
+	backups: Ref<IBackup[]>;
+
+	isLoading: Ref<boolean>;
+	backupsExist: Ref<boolean>;
+	displayBackups: Ref<boolean>;
+	modalOpen: Ref<boolean>;
+	displayWelcomeScreen: Ref<boolean>;
+	areFilesSyncing: Ref<boolean>;
+	syncingFilesDisplay: Ref<string>;
+
+	backupMetadata: (arg0: IBackup) => string;
+
+	openModal: () => void;
+	closeModal: () => void;
+	goToSettingsPage: () => void;
+	goToAccountPage: () => void;
+}
+
+const setupBackups = (): Properties => {
 	const store = useStore();
 
 	store.dispatch("getSnapshots");
@@ -303,7 +321,7 @@ const setupBackups = () => {
 		store.state.snapshots === null ? [] : store.state.snapshots
 	);
 
-	const backups = computed((): IBackup[] => {
+	const backups = computed<IBackup[]>((): IBackup[] => {
 		const arr: IBackup[] = [];
 
 		if (store.getters.backupStarted && !store.getters.backupFinished) {
@@ -337,7 +355,7 @@ const setupBackups = () => {
 		() => !isLoading.value && snapshots.value.length > 0
 	);
 
-	const modalOpen = ref<boolean>(false);
+	const modalOpen = ref(false);
 
 	const areFilesSyncing = computed(() => store.getters.backupStarted);
 
@@ -354,7 +372,7 @@ const setupBackups = () => {
 			store.getters.lastStatusEvent;
 
 		if (event === undefined) {
-			return 0;
+			return "0";
 		}
 
 		console.log("syncingfilesdisplay", event);
@@ -412,7 +430,7 @@ export default defineComponent({
 		CogIcon,
 		UserIcon
 	},
-	setup: () => ({
+	setup: (): Properties => ({
 		...setupBackups()
 	})
 });

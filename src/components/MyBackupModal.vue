@@ -285,11 +285,18 @@
 </template>
 
 <script lang="ts">
-import { defineComponent } from "vue";
+import {
+	defineComponent,
+	ref,
+	reactive,
+	Ref,
+	computed,
+	ComputedRef
+} from "vue";
 import prettyBytes from "pretty-bytes";
 import { CheckIcon, XIcon } from "@heroicons/vue/solid";
 import { PlusCircleIcon } from "@heroicons/vue/outline";
-import { store } from "@/store";
+import { useStore, store } from "@/store";
 
 interface IMediaTypes {
 	photosOrVideos: number;
@@ -299,8 +306,36 @@ interface IMediaTypes {
 interface IFolder {
 	mediaTypes: IMediaTypes;
 	displaySize: number;
-	filesAlreadyAdded: {};
+	filesAlreadyAdded: { [key: string]: boolean };
 	absolutePath: string;
+}
+
+interface Properties {
+	frequencyOptions: Array<string>;
+	backupName: Ref<string>;
+	temporaryBackupName: Ref<string>;
+	backupNameInputOpen: Ref<boolean>;
+	selectedFrequency: Ref<string>;
+	passphrase: Ref<string>;
+	folderInputElement: Ref<null | HTMLInputElement>;
+
+	foldersArr: ComputedRef<string[]>;
+	foldersExist: ComputedRef<boolean>;
+	selectFolderView: ComputedRef<boolean>;
+	frequencyView: ComputedRef<boolean>;
+	nextEnabled: ComputedRef<boolean>;
+	validBackupName: ComputedRef<boolean>;
+	backupNameInputClass: ComputedRef<string>;
+
+	cancelBackupNameChange: () => void;
+	saveBackupNameChange: () => void;
+	changeBackupName: (arg0: string) => void;
+	closeModal: () => void;
+	nextButton: () => void;
+	addFolderButton: () => void;
+	upload: (arg0: Event) => void;
+	folderUploadMetaData: (arg0: string) => void;
+	deleteFolder: (arg0: string) => void;
 }
 
 export default defineComponent({
@@ -311,78 +346,72 @@ export default defineComponent({
 		XIcon,
 		PlusCircleIcon
 	},
-	data: () => ({
-		backupName: "My Backup",
-		temporaryBackupName: "My Backup",
-		backupNameInputOpen: false,
-		folders: {},
-		view: "SELECT_FOLDER",
-		frequencyOptions: [
+	setup: (props, { emit }): Properties => {
+		const frequencyOptions = [
 			"Daily",
 			"Weekly",
 			"Bi-weekly",
 			"Monthly",
 			"Quarterly",
 			"Yearly"
-		],
-		selectedFrequency: "Daily",
-		passphrase: ""
-	}),
-	computed: {
-		foldersArr(): string[] {
-			return Object.keys(this.folders);
-		},
+		];
 
-		foldersExist(): boolean {
-			return this.foldersArr.length > 0;
-		},
+		const folders = reactive<{ [key: string]: IFolder | undefined }>({});
 
-		selectFolderView(): boolean {
-			return this.view === "SELECT_FOLDER";
-		},
+		const backupName = ref("My Backup");
+		const temporaryBackupName = ref("My Backup");
+		const backupNameInputOpen = ref(false);
+		const view = ref("SELECT_FOLDER");
+		const selectedFrequency = ref("Daily");
+		const passphrase = ref("");
 
-		frequencyView(): boolean {
-			return this.view === "FREQUENCY";
-		},
+		const foldersArr = computed(() => Object.keys(folders));
 
-		nextEnabled(): boolean {
-			return this.foldersExist || this.frequencyView;
-		},
+		const foldersExist = computed(() => foldersArr.value.length > 0);
 
-		validBackupName(): boolean {
-			return this.temporaryBackupName.length > 0;
-		},
+		const selectFolderView = computed(() => view.value === "SELECT_FOLDER");
 
-		backupNameInputClass(): string {
-			return this.validBackupName
+		const frequencyView = computed(() => view.value === "FREQUENCY");
+
+		const nextEnabled = computed(
+			() => foldersExist.value || frequencyView.value
+		);
+
+		const validBackupName = computed(
+			() => temporaryBackupName.value.length > 0
+		);
+
+		const backupNameInputClass = computed(() =>
+			validBackupName
 				? "shadow-sm focus:ring-storjBlue focus:border-storjBlue block sm:text-sm border-gray-300 rounded-md w-1/3"
-				: "shadow-sm focus:ring-red-400 focus:border-red-400 ring-red-400 border-red-400 block sm:text-sm border-gray-300 rounded-md w-1/3";
-		}
-	},
-	methods: {
-		saveBackupNameChange(): void {
-			if (this.temporaryBackupName.length > 0) {
-				this.backupName = this.temporaryBackupName;
-				this.cancelBackupNameChange();
+				: "shadow-sm focus:ring-red-400 focus:border-red-400 ring-red-400 border-red-400 block sm:text-sm border-gray-300 rounded-md w-1/3"
+		);
+
+		const cancelBackupNameChange = () => {
+			temporaryBackupName.value = backupName.value;
+			backupNameInputOpen.value = false;
+		};
+
+		const saveBackupNameChange = () => {
+			if (temporaryBackupName.value.length > 0) {
+				backupName.value = temporaryBackupName.value;
+				cancelBackupNameChange();
 			}
-		},
+		};
 
-		cancelBackupNameChange(): void {
-			this.temporaryBackupName = this.backupName;
-			this.backupNameInputOpen = false;
-		},
+		const changeBackupName = (name: string) => {
+			backupNameInputOpen.value = true;
+		};
 
-		changeBackupName(name: string): void {
-			this.backupNameInputOpen = true;
-		},
+		const closeModal = () => {
+			emit("closeModal");
+		};
 
-		closeModal(): void {
-			this.$emit("closeModal");
-		},
+		const store = useStore();
 
-		nextButton(): void {
-			if (this.selectFolderView) {
-				this.view = "FREQUENCY";
+		const nextButton = () => {
+			if (selectFolderView.value === true) {
+				view.value = "FREQUENCY";
 			} else {
 				store.dispatch("backup", {
 					directories:
@@ -393,35 +422,39 @@ export default defineComponent({
 						)
 				});
 
-				this.closeModal();
+				closeModal();
 			}
-		},
+		};
 
-		addFolderButton(): void {
-			const folderInputElement = this.$refs
-				.folderInput as HTMLInputElement;
-			folderInputElement.click();
-		},
+		const folderInputElement = ref<null | HTMLInputElement>(null);
 
-		upload(e: Event): void {
+		const addFolderButton = () => {
+			if (folderInputElement.value !== null) {
+				folderInputElement.value.click();
+			} else {
+				throw new Error("folderInputElement null");
+			}
+		};
+
+		const upload = (e: Event) => {
 			const target = e.target as HTMLInputElement;
 			const files = target.files as FileList;
 
 			[...files].forEach((file: any) => {
-				const relativePath: string = file.webkitRelativePath;
+				const relativePath = file.webkitRelativePath;
 
 				// get the first directory from the current file
-				const folderNameKey: string = relativePath.split("/")[0];
+				const folderNameKey = relativePath.split("/")[0];
 
 				// get the absolute path to the current file
-				const path: string = file.path
-					.split("/")
-					.slice(0, -1)
-					.join("/");
+				const path = file.path.split("/").slice(0, -1).join("/");
 
-				// if the current directory is unique within the list of folders, add the new folder
-				if (!(this.folders as any)[folderNameKey]) {
-					const initialFolder: IFolder = {
+				// if the current directory is unique within the list of folders, add the new folde
+
+				let folder = folders[folderNameKey];
+
+				if (folder === undefined) {
+					folder = {
 						mediaTypes: {
 							photosOrVideos: 0,
 							otherFiles: 0
@@ -431,13 +464,11 @@ export default defineComponent({
 						absolutePath: path
 					};
 
-					(this.folders as any)[folderNameKey] = initialFolder;
+					folders[folderNameKey] = folder;
 				}
 
-				const folder = (this.folders as any)[folderNameKey];
-
 				// if the current file hasn't already been accounted for display
-				if (!folder.filesAlreadyAdded[relativePath]) {
+				if (folder.filesAlreadyAdded[relativePath]) {
 					folder.filesAlreadyAdded[relativePath] = true;
 
 					// aggregate the data
@@ -455,151 +486,50 @@ export default defineComponent({
 			});
 
 			(e.target as any)["value"] = "";
-		},
+		};
 
-		folderUploadMetaData(folderName: string): string {
-			const folder: IFolder = (this.folders as any)[folderName];
-			const photosOrVideos: number = folder.mediaTypes.photosOrVideos;
-			const otherFiles: number = folder.mediaTypes.otherFiles;
+		const folderUploadMetaData = (folderName: string) => {
+			const folder = folders[folderName] as unknown as IFolder;
+
+			const photosOrVideos = folder.mediaTypes.photosOrVideos;
+			const otherFiles = folder.mediaTypes.otherFiles;
 
 			return `${prettyBytes(folder.displaySize)} - ${photosOrVideos} ${
 				photosOrVideos > 1 ? "photos or videos" : "photo or video"
 			}, ${otherFiles} ${otherFiles > 1 ? "other files" : "other file"}`;
-		},
+		};
 
-		// finalUpload() {
-		//   const target = e.target as HTMLInputElement;
-		//   const files: FileList = (target.files as FileList);
+		const deleteFolder = (folderName: string) => {
+			delete folders[folderName];
+		};
 
-		//   const items = e.dataTransfer
-		// 		? e.dataTransfer.items
-		// 		: e.target.files;
-		// 	async function* traverse(item, path = "") {
-		// 		if (item.isFile) {
-		// 			const file = await new Promise(item.file.bind(item));
-		// 			yield { path, file };
-		// 		} else if (item instanceof File) {
-		// 			yield { path: item.webkitRelativePath, file: item };
-		// 		} else if (item.isDirectory) {
-		// 			const dirReader = item.createReader();
+		return {
+			frequencyOptions,
+			backupName,
+			temporaryBackupName,
+			backupNameInputOpen,
+			selectedFrequency,
+			passphrase,
+			folderInputElement,
 
-		// 			const entries = await new Promise(
-		// 				dirReader.readEntries.bind(dirReader)
-		// 			);
+			foldersArr,
+			foldersExist,
+			selectFolderView,
+			frequencyView,
+			nextEnabled,
+			validBackupName,
+			backupNameInputClass,
 
-		// 			for (const entry of entries) {
-		// 				yield* traverse(entry, path + item.name + "/");
-		// 			}
-		// 		} else if (typeof item.length === "number") {
-		// 			for (const i of item) {
-		// 				yield* traverse(i);
-		// 			}
-		// 		} else {
-		// 			throw new Error("Item is not directory or file");
-		// 		}
-		// 	}
-
-		// 	const iterator =
-		// 		items instanceof FileList
-		// 			? [...items]
-		// 			: [...items].map(
-		// 					(item) =>
-		// 						item.webkitGetAsEntry() || item.getAsEntry()
-		// 			  );
-		// 	const fileNames = state.files.map((file) => file.Key);
-
-		// 	function getUniqueFileName(fileName) {
-		// 		for (let count = 1; fileNames.includes(fileName); count++) {
-		// 			if (count > 1) {
-		// 				fileName = fileName.replace(
-		// 					/\((\d+)\)(.*)/,
-		// 					`(${count})$2`
-		// 				);
-		// 			} else {
-		// 				fileName = fileName.replace(
-		// 					/([^.]*)(.*)/,
-		// 					`$1 (${count})$2`
-		// 				);
-		// 			}
-		// 		}
-
-		// 		return fileName;
-		// 	}
-
-		// 	for await (const { path, file } of traverse(iterator)) {
-		// 		const directories = path.split("/");
-		// 		const uniqueFirstDirectory = getUniqueFileName(directories[0]);
-		// 		directories[0] = uniqueFirstDirectory;
-
-		// 		let fileName = getUniqueFileName(
-		// 			directories.join("/") + file.name
-		// 		);
-
-		// 		const params = {
-		// 			Bucket: state.bucket,
-		// 			Key: state.path + fileName,
-		// 			Body: file
-		// 		};
-
-		// 		const upload = state.s3.upload(
-		// 			{ ...params },
-		// 			{ partSize: 64 * 1024 * 1024 }
-		// 		);
-
-		// 		upload.on("httpUploadProgress", (progress) => {
-		// 			commit("setProgress", {
-		// 				Key: params.Key,
-		// 				progress: Math.round(
-		// 					(progress.loaded / progress.total) * 100
-		// 				)
-		// 			});
-		// 		});
-
-		// 		commit("pushUpload", {
-		// 			...params,
-		// 			upload,
-		// 			progress: 0
-		// 		});
-
-		// 		commit("addUploadToChain", async () => {
-		// 			if (
-		// 				state.uploading.findIndex(
-		// 					(file) => file.Key === params.Key
-		// 				) === -1
-		// 			) {
-		// 				// upload cancelled or removed
-		// 				return -1;
-		// 			}
-
-		// 			try {
-		// 				await upload.promise();
-		// 			} catch (e) {
-		// 				// An error is raised if the upload is aborted by the user
-		// 				console.log(e);
-		// 			}
-
-		// 			await dispatch("list");
-
-		// 			const uploadedFiles = state.files.filter(
-		// 				(file) => file.type === "file"
-		// 			);
-
-		// 			if (uploadedFiles.length === 1) {
-		// 				const [{ Key }] = uploadedFiles;
-
-		// 				if (state.openModalOnFirstUpload === true) {
-		// 					commit("openModal", params.Key);
-		// 				}
-		// 			}
-
-		// 			commit("finishUpload", params.Key);
-		// 		});
-		// 	}
-		// },
-
-		deleteFolder(folderName: string): void {
-			delete (this.folders as any)[folderName];
-		}
+			cancelBackupNameChange,
+			saveBackupNameChange,
+			changeBackupName,
+			closeModal,
+			nextButton,
+			addFolderButton,
+			upload,
+			folderUploadMetaData,
+			deleteFolder
+		};
 	}
 });
 </script>
