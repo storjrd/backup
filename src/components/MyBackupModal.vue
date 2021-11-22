@@ -356,7 +356,7 @@ export default defineComponent({
 			"Yearly"
 		];
 
-		const folders = reactive<{ [key: string]: IFolder | undefined }>({});
+		const folders = reactive<{ [key: string]: IFolder }>({});
 
 		const backupName = ref("My Backup");
 		const temporaryBackupName = ref("My Backup");
@@ -366,11 +366,8 @@ export default defineComponent({
 		const passphrase = ref("");
 
 		const foldersArr = computed(() => Object.keys(folders));
-
 		const foldersExist = computed(() => foldersArr.value.length > 0);
-
 		const selectFolderView = computed(() => view.value === "SELECT_FOLDER");
-
 		const frequencyView = computed(() => view.value === "FREQUENCY");
 
 		const nextEnabled = computed(
@@ -383,8 +380,24 @@ export default defineComponent({
 
 		const backupNameInputClass = computed(() =>
 			validBackupName
-				? "shadow-sm focus:ring-storjBlue focus:border-storjBlue block sm:text-sm border-gray-300 rounded-md w-1/3"
-				: "shadow-sm focus:ring-red-400 focus:border-red-400 ring-red-400 border-red-400 block sm:text-sm border-gray-300 rounded-md w-1/3"
+				? ` shadow-sm
+					focus:ring-storjBlue
+					focus:border-storjBlue
+					block sm:text-sm
+					border-gray-300
+					rounded-md
+					w-1/3
+				`
+				: `	shadow-sm
+					focus:ring-red-400
+					focus:border-red-400
+					ring-red-400
+					border-red-400
+					block sm:text-sm
+					border-gray-300
+					rounded-md
+					w-1/3
+				`
 		);
 
 		const cancelBackupNameChange = () => {
@@ -414,12 +427,9 @@ export default defineComponent({
 				view.value = "FREQUENCY";
 			} else {
 				store.dispatch("backup", {
-					directories:
-						// @ts-ignore
-						Object.values(this.folders).map(
-							// @ts-ignore
-							(folder: IFolder) => folder.absolutePath
-						)
+					directories: Object.values(folders).map(
+						(folder: IFolder) => folder.absolutePath
+					)
 				});
 
 				closeModal();
@@ -440,16 +450,10 @@ export default defineComponent({
 			const target = e.target as HTMLInputElement;
 			const files = target.files as FileList;
 
-			[...files].forEach((file: any) => {
+			for (const file of files as unknown as any[]) {
 				const relativePath = file.webkitRelativePath;
-
-				// get the first directory from the current file
 				const folderNameKey = relativePath.split("/")[0];
-
-				// get the absolute path to the current file
 				const path = file.path.split("/").slice(0, -1).join("/");
-
-				// if the current directory is unique within the list of folders, add the new folde
 
 				let folder = folders[folderNameKey];
 
@@ -467,11 +471,9 @@ export default defineComponent({
 					folders[folderNameKey] = folder;
 				}
 
-				// if the current file hasn't already been accounted for display
 				if (folder.filesAlreadyAdded[relativePath]) {
 					folder.filesAlreadyAdded[relativePath] = true;
 
-					// aggregate the data
 					if (
 						file.type.includes("image") ||
 						file.type.includes("video")
@@ -483,7 +485,7 @@ export default defineComponent({
 
 					folder.displaySize += file.size;
 				}
-			});
+			}
 
 			(e.target as any)["value"] = "";
 		};

@@ -4,6 +4,12 @@ export interface Snapshot {
 	paths: string[];
 }
 
+export interface IBackup {
+	name: string;
+	progress: number;
+	hostname: string;
+}
+
 export interface BackupEvent {
 	message_type: string;
 }

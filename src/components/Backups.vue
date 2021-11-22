@@ -109,139 +109,14 @@
 			<div class="w-screen m-auto mt-20 h-screen">
 				<div class="h-full overflow-hidden">
 					<h1 class="px-7">Last activities</h1>
+
 					<div
 						class="max-h-60 overflow-auto space-y-2 pb-4 pt-2 px-7"
 					>
-						<div
+						<backup
 							v-for="backup in backups"
-							class="bg-white shadow-lg rounded-lg p-3"
-						>
-							<div class="flex justify-between items-center">
-								<div
-									class="
-										flex
-										justify-start
-										content-center
-										items-center
-										overflow-ellipsis
-									"
-								>
-									<img
-										class="
-											w-5
-											h-5
-											fill-current
-											text-black
-											mr-2
-										"
-										src="@/assets/folderIcon.svg"
-									/>
-									<p class="text-lg">{{ backup.name }}</p>
-								</div>
-								<div class="self-center">
-									<div class="flex space-x-1">
-										<ExclamationCircleIcon
-											class="
-												w-5
-												h-5
-												font-bold
-												text-gray-700
-											"
-										/>
-										<XCircleIcon
-											class="
-												w-5
-												h-5font-bold
-												text-gray-700
-											"
-										/>
-										<ArrowCircleUpIcon
-											class="
-												w-5
-												h-5
-												font-bold
-												text-gray-700
-											"
-										/>
-									</div>
-								</div>
-							</div>
-							<div class="flex justify-between">
-								<p class="text-left">
-									{{ backupMetadata(backup) }}
-
-									<br />
-
-									<i>{{ backup.hostname }}</i>
-								</p>
-								<p
-									class="
-										text-storjBlue
-										cursor-pointer
-										hover:underline
-										text-sm
-									"
-									v-on:click=""
-								>
-									See details
-								</p>
-							</div>
-							<div class="relative pt-1">
-								<div
-									class="
-										overflow-hidden
-										h-2
-										text-xs
-										flex
-										rounded
-										bg-gray-100
-										shadow-inner
-									"
-								>
-									<div
-										v-bind:style="{
-											width: `${backup.progress}%`
-										}"
-										class="
-											shadow-none
-											flex flex-col
-											text-center
-											whitespace-nowrap
-											text-white
-											justify-center
-											bg-storjBlue
-										"
-									></div>
-								</div>
-							</div>
-						</div>
-					</div>
-					<div class="flex justify-start ml-7 mt-4">
-						<button
-							v-on:click="openModal"
-							type="button"
-							class="
-								inline-flex
-								items-center
-								px-4
-								py-2
-								border border-transparent
-								text-sm
-								font-medium
-								rounded-md
-								shadow-sm
-								text-white
-								bg-storjBlue
-								focus:outline-none
-								focus:ring-2
-								focus:ring-offset-2
-							"
-						>
-							<PlusCircleIcon
-								class="w-5 h-5 mr-2 font-bold text-white"
-							/>
-							Add new job
-						</button>
+							v-bind:backup="backup"
+						></backup>
 					</div>
 				</div>
 			</div>
@@ -274,6 +149,7 @@ import prettyBytes from "pretty-bytes";
 
 import type { Snapshot, BackupStatusEvent, BackupSummaryEvent } from "@/types";
 import MyBackupModal from "@/components/MyBackupModal.vue";
+import Backup from "@/components/Backup.vue";
 
 import {
 	PlusCircleIcon,
@@ -303,8 +179,6 @@ interface Properties {
 	displayWelcomeScreen: Ref<boolean>;
 	areFilesSyncing: Ref<boolean>;
 	syncingFilesDisplay: Ref<string>;
-
-	backupMetadata: (arg0: IBackup) => string;
 
 	openModal: () => void;
 	closeModal: () => void;
@@ -388,10 +262,6 @@ const setupBackups = (): Properties => {
 		modalOpen.value = false;
 	};
 
-	const backupMetadata = (backup: IBackup): string => {
-		return `${backup.progress === 100 ? "Synced" : "Syncing"}`;
-	};
-
 	const goToSettingsPage = () => {
 		router.push("/app/settings");
 	};
@@ -413,7 +283,6 @@ const setupBackups = (): Properties => {
 
 		openModal,
 		closeModal,
-		backupMetadata,
 		goToSettingsPage,
 		goToAccountPage
 	};
@@ -423,6 +292,8 @@ export default defineComponent({
 	name: "Backups",
 	components: {
 		MyBackupModal,
+		Backup,
+
 		PlusCircleIcon,
 		ExclamationCircleIcon,
 		XCircleIcon,
