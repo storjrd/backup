@@ -8,26 +8,32 @@
 				<h1 class="font-bold text-lg">{{ headerText }}</h1>
 				<p class="text-sm">
 					Or
-					<span
+					<!-- <span
 						class="underline cursor-pointer"
 						v-on:click="toggleView"
 						>{{ subheadingText }} &#8594;</span
+					> -->
+					<a
+						class="underline cursor-pointer"
+						href="https://storj.io"
+						target="_blank"
+						>{{ subheadingText }} &#8594;</a
 					>
 				</p>
 			</div>
-			<div class="space-y-5 max-w-lg mr-14">
-				<div>
+			<div class="space-y-3 max-w-lg mr-14 mb-2">
+				<!-- <div>
 					<label
-						for="email"
+						for="accessKey"
 						class="block text-sm font-medium text-gray-700"
-						>Email</label
+						>Access Key</label
 					>
 					<div class="mt-1">
 						<input
-							v-model="email"
-							type="email"
-							name="email"
-							id="email"
+							v-model="accessKey"
+							type="text"
+							name="accessKey"
+							id="accessKey"
 							class="
 								shadow-sm
 								focus:ring-indigo-500 focus:border-indigo-500
@@ -37,22 +43,22 @@
 								border-gray-300
 								rounded-md
 							"
-							placeholder="you@example.com"
+							placeholder=""
 						/>
 					</div>
 				</div>
 				<div>
 					<label
-						for="password"
+						for="secretKey"
 						class="block text-sm font-medium text-gray-700"
-						>Password</label
+						>Secret Key</label
 					>
 					<div class="mt-1">
 						<input
-							v-model="password"
-							type="password"
-							name="password"
-							id="password"
+							v-model="secretKey"
+							type="text"
+							name="secretKey"
+							id="secretKey"
 							class="
 								shadow-sm
 								focus:ring-indigo-500 focus:border-indigo-500
@@ -62,7 +68,220 @@
 								border-gray-300
 								rounded-md
 							"
-							placeholder="••••"
+							placeholder=""
+						/>
+					</div>
+				</div>
+				<div>
+					<label
+						for="endpoint"
+						class="block text-sm font-medium text-gray-700"
+						>Endpoint</label
+					>
+					<div class="mt-1">
+						<input
+							v-model="endpoint"
+							type="text"
+							name="endpoint"
+							id="endpoint"
+							class="
+								shadow-sm
+								focus:ring-indigo-500 focus:border-indigo-500
+								block
+								w-full
+								sm:text-sm
+								border-gray-300
+								rounded-md
+							"
+							placeholder=""
+						/>
+					</div>
+				</div>
+				<div>
+					<label
+						for="bucket"
+						class="block text-sm font-medium text-gray-700"
+						>Bucket</label
+					>
+					<div class="mt-1">
+						<input
+							v-model="bucket"
+							type="text"
+							name="bucket"
+							id="bucket"
+							class="
+								shadow-sm
+								focus:ring-indigo-500 focus:border-indigo-500
+								block
+								w-full
+								sm:text-sm
+								border-gray-300
+								rounded-md
+							"
+							placeholder=""
+						/>
+					</div>
+				</div> -->
+				<div class="isolate -space-y-px rounded-md shadow-sm">
+					<div
+						class="
+							relative
+							border border-gray-300
+							rounded-md rounded-b-none
+							px-3
+							py-2
+							focus-within:z-10
+							focus-within:ring-1
+							focus-within:ring-storjBlue
+							focus-within:border-storjBlue
+						"
+					>
+						<label
+							for="accessKey"
+							class="block text-xs font-medium text-gray-700"
+							>Access Key</label
+						>
+						<input
+							v-model="accessKey"
+							type="text"
+							name="accessKey"
+							id="accessKey"
+							class="
+								block
+								border-0
+								p-0
+								text-gray-900
+								placeholder-gray-400
+								focus:ring-0
+								sm:text-sm
+							"
+							placeholder="iahsf8493hyhf9ahofj93"
+						/>
+					</div>
+					<div
+						class="
+							relative
+							border border-gray-300
+							rounded-md rounded-t-none rounded-b-none
+							px-3
+							py-2
+							focus-within:z-10
+							focus-within:ring-1
+							focus-within:ring-storjBlue
+							focus-within:border-storjBlue
+						"
+					>
+						<label
+							for="secretKey"
+							class="
+								block
+								w-full
+								text-xs
+								font-medium
+								text-gray-700
+							"
+							>Secret Key</label
+						>
+						<input
+							v-model="secretKey"
+							type="text"
+							name="secretKey"
+							id="secretKey"
+							class="
+								block
+								w-full
+								border-0
+								p-0
+								text-gray-900
+								placeholder-gray-400
+								focus:ring-0
+								sm:text-sm
+							"
+							placeholder="kajwro83h49hqfjoij93q"
+						/>
+					</div>
+					<div
+						class="
+							relative
+							border border-gray-300
+							rounded-md rounded-t-none rounded-b-none
+							px-3
+							py-2
+							focus-within:z-10
+							focus-within:ring-1
+							focus-within:ring-storjBlue
+							focus-within:border-storjBlue
+						"
+					>
+						<label
+							for="endpoint"
+							class="
+								block
+								w-full
+								text-xs
+								font-medium
+								text-gray-700
+							"
+							>Endpoint</label
+						>
+						<input
+							v-model="endpoint"
+							type="text"
+							name="endpoint"
+							id="endpoint"
+							class="
+								block
+								w-full
+								border-0
+								p-0
+								text-gray-900
+								placeholder-gray-400
+								focus:ring-0
+								sm:text-sm
+							"
+							placeholder="https://gateway.us1.storjshare.io"
+						/>
+					</div>
+					<div
+						class="
+							relative
+							border border-gray-300
+							rounded-md rounded-t-none
+							px-3
+							py-2
+							focus-within:z-10
+							focus-within:ring-1
+							focus-within:ring-storjBlue
+							focus-within:border-storjBlue
+						"
+					>
+						<label
+							for="bucket"
+							class="
+								block
+								w-full
+								text-xs
+								font-medium
+								text-gray-700
+							"
+							>Bucket</label
+						>
+						<input
+							v-model="bucket"
+							type="text"
+							name="bucket"
+							id="bucket"
+							class="
+								block
+								w-full
+								border-0
+								p-0
+								text-gray-900
+								placeholder-gray-400
+								focus:ring-0
+								sm:text-sm
+							"
+							placeholder="my-bucket"
 						/>
 					</div>
 				</div>
@@ -150,8 +369,10 @@ const setupLogin = () => {
 	const store = useStore();
 	const router = useRouter();
 
-	const email = ref<string>("");
-	const password = ref<string>("");
+	const accessKey = ref<string>("");
+	const secretKey = ref<string>("");
+	const endpoint = ref<string>("");
+	const bucket = ref<string>("");
 
 	const isLoading = ref<boolean>(false);
 
@@ -159,8 +380,10 @@ const setupLogin = () => {
 		isLoading.value = true;
 
 		await store.dispatch("login", {
-			email: email.value,
-			password: password.value
+			accessKey: accessKey.value,
+			secretKey: secretKey.value,
+			endpoint: endpoint.value,
+			bucket: bucket.value
 		});
 
 		isLoading.value = false;
@@ -169,8 +392,10 @@ const setupLogin = () => {
 	};
 
 	return {
-		email,
-		password,
+		accessKey,
+		secretKey,
+		endpoint,
+		bucket,
 		isLoading,
 		login
 	};

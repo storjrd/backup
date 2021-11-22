@@ -108,16 +108,19 @@ export const store = createStore<State>({
 
 		async login(
 			{ dispatch },
-			{ email, password }: { email: string; password: string }
+			{
+				accessKey,
+				secretKey,
+				endpoint,
+				bucket
+			}: {
+				accessKey: string;
+				secretKey: string;
+				endpoint: string;
+				bucket: string;
+			}
 		) {
-			const [endpoint, bucket] = email.split(",").map((x) => x.trim());
-			const [accessKey, secretKey] = password
-				.split(",")
-				.map((x) => x.trim());
-
 			console.log({
-				email,
-				password,
 				endpoint,
 				bucket,
 				accessKey,
