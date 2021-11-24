@@ -25,7 +25,7 @@ let mainWindow;
 			try {
 				await restic.init();
 			} catch (err) {
-				console.warn(err);
+				// console.warn(err);
 			}
 
 			ipcMain.handle("snapshots", async () => restic.snapshots());
@@ -41,6 +41,13 @@ let mainWindow;
 			});
 
 			ipcMain.handle("get-backup-events", () => backupEvents.splice(0));
+
+			ipcMain.handle("restore", async (event, { snapshotId, target }) => {
+				const output = await restic.restore(snapshotId, target);
+				console.log({ output });
+
+				return output;
+			});
 		}
 	);
 
