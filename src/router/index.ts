@@ -4,6 +4,7 @@ import Dashboard from "../views/Dashboard.vue";
 import Backups from "../components/Backups.vue";
 import Settings from "../components/Settings.vue";
 import Account from "../components/Account.vue";
+import Restore from "../components/Restore.vue";
 
 const routes: Array<RouteRecordRaw> = [
 	{
@@ -30,6 +31,11 @@ const routes: Array<RouteRecordRaw> = [
 				name: "Account",
 				path: "account",
 				component: Account
+			},
+			{
+				name: "Restore",
+				path: "restore/:id",
+				component: Restore
 			}
 		]
 	}

@@ -122,7 +122,7 @@
 				</div>
 				<div class="mt-3 flex justify-start">
 					<input
-						ref="folderInput"
+						ref="folderInputElement"
 						type="file"
 						aria-roledescription="folder-upload"
 						hidden
