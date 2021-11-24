@@ -33,12 +33,13 @@
 			</div>
 			<div class="self-center">
 				<div class="flex space-x-1">
-					<ExclamationCircleIcon
+					<!-- <ExclamationCircleIcon
 						class="w-5 h-5 font-bold text-gray-700"
 					/>
-					<XCircleIcon class="w-5 h-5font-bold text-gray-700" />
-					<ArrowCircleUpIcon
-						class="w-5 h-5 font-bold text-gray-700"
+					<XCircleIcon class="w-5 h-5font-bold text-gray-700" /> -->
+					<ArrowCircleDownIcon
+						class="w-5 h-5 font-bold text-gray-700 cursor-pointer"
+						v-on:click="restore"
 					/>
 				</div>
 			</div>
@@ -99,7 +100,7 @@ import {
 	PlusCircleIcon,
 	ExclamationCircleIcon,
 	XCircleIcon,
-	ArrowCircleUpIcon,
+	ArrowCircleDownIcon,
 	CogIcon,
 	UserIcon
 } from "@heroicons/vue/outline";
@@ -110,6 +111,7 @@ import { useStore } from "@/store";
 interface Properties {
 	backup: IBackup;
 	backupMetadata: Ref<string>;
+	restore: () => void;
 }
 
 export default defineComponent({
@@ -119,7 +121,7 @@ export default defineComponent({
 		PlusCircleIcon,
 		ExclamationCircleIcon,
 		XCircleIcon,
-		ArrowCircleUpIcon,
+		ArrowCircleDownIcon,
 		CogIcon,
 		UserIcon
 	},
@@ -131,9 +133,14 @@ export default defineComponent({
 			backup.progress === 100 ? "Synced" : "Syncing"
 		);
 
+		const restore = () => {
+			router.push("/app/restore");
+		};
+
 		return {
 			backup,
-			backupMetadata
+			backupMetadata,
+			restore
 		};
 	}
 });
