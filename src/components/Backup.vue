@@ -134,7 +134,7 @@ export default defineComponent({
 		);
 
 		const restore = () => {
-			router.push("/app/restore");
+			router.push(`/app/restore/${backup.id}`);
 		};
 
 		return {
