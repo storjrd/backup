@@ -14,17 +14,17 @@ jobs:
 
             - run: just download-restic
 
+            - uses: docker-practice/actions-setup-docker@master
+
+            - run: docker run --rm -i --env ELECTRON_CACHE="/root/.cache/electron" --env ELECTRON_BUILDER_CACHE="/root/.cache/electron-builder" -v ${PWD}:/project -v ${PWD##*/}-node-modules:/project/node_modules -v ~/.cache/electron:/root/.cache/electron -v ~/.cache/electron-builder:/root/.cache/electron-builder electronuserland/builder:wine bash -c 'npm install; npm run build; npm run dist'
+
+            - run: rm -rf node_modules
+
             - run: npm install
 
             - run: npm install dmg-license
 
             - run: CSC_IDENTITY_AUTO_DISCOVERY=false npm run dist-mac
-
-            - run: rm -rf node_modules
-
-            - uses: docker-practice/actions-setup-docker@master
-
-            - run: docker run --rm -i --env ELECTRON_CACHE="/root/.cache/electron" --env ELECTRON_BUILDER_CACHE="/root/.cache/electron-builder" -v ${PWD}:/project -v ${PWD##*/}-node-modules:/project/node_modules -v ~/.cache/electron:/root/.cache/electron -v ~/.cache/electron-builder:/root/.cache/electron-builder electronuserland/builder:wine bash -c 'npm install; npm run build; npm run dist'
 
             - uses: actions/upload-artifact@v2
               with:
