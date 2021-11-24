@@ -41,6 +41,16 @@ jobs:
                   name: "backup Setup 1.0.0.exe"
                   path: "output/backup Setup 1.0.0.exe"
 
+            - uses: actions/upload-artifact@v2
+              with:
+                  name: "backup-1.0.0.dmg"
+                  path: "output/backup-1.0.0.dmg"
+
+            - uses: actions/upload-artifact@v2
+              with:
+                  name: "backup-1.0.0-mac.zip"
+                  path: "output/backup-1.0.0-mac.zip"
+
             - uses: softprops/action-gh-release@v1
               if: startsWith(github.ref, 'refs/tags/')
               with:
@@ -48,3 +58,5 @@ jobs:
                       output/backup-1.0.0.AppImage
                       output/backup_1.0.0_amd64.snap
                       output/backup Setup 1.0.0.exe
+                      output/backup-1.0.0.dmg
+                      iutput/backup-1.0.0-mac.zip
