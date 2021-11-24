@@ -12,6 +12,7 @@ export interface Snapshot {
 }
 
 export interface IBackup {
+	id: string;
 	name: string;
 	progress: number;
 	hostname: string;

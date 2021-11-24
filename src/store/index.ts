@@ -167,10 +167,15 @@ export const store = createStore<State>({
 			{},
 			{ snapshotId, target }: { snapshotId: string; target: string }
 		) {
-			await backend.invoke({
+			await backend.invoke("restore", {
 				snapshotId,
 				target
 			});
+		},
+
+		// prompt user for directory
+		async getDirectory() {
+			return backend.invoke("get-directory");
 		}
 	},
 	modules: {}

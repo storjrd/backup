@@ -7,6 +7,7 @@
 			/>
 			<h1 class="text-lg font-bold">Restore</h1>
 		</div>
+
 		<div class="mt-5" v-if="location">
 			<p class="text-lg font-medium">Location</p>
 			<p class="text-xs font-normal text-gray-700 -mt-1">
@@ -14,16 +15,8 @@
 			</p>
 			<p class="text-gray-700 text-sm mt-2">{{ location }}</p>
 		</div>
+
 		<div>
-			<input
-				ref="locationInputElement"
-				type="file"
-				aria-roledescription="folder-restore-location"
-				hidden
-				webkitdirectory
-				mozdirectory
-				v-on:change="locationChosen"
-			/>
 			<button
 				type="button"
 				class="
@@ -50,24 +43,60 @@
 			>
 				Choose Location
 			</button>
+
+			<button
+				type="button"
+				class="
+					inline-flex
+					items-center
+					px-3
+					py-2
+					mt-8
+					border border-transparent
+					text-sm
+					leading-4
+					font-medium
+					rounded-md
+					shadow-sm
+					text-white
+					bg-storjBlue
+					hover:storjBlue
+					focus:outline-none
+					focus:ring-2
+					focus:ring-offset-2
+					focus:ring-storjBlue
+				"
+				v-bind:disabled="restoreDisabled"
+				v-on:click="restore"
+			>
+				Restore
+			</button>
+
+			<p v-if="loading">Restoring...</p>
+
+			<p v-if="completed">Restore complete!</p>
 		</div>
 	</div>
 </template>
 
 <script lang="ts">
 import { defineComponent, ref, Ref, computed } from "vue";
+import { useRouter, useRoute } from "vue-router";
 import { useStore } from "@/store";
-import router from "@/router";
 
 import { ArrowLeftIcon } from "@heroicons/vue/solid";
 
 interface Properties {
-	location: Ref<string>;
-	spinner: Ref<boolean>;
 	locationInputElement: Ref<null | HTMLInputElement>;
+
+	location: Ref<string>;
+	loading: Ref<boolean>;
+	restoreDisabled: Ref<boolean>;
+	completed: Ref<boolean>;
+
 	chooseLocation: () => void;
-	locationChosen: (arg0: Event) => void;
 	goBackToBackups: () => void;
+	restore: () => void;
 }
 
 export default defineComponent({
@@ -76,23 +105,38 @@ export default defineComponent({
 		ArrowLeftIcon
 	},
 	setup: (): Properties => {
-		const location = ref("hi/test/go");
-		const spinner = ref(false);
+		const store = useStore();
+		const router = useRouter();
+		const route = useRoute();
+
+		const location = ref("");
+		const loading = ref(false);
+		const completed = ref(false);
 		const locationInputElement = ref<null | HTMLInputElement>(null);
 
-		const chooseLocation = () => {
-			if (locationInputElement.value !== null) {
-				locationInputElement.value.click();
-			} else {
-				throw new Error("locationInputElement null");
-			}
+		const restoreDisabled = computed(() => location.value === "");
+
+		const chooseLocation = async () => {
+			const response: {
+				canceled: boolean;
+				filePaths: string[];
+			} = await store.dispatch("getDirectory");
+
+			location.value = response.filePaths[0];
+			completed.value = false;
 		};
 
-		const locationChosen = (e: Event) => {
-			const target = e.target as HTMLInputElement;
-			const path: string = (target.files as unknown as any[])[0].path;
-			const folderPath: string = path.split("/").slice(0, -1).join("/");
-			location.value = folderPath;
+		const restore = async () => {
+			console.log("restore()");
+			loading.value = true;
+
+			await store.dispatch("restore", {
+				snapshotId: route.params.id,
+				target: location.value
+			});
+
+			loading.value = false;
+			completed.value = true;
 		};
 
 		const goBackToBackups = () => {
@@ -101,11 +145,13 @@ export default defineComponent({
 
 		return {
 			location,
-			spinner,
+			loading,
+			completed,
+			restoreDisabled,
 			locationInputElement,
 			chooseLocation,
-			locationChosen,
-			goBackToBackups
+			goBackToBackups,
+			restore
 		};
 	}
 });

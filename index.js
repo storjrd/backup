@@ -1,6 +1,6 @@
 const os = require("os");
 const net = require("net");
-const { app, BrowserWindow, ipcMain } = require("electron");
+const { app, dialog, BrowserWindow, ipcMain } = require("electron");
 const serve = require("electron-serve");
 const createRestic = require("./lib/createRestic");
 
@@ -43,6 +43,7 @@ let mainWindow;
 			ipcMain.handle("get-backup-events", () => backupEvents.splice(0));
 
 			ipcMain.handle("restore", async (event, { snapshotId, target }) => {
+				console.log({ snapshotId, target });
 				const output = await restic.restore(snapshotId, target);
 				console.log({ output });
 
@@ -65,6 +66,12 @@ let mainWindow;
 			nodeIntegration: false,
 			preload: `${__dirname}/preload.js`
 		}
+	});
+
+	ipcMain.handle("get-directory", async () => {
+		return dialog.showOpenDialog(mainWindow, {
+			properties: ["openDirectory"]
+		});
 	});
 
 	if (process.env.STORJ_BACKUP_DEV !== "true") {
