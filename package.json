@@ -10,7 +10,8 @@
 		"start": "electron .",
 		"test": "echo \"Error: no test specified\" && exit 1",
 		"pack": "electron-builder --dir",
-		"dist": "electron-builder -wl"
+		"dist-mac": "electron-builder -m --publish never",
+		"dist": "electron-builder -wl --publish never"
 	},
 	"main": "index.js",
 	"dependencies": {

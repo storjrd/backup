@@ -4,7 +4,7 @@ on: [push]
 
 jobs:
     build:
-        runs-on: ubuntu-latest
+        runs-on: macos-latest
         steps:
             - run: curl --proto '=https' --tlsv1.2 -sSf https://just.systems/install.sh | sudo bash -s -- --to /usr/local/bin
 
@@ -14,7 +14,17 @@ jobs:
 
             - run: just download-restic
 
+            - uses: docker-practice/actions-setup-docker@master
+
             - run: docker run --rm -i --env ELECTRON_CACHE="/root/.cache/electron" --env ELECTRON_BUILDER_CACHE="/root/.cache/electron-builder" -v ${PWD}:/project -v ${PWD##*/}-node-modules:/project/node_modules -v ~/.cache/electron:/root/.cache/electron -v ~/.cache/electron-builder:/root/.cache/electron-builder electronuserland/builder:wine bash -c 'npm install; npm run build; npm run dist'
+
+            - run: rm -rf node_modules
+
+            - run: npm install
+
+            - run: npm install dmg-license
+
+            - run: CSC_IDENTITY_AUTO_DISCOVERY=false npm run dist-mac
 
             - uses: actions/upload-artifact@v2
               with:
@@ -31,6 +41,16 @@ jobs:
                   name: "backup Setup 1.0.0.exe"
                   path: "output/backup Setup 1.0.0.exe"
 
+            - uses: actions/upload-artifact@v2
+              with:
+                  name: "backup-1.0.0.dmg"
+                  path: "output/backup-1.0.0.dmg"
+
+            - uses: actions/upload-artifact@v2
+              with:
+                  name: "backup-1.0.0-mac.zip"
+                  path: "output/backup-1.0.0-mac.zip"
+
             - uses: softprops/action-gh-release@v1
               if: startsWith(github.ref, 'refs/tags/')
               with:
@@ -38,3 +58,5 @@ jobs:
                       output/backup-1.0.0.AppImage
                       output/backup_1.0.0_amd64.snap
                       output/backup Setup 1.0.0.exe
+                      output/backup-1.0.0.dmg
+                      iutput/backup-1.0.0-mac.zip
