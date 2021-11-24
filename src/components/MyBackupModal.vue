@@ -121,16 +121,6 @@
 					</div>
 				</div>
 				<div class="mt-3 flex justify-start">
-					<input
-						ref="folderInputElement"
-						type="file"
-						aria-roledescription="folder-upload"
-						hidden
-						webkitdirectory
-						mozdirectory
-						multiple
-						v-on:change="upload"
-					/>
 					<button
 						v-on:click="addFolderButton"
 						type="button"
@@ -317,7 +307,6 @@ interface Properties {
 	backupNameInputOpen: Ref<boolean>;
 	selectedFrequency: Ref<string>;
 	passphrase: Ref<string>;
-	folderInputElement: Ref<null | HTMLInputElement>;
 
 	foldersArr: ComputedRef<string[]>;
 	foldersExist: ComputedRef<boolean>;
@@ -333,7 +322,6 @@ interface Properties {
 	closeModal: () => void;
 	nextButton: () => void;
 	addFolderButton: () => void;
-	upload: (arg0: Event) => void;
 	folderUploadMetaData: (arg0: string) => void;
 	deleteFolder: (arg0: string) => void;
 }
@@ -436,58 +424,23 @@ export default defineComponent({
 			}
 		};
 
-		const folderInputElement = ref<null | HTMLInputElement>(null);
+		const addFolderButton = async () => {
+			const response: {
+				canceled: boolean;
+				filePaths: string[];
+			} = await store.dispatch("getDirectory");
 
-		const addFolderButton = () => {
-			if (folderInputElement.value !== null) {
-				folderInputElement.value.click();
-			} else {
-				throw new Error("folderInputElement null");
-			}
-		};
+			const path = response.filePaths[0];
 
-		const upload = (e: Event) => {
-			const target = e.target as HTMLInputElement;
-			const files = target.files as FileList;
-
-			for (const file of files as unknown as any[]) {
-				const relativePath = file.webkitRelativePath;
-				const folderNameKey = relativePath.split("/")[0];
-				const path = file.path.split("/").slice(0, -1).join("/");
-
-				let folder = folders[folderNameKey];
-
-				if (folder === undefined) {
-					folder = {
-						mediaTypes: {
-							photosOrVideos: 0,
-							otherFiles: 0
-						},
-						displaySize: 0,
-						filesAlreadyAdded: {},
-						absolutePath: path
-					};
-
-					folders[folderNameKey] = folder;
-				}
-
-				if (folder.filesAlreadyAdded[relativePath]) {
-					folder.filesAlreadyAdded[relativePath] = true;
-
-					if (
-						file.type.includes("image") ||
-						file.type.includes("video")
-					) {
-						folder.mediaTypes.photosOrVideos += 1;
-					} else {
-						folder.mediaTypes.otherFiles += 1;
-					}
-
-					folder.displaySize += file.size;
-				}
-			}
-
-			(e.target as any)["value"] = "";
+			folders[path] = {
+				mediaTypes: {
+					photosOrVideos: 0,
+					otherFiles: 0
+				},
+				displaySize: 0,
+				filesAlreadyAdded: {},
+				absolutePath: path
+			};
 		};
 
 		const folderUploadMetaData = (folderName: string) => {
@@ -512,7 +465,6 @@ export default defineComponent({
 			backupNameInputOpen,
 			selectedFrequency,
 			passphrase,
-			folderInputElement,
 
 			foldersArr,
 			foldersExist,
@@ -528,7 +480,6 @@ export default defineComponent({
 			closeModal,
 			nextButton,
 			addFolderButton,
-			upload,
 			folderUploadMetaData,
 			deleteFolder
 		};
