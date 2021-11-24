@@ -163,109 +163,132 @@
 </template>
 
 <script lang="ts">
-import { defineComponent } from "vue";
-import { store } from "../store/index";
+import { defineComponent, ref, Ref, computed } from "vue";
+import { useStore } from "@/store";
+import router from "@/router";
+
 import { ArrowLeftIcon } from "@heroicons/vue/solid";
 import prettyBytes from "pretty-bytes";
+
+interface Properties {
+	account: Ref<string>;
+	videosUsage: Ref<number>;
+	picturesUsage: Ref<number>;
+	documentsUsage: Ref<number>;
+	othersUsage: Ref<number>;
+	videosUsagePercentage: Ref<number>;
+	picturesUsagePercentage: Ref<number>;
+	documentsUsagePercentage: Ref<number>;
+	othersUsagePercentage: Ref<number>;
+	usingDisplay: Ref<string>;
+	chargesDisplay: Ref<string>;
+	goBackToBackups: () => void;
+	usagePercentage: (arg0: number) => number;
+	logout: () => void;
+	upgradePlan: () => void;
+}
+
+const setupAccount = (): Properties => {
+	const store = useStore();
+
+	const account = computed((): string => store.state.account);
+
+	const accountType = computed((): string => store.state.accountType);
+
+	const plan = computed((): number => store.state.plan);
+
+	const videosUsage = computed((): number => store.state.videosUsage);
+
+	const picturesUsage = computed((): number => store.state.picturesUsage);
+
+	const documentsUsage = computed((): number => store.state.documentsUsage);
+
+	const othersUsage = computed((): number => store.state.othersUsage);
+
+	const videosUsagePercentage = computed((): number => {
+		return usagePercentage(videosUsage.value);
+	});
+
+	const picturesUsagePercentage = computed((): number => {
+		return usagePercentage(picturesUsage.value);
+	});
+
+	const documentsUsagePercentage = computed((): number => {
+		return usagePercentage(documentsUsage.value);
+	});
+
+	const othersUsagePercentage = computed((): number => {
+		return usagePercentage(othersUsage.value);
+	});
+
+	const using = computed((): number => {
+		return (
+			videosUsage.value +
+			picturesUsage.value +
+			documentsUsage.value +
+			othersUsage.value
+		);
+	});
+
+	const usingDisplay = computed((): string => {
+		return `Using ${prettyBytes(using.value)} of ${prettyBytes(
+			plan.value
+		)}`;
+	});
+
+	const availableSpace = computed((): number => plan.value - using.value);
+
+	// retrieve this info from store
+	const charges = computed((): number => 0);
+
+	const chargesDisplay = computed((): string => {
+		if (accountType.value === store.getters["accountTypes"].freeAccount) {
+			return `${accountType.value} Account - no charges.`;
+		} else {
+			return `${accountType.value} - ${charges.value}`;
+		}
+	});
+
+	const goBackToBackups = (): void => {
+		router.push("/app/backups");
+	};
+
+	const usagePercentage = (usage: number): number => {
+		return (usage / plan.value) * 100;
+	};
+
+	const logout = (): void => {
+		router.push("/");
+	};
+
+	const upgradePlan = (): void => {};
+
+	return {
+		account,
+		videosUsage,
+		picturesUsage,
+		documentsUsage,
+		othersUsage,
+		videosUsagePercentage,
+		picturesUsagePercentage,
+		documentsUsagePercentage,
+		othersUsagePercentage,
+		usingDisplay,
+		chargesDisplay,
+		goBackToBackups,
+		usagePercentage,
+		logout,
+		upgradePlan
+	};
+};
 
 export default defineComponent({
 	name: "Account",
 	components: {
 		ArrowLeftIcon
 	},
-	data: () => ({}),
-	computed: {
-		account(): string {
-			return store.state.account;
-		},
-
-		accountType(): string {
-			return store.state.accountType;
-		},
-
-		plan(): number {
-			return store.state.plan;
-		},
-
-		videosUsage(): number {
-			return store.state.videosUsage;
-		},
-
-		picturesUsage(): number {
-			return store.state.picturesUsage;
-		},
-
-		documentsUsage(): number {
-			return store.state.documentsUsage;
-		},
-
-		othersUsage(): number {
-			return store.state.othersUsage;
-		},
-
-		videosUsagePercentage(): number {
-			return this.usagePercentage(this.videosUsage);
-		},
-
-		picturesUsagePercentage(): number {
-			return this.usagePercentage(this.picturesUsage);
-		},
-
-		documentsUsagePercentage(): number {
-			return this.usagePercentage(this.documentsUsage);
-		},
-
-		othersUsagePercentage(): number {
-			return this.usagePercentage(this.othersUsage);
-		},
-
-		using(): number {
-			return (
-				this.videosUsage +
-				this.picturesUsage +
-				this.documentsUsage +
-				this.othersUsage
-			);
-		},
-
-		usingDisplay(): string {
-			return `Using ${prettyBytes(this.using)} of ${prettyBytes(
-				this.plan
-			)}`;
-		},
-
-		availableSpace(): number {
-			return this.plan - this.using;
-		},
-
-		charges(): number {
-			return 0;
-		},
-
-		chargesDisplay(): string {
-			if (
-				this.accountType === store.getters["accountTypes"].freeAccount
-			) {
-				return `${this.accountType} Account - no charges.`;
-			} else {
-				return `${this.accountType} - ${this.charges}`;
-			}
-		}
-	},
-	methods: {
-		goBackToBackups(): void {
-			this.$router.push("/app/backups");
-		},
-
-		usagePercentage(usage: number): number {
-			return (usage / this.plan) * 100;
-		},
-
-		logout(): void {
-			this.$router.push("/");
-		},
-
-		upgradePlan(): void {}
-	}
+	setup: (): Properties => ({
+		...setupAccount()
+	})
 });
 </script>
