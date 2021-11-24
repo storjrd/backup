@@ -1,7 +1,14 @@
 export interface Snapshot {
-	hostname: string;
 	time: string;
+	parent: string;
+	tree: string;
 	paths: string[];
+	hostname: string;
+	username: string;
+	uid: Number;
+	gid: Number;
+	id: string;
+	short_id: string;
 }
 
 export interface IBackup {
