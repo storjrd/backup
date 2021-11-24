@@ -161,6 +161,16 @@ export const store = createStore<State>({
 			console.log("backup finished");
 
 			dispatch("getSnapshots");
+		},
+
+		async restore(
+			{},
+			{ snapshotId, target }: { snapshotId: string; target: string }
+		) {
+			await backend.invoke({
+				snapshotId,
+				target
+			});
 		}
 	},
 	modules: {}
