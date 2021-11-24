@@ -148,6 +148,7 @@
 							id="accessKey"
 							class="
 								block
+								w-full
 								border-0
 								p-0
 								text-gray-900

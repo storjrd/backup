@@ -16,7 +16,7 @@
 			<p class="text-gray-700 text-sm mt-2">{{ location }}</p>
 		</div>
 
-		<div>
+		<div class="space-x-4">
 			<button
 				type="button"
 				class="
@@ -59,6 +59,30 @@
 					rounded-md
 					shadow-sm
 					text-white
+					bg-blue-200
+					focus:outline-none
+					cursor-not-allowed
+				"
+				v-if="restoreDisabled"
+			>
+				Restore
+			</button>
+
+			<button
+				type="button"
+				class="
+					inline-flex
+					items-center
+					px-3
+					py-2
+					mt-8
+					border border-transparent
+					text-sm
+					leading-4
+					font-medium
+					rounded-md
+					shadow-sm
+					text-white
 					bg-storjBlue
 					hover:storjBlue
 					focus:outline-none
@@ -66,14 +90,14 @@
 					focus:ring-offset-2
 					focus:ring-storjBlue
 				"
-				v-bind:disabled="restoreDisabled"
+				v-else
 				v-on:click="restore"
 			>
 				Restore
 			</button>
-
+		</div>
+		<div class="mt-4">
 			<p v-if="loading">Restoring...</p>
-
 			<p v-if="completed">Restore complete!</p>
 		</div>
 	</div>
