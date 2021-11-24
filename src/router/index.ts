@@ -34,7 +34,7 @@ const routes: Array<RouteRecordRaw> = [
 			},
 			{
 				name: "Restore",
-				path: "restore/:id",
+				path: "restore",
 				component: Restore
 			}
 		]
