@@ -1,8 +1,14 @@
 # backup
 
-Easily backup your files with Storj. Built with Vue, Restic and Electron.
+Easily backup your files with Storj.
 
-## usage
+> [universe.storj.io](https://universe.storj.io)
+
+![Screenshot](./screenshot.png)
+
+## build from source
+
+Requires git, wget, curl, node, npm, and just.
 
 ```
 git clone https://github.com/storjrd/backup.git
@@ -30,4 +36,14 @@ just
 
 ```
 just dev
+```
+
+Alternatively you can run the 'backend' (electron app) and 'frontend' (vue app build) seperately.
+
+```
+just backend
+```
+
+```
+just frontend
 ```
