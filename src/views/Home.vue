@@ -329,7 +329,7 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, ref, computed } from "vue";
+import { defineComponent, ref, computed, watch } from "vue";
 import { useStore } from "@/store";
 import { useRouter } from "vue-router";
 
@@ -370,6 +370,15 @@ const setupLogin = () => {
 	const store = useStore();
 	const router = useRouter();
 
+	// if user becomes logged in, redirect
+	const loginStatus = computed<boolean>(() => store.state.loginStatus);
+
+	watch(loginStatus, () => {
+		if (loginStatus.value === true) {
+			router.push("/app/backups");
+		}
+	});
+
 	const accessKey = ref<string>("");
 	const secretKey = ref<string>("");
 	const endpoint = ref<string>("");
@@ -388,8 +397,6 @@ const setupLogin = () => {
 		});
 
 		isLoading.value = false;
-
-		router.push("/app/backups");
 	};
 
 	return {

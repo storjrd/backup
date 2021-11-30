@@ -22,6 +22,10 @@ const { backend } = window;
 
 export interface State {
 	snapshots: Snapshot[] | null;
+	backupEvents: any[];
+	loginStatus: boolean;
+
+	// todo: remove
 	account: string;
 	plan: number;
 	accountType: string;
@@ -33,7 +37,6 @@ export interface State {
 	backupLocation: string;
 	localCachedDirectory: string;
 	preferences: boolean;
-	backupEvents: any[];
 }
 
 export const key: InjectionKey<Store<State>> = Symbol();
@@ -41,6 +44,9 @@ export const key: InjectionKey<Store<State>> = Symbol();
 export const store = createStore<State>({
 	state: {
 		snapshots: null,
+		backupEvents: [],
+		loginStatus: false,
+
 		account: "david@gmail.com",
 		plan: 1.5e11,
 		accountType: "Free",
@@ -53,13 +59,10 @@ export const store = createStore<State>({
 		othersUsage: 4e9,
 		backupLocation: "/Volumes/StorjBackup",
 		localCachedDirectory: "/Volumes/StorjBackup",
-		preferences: true,
-		backupEvents: []
+		preferences: true
 	},
 	getters: {
-		accountTypes(state) {
-			return state.accountTypes;
-		},
+		accountTypes: (state) => state.accountTypes,
 
 		lastStatusEvent: (state): BackupStatusEvent | undefined => {
 			const isStatusEvent = (event: BackupEvent): boolean =>
@@ -81,10 +84,15 @@ export const store = createStore<State>({
 
 		backupStarted: (state, getters): boolean =>
 			getters.lastStatusEvent !== undefined,
+
 		backupFinished: (state, getters): boolean =>
 			getters.lastSummaryEvent !== undefined
 	},
 	mutations: {
+		login(state) {
+			state.loginStatus = true;
+		},
+
 		setSnapshots(state, snapshots) {
 			state.snapshots = snapshots;
 		},
@@ -107,7 +115,7 @@ export const store = createStore<State>({
 		},
 
 		async login(
-			{ dispatch },
+			{ commit },
 			{
 				accessKey,
 				secretKey,
@@ -133,6 +141,8 @@ export const store = createStore<State>({
 				accessKey,
 				secretKey
 			});
+
+			commit("login");
 		},
 
 		async backup(
@@ -180,5 +190,11 @@ export const store = createStore<State>({
 	},
 	modules: {}
 });
+
+(async () => {
+	if (await backend.invoke("loginStatus")) {
+		store.commit("login");
+	}
+})();
 
 export const useStore = () => baseUseStore(key);
