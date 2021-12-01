@@ -370,15 +370,6 @@ const setupLogin = () => {
 	const store = useStore();
 	const router = useRouter();
 
-	// if user becomes logged in, redirect
-	const loginStatus = computed<boolean>(() => store.state.loginStatus);
-
-	watch(loginStatus, () => {
-		if (loginStatus.value === true) {
-			router.push("/app/backups");
-		}
-	});
-
 	const accessKey = ref<string>("");
 	const secretKey = ref<string>("");
 	const endpoint = ref<string>("");

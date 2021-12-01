@@ -258,7 +258,7 @@ const setupAccount = (): Properties => {
 	};
 
 	const logout = (): void => {
-		router.push("/");
+		store.dispatch("logout");
 	};
 
 	const upgradePlan = (): void => {};

@@ -93,6 +93,10 @@ export const store = createStore<State>({
 			state.loginStatus = true;
 		},
 
+		logout(state) {
+			state.loginStatus = false;
+		},
+
 		setSnapshots(state, snapshots) {
 			state.snapshots = snapshots;
 		},
@@ -143,6 +147,11 @@ export const store = createStore<State>({
 			});
 
 			commit("login");
+		},
+
+		async logout({ commit }) {
+			await backend.invoke("logout");
+			commit("logout");
 		},
 
 		async backup(

@@ -87,6 +87,18 @@ const loadURL = serve({ directory: `${__dirname}/dist` });
 		loginStatus = true;
 	}
 
+	ipcMain.handle("logout", async () => {
+		ipcMain.removeHandler("snapshots");
+		ipcMain.removeHandler("backup");
+		ipcMain.removeHandler("get-backup-events");
+		ipcMain.removeHandler("restore");
+
+		await config.set({
+			credentials: undefined,
+			resticPassphrase: undefined
+		});
+	});
+
 	await app.whenReady();
 
 	const mainWindow = new BrowserWindow({
