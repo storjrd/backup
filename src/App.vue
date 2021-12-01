@@ -10,15 +10,35 @@
 </template>
 
 <script lang="ts">
-import { defineComponent } from "vue";
+import { defineComponent, Ref, computed, watch } from "vue";
+import { useRouter, useRoute } from "vue-router";
+import { useStore } from "./store";
+
+interface Properties {
+	logoPath: Ref<boolean>;
+}
 
 export default defineComponent({
 	name: "App",
-	computed: {
-		logoPath(): boolean {
-			const name: string = String(this.$route.name);
-			return name === "Home" || name === "Backups";
-		}
+	setup: (): Properties => {
+		const router = useRouter();
+		const route = useRoute();
+		const store = useStore();
+
+		// if user becomes logged in, redirect
+		const loginStatus = computed<boolean>(() => store.state.loginStatus);
+
+		watch(loginStatus, () => {
+			router.push(loginStatus.value ? "/app/backups" : "/");
+		});
+
+		const logoPath = computed<boolean>(() =>
+			["Home", "Backups"].includes(route.path)
+		);
+
+		return {
+			logoPath
+		};
 	}
 });
 </script>

@@ -329,7 +329,7 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, ref, computed } from "vue";
+import { defineComponent, ref, computed, watch } from "vue";
 import { useStore } from "@/store";
 import { useRouter } from "vue-router";
 
@@ -388,8 +388,6 @@ const setupLogin = () => {
 		});
 
 		isLoading.value = false;
-
-		router.push("/app/backups");
 	};
 
 	return {
