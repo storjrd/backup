@@ -195,6 +195,10 @@ export const store = createStore<State>({
 		// prompt user for directory
 		async getDirectory() {
 			return backend.invoke("get-directory");
+		},
+
+		async openExternal({}, { url }: { url: string }) {
+			backend.invoke("openExternal", { url });
 		}
 	},
 	modules: {}
