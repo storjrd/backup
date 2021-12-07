@@ -7,4 +7,4 @@ jobs:
         runs-on: ubuntu-latest
         steps:
             - uses: actions/checkout@v2
-            - run: npx prettier@2.4.1 --check .
+            - run: ./node_modules/prettier/bin-prettier.js --check .
