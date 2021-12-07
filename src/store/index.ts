@@ -195,6 +195,14 @@ export const store = createStore<State>({
 		// prompt user for directory
 		async getDirectory() {
 			return backend.invoke("get-directory");
+		},
+
+		async openSignup() {
+			backend.invoke("openSignup");
+		},
+
+		async openUpgradePlan() {
+			backend.invoke("openUpgradePlan");
 		}
 	},
 	modules: {}

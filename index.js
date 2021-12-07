@@ -1,6 +1,6 @@
 const os = require("os");
 const net = require("net");
-const { app, dialog, BrowserWindow, ipcMain } = require("electron");
+const { app, dialog, BrowserWindow, ipcMain, shell } = require("electron");
 const serve = require("electron-serve");
 
 const config = require("./lib/config");
@@ -38,6 +38,14 @@ const loadURL = serve({ directory: `${__dirname}/dist` });
 			return output;
 		});
 	};
+
+	ipcMain.handle("openSignup", async () => {
+		shell.openExternal("https://storj.io");
+	});
+
+	ipcMain.handle("openUpgradePlan", async () => {
+		shell.openExternal("https://storj.io/pricing");
+	});
 
 	const { credentials } = await config.get();
 

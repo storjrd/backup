@@ -13,11 +13,10 @@
 						v-on:click="toggleView"
 						>{{ subheadingText }} &#8594;</span
 					> -->
-					<a
+					<span
 						class="underline cursor-pointer"
-						href="https://storj.io"
-						target="_blank"
-						>{{ subheadingText }} &#8594;</a
+						v-on:click="openHomepage"
+						>{{ subheadingText }} &#8594;</span
 					>
 				</p>
 			</div>
@@ -356,13 +355,18 @@ const setupViews = () => {
 		signInView.value = !signInView.value;
 	};
 
+	const openHomepage = () => {
+		store.dispatch("openSignup");
+	};
+
 	return {
 		signInView,
 		signUpView,
 		headerText,
 		subheadingText,
 		buttonText,
-		toggleView
+		toggleView,
+		openHomepage
 	};
 };
 
