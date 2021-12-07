@@ -356,7 +356,7 @@ const setupViews = () => {
 	};
 
 	const openHomepage = () => {
-		store.dispatch("openExternal", { url: "https://storj.io" });
+		store.dispatch("openSignup");
 	};
 
 	return {

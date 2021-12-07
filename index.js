@@ -39,8 +39,12 @@ const loadURL = serve({ directory: `${__dirname}/dist` });
 		});
 	};
 
-	ipcMain.handle("openExternal", async (event, { url }) => {
-		shell.openExternal(url);
+	ipcMain.handle("openSignup", async () => {
+		shell.openExternal("https://storj.io");
+	});
+
+	ipcMain.handle("openUpgradePlan", async () => {
+		shell.openExternal("https://storj.io/pricing");
 	});
 
 	const { credentials } = await config.get();

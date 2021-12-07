@@ -262,7 +262,7 @@ const setupAccount = (): Properties => {
 	};
 
 	const upgradePlan = (): void => {
-		store.dispatch("openExternal", { url: "https://storj.io/pricing" });
+		store.dispatch("openUpgradePlan");
 	};
 
 	return {
