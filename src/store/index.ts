@@ -197,7 +197,7 @@ export const store = createStore<State>({
 			return backend.invoke("get-directory");
 		},
 
-		async openSignup({}) {
+		async openSignup() {
 			backend.invoke("openSignup");
 		},
 
