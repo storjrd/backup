@@ -155,7 +155,7 @@
 				focus:ring-offset-2
 				focus:ring-storjBlue
 			"
-			v-on:click="upgradePlan"
+			v-on:click="openUpgradePlanPage"
 		>
 			Upgrade Plan
 		</button>
@@ -185,7 +185,7 @@ interface Properties {
 	goBackToBackups: () => void;
 	usagePercentage: (arg0: number) => number;
 	logout: () => void;
-	upgradePlan: () => void;
+	openUpgradePlanPage: () => void;
 }
 
 const setupAccount = (): Properties => {
@@ -261,7 +261,7 @@ const setupAccount = (): Properties => {
 		store.dispatch("logout");
 	};
 
-	const upgradePlan = (): void => {
+	const openUpgradePlanPage = (): void => {
 		store.dispatch("openUpgradePlan");
 	};
 
@@ -280,7 +280,7 @@ const setupAccount = (): Properties => {
 		goBackToBackups,
 		usagePercentage,
 		logout,
-		upgradePlan
+		openUpgradePlanPage
 	};
 };
 
