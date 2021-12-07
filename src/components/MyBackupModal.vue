@@ -14,31 +14,13 @@
 						/>
 						<div
 							v-on:click="saveBackupNameChange"
-							class="
-								bg-green-100
-								p-1
-								rounded-full
-								w-5
-								h-5
-								flex
-								self-center
-								cursor-pointer
-							"
+							class="bg-green-100 p-1 rounded-full w-5 h-5 flex self-center cursor-pointer"
 						>
 							<CheckIcon class="w-3 h-3 text-green-700" />
 						</div>
 						<div
 							v-on:click="cancelBackupNameChange"
-							class="
-								bg-red-100
-								p-1
-								rounded-full
-								w-5
-								h-5
-								flex
-								self-center
-								cursor-pointer
-							"
+							class="bg-red-100 p-1 rounded-full w-5 h-5 flex self-center cursor-pointer"
 						>
 							<XIcon class="w-3 h-3 text-red-700" />
 						</div>
@@ -50,16 +32,7 @@
 					</h1>
 					<div
 						v-on:click="changeBackupName"
-						class="
-							bg-gray-100
-							p-1
-							rounded-full
-							w-5
-							h-5
-							flex
-							self-center
-							cursor-pointer
-						"
+						class="bg-gray-100 p-1 rounded-full w-5 h-5 flex self-center cursor-pointer"
 					>
 						<img src="@/assets/editIcon.svg" class="w-3 h-3" />
 					</div>
@@ -75,12 +48,7 @@
 					>
 						<div class="flex justify-between">
 							<div
-								class="
-									flex
-									justify-start
-									content-center
-									items-center
-								"
+								class="flex justify-start content-center items-center"
 							>
 								<img
 									class="w-5 h-5 fill-current text-black mr-2"
@@ -89,11 +57,7 @@
 								<p class="text-lg">{{ folder }}</p>
 							</div>
 							<p
-								class="
-									text-storjBlue
-									cursor-pointer
-									hover:underline
-								"
+								class="text-storjBlue cursor-pointer hover:underline"
 								v-on:click="deleteFolder(folder)"
 							>
 								Delete
@@ -105,17 +69,7 @@
 					</div>
 					<div
 						v-if="!foldersExist"
-						class="
-							bg-gray-50
-							border border-gray-200
-							rounded-lg
-							p-3
-							flex
-							justify-start
-							content-center
-							h-full
-							w-auto
-						"
+						class="bg-gray-50 border border-gray-200 rounded-lg p-3 flex justify-start content-center h-full w-auto"
 					>
 						<p class="text-base">Folders to backup...</p>
 					</div>
@@ -124,22 +78,7 @@
 					<button
 						v-on:click="addFolderButton"
 						type="button"
-						class="
-							inline-flex
-							items-center
-							px-3
-							py-2
-							border border-gray-300
-							shadow-sm
-							text-sm
-							leading-4
-							font-medium
-							rounded-md
-							text-gray-700
-							bg-white
-							hover:bg-gray-50
-							focus:outline-none focus:ring-2 focus:ring-offset-2
-						"
+						class="inline-flex items-center px-3 py-2 border border-gray-300 shadow-sm text-sm leading-4 font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2"
 					>
 						<PlusCircleIcon
 							class="w-5 h-5 mr-2 font-bold text-gray-500"
@@ -156,20 +95,7 @@
 					<select
 						id="location"
 						name="location"
-						class="
-							mt-1
-							block
-							w-full
-							pl-3
-							pr-10
-							py-2
-							text-base
-							border-gray-300
-							focus:outline-none
-							focus:ring-storjBlue
-							focus:border-storjBluesm:text-sm
-							rounded-md
-						"
+						class="mt-1 block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-storjBlue focus:border-storjBluesm:text-sm rounded-md"
 						v-model="selectedFrequency"
 					>
 						<option v-for="frequency in frequencyOptions">
@@ -187,16 +113,7 @@
 						type="text"
 						name="passphrase"
 						id="passphrase"
-						class="
-							shadow-sm
-							focus:ring-storjBlue focus:border-storjBlue
-							block
-							w-full
-							sm:text-sm
-							border-gray-300
-							rounded-md
-							placeholder-gray-300
-						"
+						class="shadow-sm focus:ring-storjBlue focus:border-storjBlue block w-full sm:text-sm border-gray-300 rounded-md placeholder-gray-300"
 						placeholder="Ex: secureP4ssphrase678#"
 					/>
 				</div>
@@ -205,23 +122,7 @@
 				<button
 					v-on:click="closeModal"
 					type="button"
-					class="
-						space-x-2
-						inline-flex
-						items-center
-						px-3
-						py-2
-						border border-gray-300
-						shadow-sm
-						text-sm
-						leading-4
-						font-medium
-						rounded-md
-						text-gray-700
-						bg-white
-						hover:bg-gray-50
-						focus:outline-none focus:ring-2 focus:ring-offset-2
-					"
+					class="space-x-2 inline-flex items-center px-3 py-2 border border-gray-300 shadow-sm text-sm leading-4 font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2"
 				>
 					Cancel
 				</button>
@@ -229,43 +130,14 @@
 					v-if="nextEnabled"
 					v-on:click="nextButton"
 					type="button"
-					class="
-						inline-flex
-						items-center
-						px-3
-						py-2
-						border border-transparent
-						text-sm
-						leading-4
-						font-medium
-						rounded-md
-						shadow-sm
-						text-white
-						bg-storjBlue
-						focus:outline-none focus:ring-2 focus:ring-offset-2
-					"
+					class="inline-flex items-center px-3 py-2 border border-transparent text-sm leading-4 font-medium rounded-md shadow-sm text-white bg-storjBlue focus:outline-none focus:ring-2 focus:ring-offset-2"
 				>
 					Next
 				</button>
 				<button
 					v-else
 					type="button"
-					class="
-						inline-flex
-						items-center
-						px-3
-						py-2
-						border border-transparent
-						text-sm
-						leading-4
-						font-medium
-						rounded-md
-						shadow-sm
-						text-white
-						bg-blue-200
-						cursor-not-allowed
-						focus:outline-none
-					"
+					class="inline-flex items-center px-3 py-2 border border-transparent text-sm leading-4 font-medium rounded-md shadow-sm text-white bg-blue-200 cursor-not-allowed focus:outline-none"
 				>
 					Next
 				</button>

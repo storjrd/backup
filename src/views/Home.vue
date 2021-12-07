@@ -123,17 +123,7 @@
 				</div> -->
 				<div class="isolate -space-y-px rounded-md shadow-sm">
 					<div
-						class="
-							relative
-							border border-gray-300
-							rounded-md rounded-b-none
-							px-3
-							py-2
-							focus-within:z-10
-							focus-within:ring-1
-							focus-within:ring-storjBlue
-							focus-within:border-storjBlue
-						"
+						class="relative border border-gray-300 rounded-md rounded-b-none px-3 py-2 focus-within:z-10 focus-within:ring-1 focus-within:ring-storjBlue focus-within:border-storjBlue"
 					>
 						<label
 							for="accessKey"
@@ -145,41 +135,16 @@
 							type="text"
 							name="accessKey"
 							id="accessKey"
-							class="
-								block
-								w-full
-								border-0
-								p-0
-								text-gray-900
-								placeholder-gray-400
-								focus:ring-0
-								sm:text-sm
-							"
+							class="block w-full border-0 p-0 text-gray-900 placeholder-gray-400 focus:ring-0 sm:text-sm"
 							placeholder="iahsf8493hyhf9ahofj93"
 						/>
 					</div>
 					<div
-						class="
-							relative
-							border border-gray-300
-							rounded-md rounded-t-none rounded-b-none
-							px-3
-							py-2
-							focus-within:z-10
-							focus-within:ring-1
-							focus-within:ring-storjBlue
-							focus-within:border-storjBlue
-						"
+						class="relative border border-gray-300 rounded-md rounded-t-none rounded-b-none px-3 py-2 focus-within:z-10 focus-within:ring-1 focus-within:ring-storjBlue focus-within:border-storjBlue"
 					>
 						<label
 							for="secretKey"
-							class="
-								block
-								w-full
-								text-xs
-								font-medium
-								text-gray-700
-							"
+							class="block w-full text-xs font-medium text-gray-700"
 							>Secret Key</label
 						>
 						<input
@@ -187,41 +152,16 @@
 							type="text"
 							name="secretKey"
 							id="secretKey"
-							class="
-								block
-								w-full
-								border-0
-								p-0
-								text-gray-900
-								placeholder-gray-400
-								focus:ring-0
-								sm:text-sm
-							"
+							class="block w-full border-0 p-0 text-gray-900 placeholder-gray-400 focus:ring-0 sm:text-sm"
 							placeholder="kajwro83h49hqfjoij93q"
 						/>
 					</div>
 					<div
-						class="
-							relative
-							border border-gray-300
-							rounded-md rounded-t-none rounded-b-none
-							px-3
-							py-2
-							focus-within:z-10
-							focus-within:ring-1
-							focus-within:ring-storjBlue
-							focus-within:border-storjBlue
-						"
+						class="relative border border-gray-300 rounded-md rounded-t-none rounded-b-none px-3 py-2 focus-within:z-10 focus-within:ring-1 focus-within:ring-storjBlue focus-within:border-storjBlue"
 					>
 						<label
 							for="endpoint"
-							class="
-								block
-								w-full
-								text-xs
-								font-medium
-								text-gray-700
-							"
+							class="block w-full text-xs font-medium text-gray-700"
 							>Endpoint</label
 						>
 						<input
@@ -229,41 +169,16 @@
 							type="text"
 							name="endpoint"
 							id="endpoint"
-							class="
-								block
-								w-full
-								border-0
-								p-0
-								text-gray-900
-								placeholder-gray-400
-								focus:ring-0
-								sm:text-sm
-							"
+							class="block w-full border-0 p-0 text-gray-900 placeholder-gray-400 focus:ring-0 sm:text-sm"
 							placeholder="https://gateway.us1.storjshare.io"
 						/>
 					</div>
 					<div
-						class="
-							relative
-							border border-gray-300
-							rounded-md rounded-t-none
-							px-3
-							py-2
-							focus-within:z-10
-							focus-within:ring-1
-							focus-within:ring-storjBlue
-							focus-within:border-storjBlue
-						"
+						class="relative border border-gray-300 rounded-md rounded-t-none px-3 py-2 focus-within:z-10 focus-within:ring-1 focus-within:ring-storjBlue focus-within:border-storjBlue"
 					>
 						<label
 							for="bucket"
-							class="
-								block
-								w-full
-								text-xs
-								font-medium
-								text-gray-700
-							"
+							class="block w-full text-xs font-medium text-gray-700"
 							>Bucket</label
 						>
 						<input
@@ -271,16 +186,7 @@
 							type="text"
 							name="bucket"
 							id="bucket"
-							class="
-								block
-								w-full
-								border-0
-								p-0
-								text-gray-900
-								placeholder-gray-400
-								focus:ring-0
-								sm:text-sm
-							"
+							class="block w-full border-0 p-0 text-gray-900 placeholder-gray-400 focus:ring-0 sm:text-sm"
 							placeholder="my-bucket"
 						/>
 					</div>
@@ -288,21 +194,7 @@
 				<button
 					v-on:click="login"
 					type="button"
-					class="
-						inline-flex
-						items-center
-						justify-center
-						px-4
-						py-2
-						border border-transparent
-						text-sm
-						font-medium
-						rounded-md
-						shadow-sm
-						text-white
-						bg-storjBlue
-						focus:outline-none focus:ring-2 focus:ring-offset-2
-					"
+					class="inline-flex items-center justify-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-storjBlue focus:outline-none focus:ring-2 focus:ring-offset-2"
 				>
 					{{ buttonText }}
 
@@ -311,14 +203,7 @@
 						class="flex justify-center items-center"
 					>
 						<div
-							class="
-								animate-spin
-								rounded-full
-								h-2
-								w-2
-								border-b-2 border-green
-								ml-3
-							"
+							class="animate-spin rounded-full h-2 w-2 border-b-2 border-green ml-3"
 						></div>
 					</div>
 				</button>

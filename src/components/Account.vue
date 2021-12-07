@@ -28,71 +28,31 @@
 			</div>
 			<div class="relative pt-1">
 				<div
-					class="
-						overflow-hidden
-						h-2
-						mb-4
-						text-xs
-						flex
-						rounded
-						bg-gray-200
-					"
+					class="overflow-hidden h-2 mb-4 text-xs flex rounded bg-gray-200"
 				>
 					<div
 						v-bind:style="{
 							width: `${videosUsagePercentage}%`
 						}"
-						class="
-							shadow-none
-							flex flex-col
-							text-center
-							whitespace-nowrap
-							text-white
-							justify-center
-							bg-storjBlue
-						"
+						class="shadow-none flex flex-col text-center whitespace-nowrap text-white justify-center bg-storjBlue"
 					></div>
 					<div
 						v-bind:style="{
 							width: `${picturesUsagePercentage}%`
 						}"
-						class="
-							shadow-none
-							flex flex-col
-							text-center
-							whitespace-nowrap
-							text-white
-							justify-center
-							bg-yellow-400
-						"
+						class="shadow-none flex flex-col text-center whitespace-nowrap text-white justify-center bg-yellow-400"
 					></div>
 					<div
 						v-bind:style="{
 							width: `${documentsUsagePercentage}%`
 						}"
-						class="
-							shadow-none
-							flex flex-col
-							text-center
-							whitespace-nowrap
-							text-white
-							justify-center
-							bg-pink-500
-						"
+						class="shadow-none flex flex-col text-center whitespace-nowrap text-white justify-center bg-pink-500"
 					></div>
 					<div
 						v-bind:style="{
 							width: `${othersUsagePercentage}%`
 						}"
-						class="
-							shadow-none
-							flex flex-col
-							text-center
-							whitespace-nowrap
-							text-white
-							justify-center
-							bg-green-400
-						"
+						class="shadow-none flex flex-col text-center whitespace-nowrap text-white justify-center bg-green-400"
 					></div>
 				</div>
 			</div>
@@ -135,26 +95,7 @@
 
 		<button
 			type="button"
-			class="
-				inline-flex
-				items-center
-				px-3
-				py-2
-				mt-8
-				border border-transparent
-				text-sm
-				leading-4
-				font-medium
-				rounded-md
-				shadow-sm
-				text-white
-				bg-storjBlue
-				hover:storjBlue
-				focus:outline-none
-				focus:ring-2
-				focus:ring-offset-2
-				focus:ring-storjBlue
-			"
+			class="inline-flex items-center px-3 py-2 mt-8 border border-transparent text-sm leading-4 font-medium rounded-md shadow-sm text-white bg-storjBlue hover:storjBlue focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-storjBlue"
 			v-on:click="openUpgradePlanPage"
 		>
 			Upgrade Plan

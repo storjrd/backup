@@ -38,14 +38,7 @@
 						aria-describedby="preferences"
 						name="preferences"
 						type="checkbox"
-						class="
-							focus:ring-storjBlue
-							h-4
-							w-4
-							text-storjBlue
-							border-gray-300
-							rounded
-						"
+						class="focus:ring-storjBlue h-4 w-4 text-storjBlue border-gray-300 rounded"
 						v-model="preferences"
 					/>
 				</div>
@@ -58,26 +51,7 @@
 		</div>
 		<button
 			type="button"
-			class="
-				inline-flex
-				items-center
-				px-3
-				py-2
-				mt-8
-				border border-transparent
-				text-sm
-				leading-4
-				font-medium
-				rounded-md
-				shadow-sm
-				text-white
-				bg-storjBlue
-				hover:storjBlue
-				focus:outline-none
-				focus:ring-2
-				focus:ring-offset-2
-				focus:ring-storjBlue
-			"
+			class="inline-flex items-center px-3 py-2 mt-8 border border-transparent text-sm leading-4 font-medium rounded-md shadow-sm text-white bg-storjBlue hover:storjBlue focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-storjBlue"
 			v-on:click="save"
 		>
 			Save

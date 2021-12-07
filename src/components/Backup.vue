@@ -17,13 +17,7 @@
 	<div class="bg-white shadow-lg rounded-lg p-3">
 		<div class="flex justify-between items-center">
 			<div
-				class="
-					flex
-					justify-start
-					content-center
-					items-center
-					overflow-ellipsis
-				"
+				class="flex justify-start content-center items-center overflow-ellipsis"
 			>
 				<img
 					class="w-5 h-5 fill-current text-black mr-2"
@@ -61,29 +55,13 @@
 		</div>
 		<div class="relative pt-1">
 			<div
-				class="
-					overflow-hidden
-					h-2
-					text-xs
-					flex
-					rounded
-					bg-gray-100
-					shadow-inner
-				"
+				class="overflow-hidden h-2 text-xs flex rounded bg-gray-100 shadow-inner"
 			>
 				<div
 					v-bind:style="{
 						width: `${backup.progress}%`
 					}"
-					class="
-						shadow-none
-						flex flex-col
-						text-center
-						whitespace-nowrap
-						text-white
-						justify-center
-						bg-storjBlue
-					"
+					class="shadow-none flex flex-col text-center whitespace-nowrap text-white justify-center bg-storjBlue"
 				></div>
 			</div>
 		</div>

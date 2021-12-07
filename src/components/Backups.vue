@@ -18,29 +18,13 @@
 		<div class="absolute top-0 right-0 mt-5 mr-5">
 			<div class="flex space-x-3">
 				<div
-					class="
-						bg-white
-						rounded-full
-						shadow-lg
-						w-8
-						h-8
-						p-2
-						cursor-pointer
-					"
+					class="bg-white rounded-full shadow-lg w-8 h-8 p-2 cursor-pointer"
 					v-on:click="goToSettingsPage"
 				>
 					<CogIcon class="text-gray-500" />
 				</div>
 				<div
-					class="
-						bg-white
-						rounded-full
-						shadow-lg
-						w-8
-						h-8
-						p-2
-						cursor-pointer
-					"
+					class="bg-white rounded-full shadow-lg w-8 h-8 p-2 cursor-pointer"
 					v-on:click="goToAccountPage"
 				>
 					<UserIcon class="text-gray-500" />
@@ -51,13 +35,7 @@
 		<div v-if="isLoading" class="flex h-screen justify-center items-center">
 			<div class="flex justify-center items-center">
 				<div
-					class="
-						animate-spin
-						rounded-full
-						h-32
-						w-32
-						border-b-2 border-gray-900
-					"
+					class="animate-spin rounded-full h-32 w-32 border-b-2 border-gray-900"
 				></div>
 			</div>
 		</div>
@@ -80,20 +58,7 @@
 					<button
 						v-on:click="openModal"
 						type="button"
-						class="
-							inline-flex
-							items-center
-							px-4
-							py-2
-							border border-transparent
-							text-sm
-							font-medium
-							rounded-md
-							shadow-sm
-							text-white
-							bg-storjBlue
-							focus:outline-none focus:ring-2 focus:ring-offset-2
-						"
+						class="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-storjBlue focus:outline-none focus:ring-2 focus:ring-offset-2"
 					>
 						<img
 							class="-ml-1 mr-2 w-5 h-5"
@@ -121,22 +86,7 @@
 					<button
 						v-on:click="openModal"
 						type="button"
-						class="
-							inline-flex
-							items-center
-							mx-7
-							mt-4
-							px-4
-							py-2
-							border border-transparent
-							text-sm
-							font-medium
-							rounded-md
-							shadow-sm
-							text-white
-							bg-storjBlue
-							focus:outline-none focus:ring-2 focus:ring-offset-2
-						"
+						class="inline-flex items-center mx-7 mt-4 px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-storjBlue focus:outline-none focus:ring-2 focus:ring-offset-2"
 					>
 						<PlusCircleIcon
 							class="w-5 h-5 mr-2 font-bold text-white"

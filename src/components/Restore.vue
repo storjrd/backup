@@ -14,14 +14,7 @@
 				Folder where your backup will be restored to
 			</p>
 			<div
-				class="
-					flex
-					justify-start
-					content-center
-					items-center
-					overflow-ellipsis
-					mt-1
-				"
+				class="flex justify-start content-center items-center overflow-ellipsis mt-1"
 				v-if="location"
 			>
 				<img
@@ -35,23 +28,7 @@
 		<div class="flex items-end space-x-4 mt-5">
 			<button
 				type="button"
-				class="
-					inline-flex
-					items-center
-					px-3
-					py-2
-					h-full
-					border border-gray-300
-					shadow-sm
-					text-sm
-					leading-4
-					font-semibold
-					rounded-md
-					text-gray-700
-					bg-white
-					hover:bg-gray-50
-					focus:outline-none focus:ring-2 focus:ring-offset-2
-				"
+				class="inline-flex items-center px-3 py-2 h-full border border-gray-300 shadow-sm text-sm leading-4 font-semibold rounded-md text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2"
 				v-on:click="chooseLocation"
 			>
 				Choose Location
@@ -59,26 +36,7 @@
 
 			<button
 				type="button"
-				class="
-					inline-flex
-					items-center
-					px-4
-					py-2
-					h-full
-					border
-					shadow-sm
-					text-sm
-					leading-4
-					font-semibold
-					rounded-md
-					text-white
-					bg-storjBlue
-					hover:storjBlue
-					focus:outline-none
-					focus:ring-2
-					focus:ring-offset-2
-					focus:ring-storjBlue
-				"
+				class="inline-flex items-center px-4 py-2 h-full border shadow-sm text-sm leading-4 font-semibold rounded-md text-white bg-storjBlue hover:storjBlue focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-storjBlue"
 				v-if="!restoreDisabled"
 				v-on:click="restore"
 			>
