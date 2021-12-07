@@ -10,7 +10,7 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, Ref, computed, watch } from "vue";
+import { defineComponent, Ref, computed, reactive, watch } from "vue";
 import { useRouter, useRoute } from "vue-router";
 import { useStore } from "./store";
 
@@ -22,7 +22,7 @@ export default defineComponent({
 	name: "App",
 	setup: (): Properties => {
 		const router = useRouter();
-		const route = useRoute();
+		const route = reactive(useRoute());
 		const store = useStore();
 
 		// if user becomes logged in, redirect
@@ -33,7 +33,7 @@ export default defineComponent({
 		});
 
 		const logoPath = computed<boolean>(() =>
-			["Home", "Backups"].includes(route.path)
+			typeof route.name === "string" && ["Home", "Backups"].includes(route.name)
 		);
 
 		return {
