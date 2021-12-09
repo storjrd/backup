@@ -46,14 +46,14 @@
 			"output": "output"
 		},
 		"mac": {
-			"icon": "./public/icon.png",
+			"icon": "./icon.png",
 			"category": "storjrd.backup.category.type"
 		},
 		"win": {
-			"icon": "./public/icon.png"
+			"icon": "./icon.png"
 		},
 		"linux": {
-			"icon": "./public/icon.png"
+			"icon": "./icon.png"
 		},
 		"files": [
 			"node_modules",
