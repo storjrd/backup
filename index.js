@@ -54,7 +54,7 @@ const loadURL = serve({ directory: `${__dirname}/dist` });
 	let loginStatus = false;
 	ipcMain.handle("loginStatus", () => loginStatus);
 
-	if (typeof credentials !== "object") {
+	const handleSetup = () =>
 		ipcMain.handle(
 			"setup",
 			async function (event, { endpoint, bucket, accessKey, secretKey }) {
@@ -83,7 +83,9 @@ const loadURL = serve({ directory: `${__dirname}/dist` });
 				loginStatus = true;
 			}
 		);
-	} else {
+
+	// auto login
+	if (typeof credentials === "object") {
 		const resticPassphrase = "a";
 
 		const restic = createRestic({
@@ -93,6 +95,8 @@ const loadURL = serve({ directory: `${__dirname}/dist` });
 
 		await handleRestic(restic);
 		loginStatus = true;
+	} else {
+		handleSetup();
 	}
 
 	ipcMain.handle("logout", async () => {
@@ -105,6 +109,8 @@ const loadURL = serve({ directory: `${__dirname}/dist` });
 			credentials: undefined,
 			resticPassphrase: undefined
 		});
+
+		handleSetup();
 	});
 
 	await app.whenReady();
