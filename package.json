@@ -46,7 +46,14 @@
 			"output": "output"
 		},
 		"mac": {
+			"icon": "./icon.png",
 			"category": "storjrd.backup.category.type"
+		},
+		"win": {
+			"icon": "./icon.png"
+		},
+		"linux": {
+			"icon": "./icon.png"
 		},
 		"files": [
 			"node_modules",
@@ -54,7 +61,8 @@
 			"dist",
 			"lib",
 			"*.js",
-			"package.json"
+			"package.json",
+			"public/icon.png"
 		],
 		"extraResources": [
 			{
