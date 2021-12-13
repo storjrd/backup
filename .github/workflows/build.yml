@@ -15,14 +15,14 @@ jobs:
             - uses: actions/upload-artifact@v2
               with:
                   name: "backup-1.0.0.AppImage"
-                  path: "bin/backup-1.0.0.AppImage"
+                  path: "output/backup-1.0.0.AppImage"
 
             - uses: actions/upload-artifact@v2
               with:
                   name: "backup_1.0.0_amd64.snap"
-                  path: "bin/backup_1.0.0_amd64.snap"
+                  path: "output/backup_1.0.0_amd64.snap"
 
             - uses: actions/upload-artifact@v2
               with:
                   name: "backup Setup 1.0.0.exe"
-                  path: "bin/backup Setup 1.0.0.exe"
+                  path: "output/backup Setup 1.0.0.exe"
