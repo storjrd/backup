@@ -8,22 +8,12 @@
 			<h1 class="text-lg font-bold">Settings</h1>
 		</div>
 		<div class="mt-5 border-b border-gray-100 pb-3">
-			<h2 class="text-lg">Storj Backup folder location</h2>
+			<h2 class="text-lg">Bucket</h2>
 			<div class="flex justify-between">
 				<div class="flex items-center">
-					<img class="mr-2 w-5 h-5" src="@/assets/folderIcon.svg" />
-					<p class="text-gray-700 text-sm">{{ backupLocation }}</p>
-				</div>
-				<p class="text-storjBlue cursor-pointer text-sm">Change</p>
-			</div>
-		</div>
-		<div class="mt-5 border-b border-gray-100 pb-3">
-			<h2 class="text-lg">Local cached files directory</h2>
-			<div class="flex justify-between">
-				<div class="flex items-center">
-					<img class="mr-2 w-5 h-5" src="@/assets/folderIcon.svg" />
+					<img class="mr-2 w-5 h-5" src="@/assets/buckets.svg" />
 					<p class="text-gray-700 text-sm">
-						{{ localCachedDirectory }}
+						{{ bucketName }}
 					</p>
 				</div>
 				<p class="text-storjBlue cursor-pointer text-sm">Change</p>
@@ -93,10 +83,8 @@ import { useRouter } from "vue-router";
 import { ArrowLeftIcon } from "@heroicons/vue/solid";
 
 interface Properties {
-	backupLocation: Ref<string>;
-	localCachedDirectory: Ref<string>;
 	preferences: Ref<boolean>;
-
+	bucketName: Ref<string>;
 	goToBackups: () => void;
 	save: () => void;
 }
@@ -110,11 +98,13 @@ export default defineComponent({
 		const store = useStore();
 		const router = useRouter();
 
+		store.dispatch("changeBucketName", { bucket: "test" });
+
 		return {
-			backupLocation: computed(() => store.state.backupLocation),
-			localCachedDirectory: computed(
-				() => store.state.localCachedDirectory
-			),
+			bucketName: computed(() => {
+				return store.state.bucket;
+			}),
+
 			preferences: computed(() => store.state.preferences),
 
 			goToBackups: () => {
