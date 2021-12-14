@@ -66,7 +66,7 @@
 				</div>
 			</div>
 			<div v-if="selectFolderView" class="h-3/4">
-				<p class="mt-2 text-left">Select folder(s) to sync:</p>
+				<p class="mt-2 text-left">Select folder to sync:</p>
 				<div class="h-2/5 w-auto overflow-scroll mt-1 space-y-2">
 					<div
 						v-if="foldersExist"
@@ -117,7 +117,7 @@
 							w-auto
 						"
 					>
-						<p class="text-base">Folders to backup...</p>
+						<p class="text-base">Folder to backup...</p>
 					</div>
 				</div>
 				<div class="mt-3 flex justify-start">
@@ -429,6 +429,12 @@ export default defineComponent({
 				canceled: boolean;
 				filePaths: string[];
 			} = await store.dispatch("getDirectory");
+
+			// Replace the first folder for backup with the newly selected one if attempting to add more than one folder for backup.
+			if (Object.keys(folders)) {
+				const key = Object.keys(folders)[0];
+				delete folders[key];
+			}
 
 			const path = response.filePaths[0];
 
