@@ -286,7 +286,7 @@ import {
 import prettyBytes from "pretty-bytes";
 import { CheckIcon, XIcon } from "@heroicons/vue/solid";
 import { PlusCircleIcon } from "@heroicons/vue/outline";
-import { useStore, store } from "@/store";
+import { useStore } from "@/store";
 
 interface IMediaTypes {
 	photosOrVideos: number;

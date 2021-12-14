@@ -183,7 +183,7 @@ export const store = createStore<State>({
 		},
 
 		async restore(
-			{},
+			{ commit },
 			{ snapshotId, target }: { snapshotId: string; target: string }
 		) {
 			await backend.invoke("restore", {
