@@ -47,16 +47,16 @@ export const store = createStore<State>({
 		backupEvents: [],
 		loginStatus: false,
 
-		account: "david@gmail.com",
+		account: "example@storj.io",
 		plan: 1.5e11,
 		accountType: "Free",
 		accountTypes: {
 			freeAccount: "Free"
 		},
-		videosUsage: 3e10,
-		picturesUsage: 7.5e9,
-		documentsUsage: 6e9,
-		othersUsage: 4e9,
+		videosUsage: 0,
+		picturesUsage: 0,
+		documentsUsage: 0,
+		othersUsage: 0,
 		backupLocation: "/Volumes/StorjBackup",
 		localCachedDirectory: "/Volumes/StorjBackup",
 		preferences: true
