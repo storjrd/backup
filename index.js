@@ -54,15 +54,9 @@ const loadURL = serve({ directory: `${__dirname}/dist` });
 	let loginStatus = false;
 	ipcMain.handle("loginStatus", () => loginStatus);
 
-	ipcMain.handle("getBucketName", () => {
+	ipcMain.handle("getBucketName", async () => {
+		const { credentials } = await config.get();
 		return credentials.bucket;
-	});
-
-	ipcMain.handle("setBucketName", (event, { bucket }) => {
-		// config.set({
-
-		// })
-		return { credentials, bucket };
 	});
 
 	const handleSetup = () =>

@@ -121,7 +121,7 @@ export const store = createStore<State>({
 		},
 
 		async login(
-			{ commit },
+			{ commit, dispatch },
 			{
 				accessKey,
 				secretKey,
@@ -149,6 +149,7 @@ export const store = createStore<State>({
 			});
 
 			commit("login");
+			dispatch("getBucketName");
 		},
 
 		async logout({ commit }) {
@@ -207,9 +208,12 @@ export const store = createStore<State>({
 			backend.invoke("openUpgradePlan");
 		},
 
-		async changeBucketName({ commit }, { bucket }: { bucket: string }) {
-			const bucketVal = await backend.invoke("setBucketName", { bucket });
-			console.log("BUCKET", bucketVal);
+		async getBucketName({ commit }) {
+			const bucketName = await backend.invoke("getBucketName");
+
+			if (bucketName) {
+				commit("setBucketName", bucketName);
+			}
 		}
 	},
 	modules: {}
@@ -220,13 +224,7 @@ export const store = createStore<State>({
 		store.commit("login");
 	}
 
-	const bucketName = await backend.invoke("getBucketName");
-
-	console.log("bucketName", bucketName);
-
-	if (bucketName) {
-		store.commit("setBucketName", bucketName);
-	}
+	store.dispatch("getBucketName");
 })();
 
 export const useStore = () => baseUseStore(key);

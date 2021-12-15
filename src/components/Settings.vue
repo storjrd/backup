@@ -16,7 +16,7 @@
 						{{ bucketName }}
 					</p>
 				</div>
-				<p class="text-storjBlue cursor-pointer text-sm">Change</p>
+				<!-- <p class="text-storjBlue cursor-pointer text-sm">Change</p> -->
 			</div>
 		</div>
 		<div>
@@ -97,8 +97,6 @@ export default defineComponent({
 	setup: (): Properties => {
 		const store = useStore();
 		const router = useRouter();
-
-		store.dispatch("changeBucketName", { bucket: "test" });
 
 		return {
 			bucketName: computed(() => {
