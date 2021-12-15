@@ -13,6 +13,7 @@
 							:placeholder="backupName"
 						/>
 						<div
+							v-if="validBackupName"
 							v-on:click="saveBackupNameChange"
 							class="
 								bg-green-100
@@ -26,6 +27,22 @@
 							"
 						>
 							<CheckIcon class="w-3 h-3 text-green-700" />
+						</div>
+						<div
+							v-else
+							v-on:click="saveBackupNameChange"
+							class="
+								bg-gray-100
+								p-1
+								rounded-full
+								w-5
+								h-5
+								flex
+								self-center
+								cursor-pointer
+							"
+						>
+							<CheckIcon class="w-3 h-3 text-gray-700" />
 						</div>
 						<div
 							v-on:click="cancelBackupNameChange"
@@ -363,7 +380,7 @@ export default defineComponent({
 		);
 
 		const validBackupName = computed(
-			() => temporaryBackupName.value.length > 0
+			() => temporaryBackupName.value.trim().length > 0
 		);
 
 		const backupNameInputClass = computed(() =>
@@ -394,8 +411,8 @@ export default defineComponent({
 		};
 
 		const saveBackupNameChange = () => {
-			if (temporaryBackupName.value.length > 0) {
-				backupName.value = temporaryBackupName.value;
+			if (validBackupName.value) {
+				backupName.value = temporaryBackupName.value.trim();
 				cancelBackupNameChange();
 			}
 		};
