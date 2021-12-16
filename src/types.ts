@@ -44,3 +44,8 @@ export interface BackupSummaryEvent extends BackupEvent {
 	total_files_processed: number;
 	tree_blobs: number;
 }
+
+export interface ModalConfig {
+	backupId: string;
+	view: string;
+}

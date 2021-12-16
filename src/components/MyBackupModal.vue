@@ -304,6 +304,7 @@ import prettyBytes from "pretty-bytes";
 import { CheckIcon, XIcon } from "@heroicons/vue/solid";
 import { PlusCircleIcon } from "@heroicons/vue/outline";
 import { useStore } from "@/store";
+import type { ModalConfig } from "@/types";
 
 interface IMediaTypes {
 	photosOrVideos: number;
@@ -345,7 +346,7 @@ interface Properties {
 
 export default defineComponent({
 	name: "Dashboard",
-	props: ["modalOpen"],
+	props: ["modalConfig"],
 	components: {
 		CheckIcon,
 		XIcon,
@@ -362,11 +363,12 @@ export default defineComponent({
 		];
 
 		const folders = reactive<{ [key: string]: IFolder }>({});
+		const modalConfig = reactive<ModalConfig>(props.modalConfig);
 
 		const backupName = ref("My Backup");
 		const temporaryBackupName = ref("My Backup");
 		const backupNameInputOpen = ref(false);
-		const view = ref("SELECT_FOLDER");
+		const view = ref(props.modalConfig.view);
 		const selectedFrequency = ref("Daily");
 		const passphrase = ref("");
 
@@ -431,11 +433,15 @@ export default defineComponent({
 			if (selectFolderView.value === true) {
 				view.value = "FREQUENCY";
 			} else {
-				store.dispatch("backup", {
-					directories: Object.values(folders).map(
-						(folder: IFolder) => folder.absolutePath
-					)
-				});
+				if (modalConfig.backupId) {
+					// this is a backup job update and not a new folder backup.
+				} else {
+					store.dispatch("backup", {
+						directories: Object.values(folders).map(
+							(folder: IFolder) => folder.absolutePath
+						)
+					});
+				}
 
 				closeModal();
 			}

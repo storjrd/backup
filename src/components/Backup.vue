@@ -54,7 +54,7 @@
 			</p>
 			<p
 				class="text-storjBlue cursor-pointer hover:underline text-sm"
-				v-on:click=""
+				v-on:click="updateBackup"
 			>
 				See details
 			</p>
@@ -112,6 +112,7 @@ interface Properties {
 	backup: IBackup;
 	backupMetadata: Ref<string>;
 	restore: () => void;
+	updateBackup: () => void;
 }
 
 export default defineComponent({
@@ -126,7 +127,8 @@ export default defineComponent({
 		UserIcon
 	},
 	props: ["backup"],
-	setup: (props): Properties => {
+	emits: ["handleBackupUpdate"],
+	setup: (props, { emit }): Properties => {
 		const backup = reactive<IBackup>(props.backup);
 
 		const backupMetadata = computed<string>(() =>
@@ -137,10 +139,15 @@ export default defineComponent({
 			router.push(`/app/restore/${backup.id}`);
 		};
 
+		const updateBackup = () => {
+			emit("handleBackupUpdate", backup.id);
+		};
+
 		return {
 			backup,
 			backupMetadata,
-			restore
+			restore,
+			updateBackup
 		};
 	}
 });
