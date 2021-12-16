@@ -28,14 +28,13 @@ export interface State {
 	// todo: remove
 	account: string;
 	plan: number;
+	bucket: string;
 	accountType: string;
 	accountTypes: object;
 	videosUsage: number;
 	picturesUsage: number;
 	documentsUsage: number;
 	othersUsage: number;
-	backupLocation: string;
-	localCachedDirectory: string;
 	preferences: boolean;
 }
 
@@ -49,6 +48,7 @@ export const store = createStore<State>({
 
 		account: "example@storj.io",
 		plan: 1.5e11,
+		bucket: "",
 		accountType: "Free",
 		accountTypes: {
 			freeAccount: "Free"
@@ -57,8 +57,6 @@ export const store = createStore<State>({
 		picturesUsage: 0,
 		documentsUsage: 0,
 		othersUsage: 0,
-		backupLocation: "/Volumes/StorjBackup",
-		localCachedDirectory: "/Volumes/StorjBackup",
 		preferences: true
 	},
 	getters: {
@@ -97,6 +95,10 @@ export const store = createStore<State>({
 			state.loginStatus = false;
 		},
 
+		setBucketName(state, name) {
+			state.bucket = name;
+		},
+
 		setSnapshots(state, snapshots) {
 			state.snapshots = snapshots;
 		},
@@ -119,7 +121,7 @@ export const store = createStore<State>({
 		},
 
 		async login(
-			{ commit },
+			{ commit, dispatch },
 			{
 				accessKey,
 				secretKey,
@@ -147,6 +149,7 @@ export const store = createStore<State>({
 			});
 
 			commit("login");
+			dispatch("getBucketName");
 		},
 
 		async logout({ commit }) {
@@ -203,6 +206,14 @@ export const store = createStore<State>({
 
 		async openUpgradePlan() {
 			backend.invoke("openUpgradePlan");
+		},
+
+		async getBucketName({ commit }) {
+			const bucketName = await backend.invoke("getBucketName");
+
+			if (bucketName) {
+				commit("setBucketName", bucketName);
+			}
 		}
 	},
 	modules: {}
@@ -212,6 +223,8 @@ export const store = createStore<State>({
 	if (await backend.invoke("loginStatus")) {
 		store.commit("login");
 	}
+
+	store.dispatch("getBucketName");
 })();
 
 export const useStore = () => baseUseStore(key);
