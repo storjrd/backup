@@ -120,6 +120,10 @@ const loadURL = serve({ directory: `${__dirname}/dist` });
 
 	await app.whenReady();
 
+	app.setLoginItemSettings({
+		openAtLogin: true
+	});
+
 	const mainWindow = new BrowserWindow({
 		width: 700,
 		height: 500,
