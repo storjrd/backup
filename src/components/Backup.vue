@@ -41,6 +41,7 @@
 						class="w-5 h-5 font-bold text-gray-700 cursor-pointer"
 						v-on:click="restore"
 					/>
+					<ArrowCircleUpIcon class="w-5 h-5 font-bold text-gray-700 cursor-pointer" v-on:click="createBackup" />
 				</div>
 			</div>
 		</div>
@@ -101,6 +102,7 @@ import {
 	ExclamationCircleIcon,
 	XCircleIcon,
 	ArrowCircleDownIcon,
+	ArrowCircleUpIcon,
 	CogIcon,
 	UserIcon
 } from "@heroicons/vue/outline";
@@ -112,6 +114,7 @@ interface Properties {
 	backup: IBackup;
 	backupMetadata: Ref<string>;
 	restore: () => void;
+	createBackup: () => void;
 }
 
 export default defineComponent({
@@ -122,11 +125,14 @@ export default defineComponent({
 		ExclamationCircleIcon,
 		XCircleIcon,
 		ArrowCircleDownIcon,
+		ArrowCircleUpIcon,
 		CogIcon,
 		UserIcon
 	},
 	props: ["backup"],
 	setup: (props): Properties => {
+		const store = useStore();
+
 		const backup = reactive<IBackup>(props.backup);
 
 		const backupMetadata = computed<string>(() =>
@@ -137,10 +143,17 @@ export default defineComponent({
 			router.push(`/app/restore/${backup.id}`);
 		};
 
+		const createBackup = () => {
+			store.dispatch("backup", {
+				directories: [backup.name]
+			});
+		};
+
 		return {
 			backup,
 			backupMetadata,
-			restore
+			restore,
+			createBackup
 		};
 	}
 });
