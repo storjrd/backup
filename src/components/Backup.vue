@@ -41,7 +41,10 @@
 						class="w-5 h-5 font-bold text-gray-700 cursor-pointer"
 						v-on:click="restore"
 					/>
-					<ArrowCircleUpIcon class="w-5 h-5 font-bold text-gray-700 cursor-pointer" v-on:click="createBackup" />
+					<ArrowCircleUpIcon
+						class="w-5 h-5 font-bold text-gray-700 cursor-pointer"
+						v-on:click="createBackup"
+					/>
 				</div>
 			</div>
 		</div>
