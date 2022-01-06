@@ -222,9 +222,8 @@ export const store = createStore<State>({
 (async () => {
 	if (await backend.invoke("loginStatus")) {
 		store.commit("login");
+		store.dispatch("getBucketName");
 	}
-
-	store.dispatch("getBucketName");
 })();
 
 export const useStore = () => baseUseStore(key);
