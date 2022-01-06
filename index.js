@@ -119,8 +119,6 @@ const loadURL = serve({ directory: `${__dirname}/dist` });
 			credentials: undefined,
 			resticPassphrase: undefined
 		});
-
-		handleSetup();
 	});
 
 	await app.whenReady();
