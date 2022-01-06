@@ -56,6 +56,11 @@ const loadURL = serve({ directory: `${__dirname}/dist` });
 
 	ipcMain.handle("getBucketName", async () => {
 		const { credentials } = await config.get();
+
+		if (!credentials) {
+			return null;
+		}
+
 		return credentials.bucket;
 	});
 
