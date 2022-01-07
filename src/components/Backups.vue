@@ -236,7 +236,9 @@ const setupBackups = (): Properties => {
 
 	store.dispatch("getSnapshots");
 
-	const snapshots = computed<Snapshot[]>(() => store.state.snapshots === null ? [] : store.state.snapshots);
+	const snapshots = computed<Snapshot[]>(() =>
+		store.state.snapshots === null ? [] : store.state.snapshots
+	);
 
 	const backups = computed<IBackup[]>((): IBackup[] => {
 		const arr: IBackup[] = [];
