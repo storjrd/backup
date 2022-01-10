@@ -178,8 +178,7 @@ export default defineComponent({
 			router.push(`/app/restore/${backup.id}`);
 		};
 
-		const updateBackup = () => {
-			emit("handleBackupUpdate", backup.id);
+		const updateBackup = () => emit("handleBackupUpdate", backup.id);
 
 		const createBackup = () => {
 			store.dispatch("backup", {
@@ -191,7 +190,7 @@ export default defineComponent({
 			backup,
 			backupMetadata,
 			restore,
-			updateBackup
+			updateBackup,
 			createBackup
 		};
 	}
