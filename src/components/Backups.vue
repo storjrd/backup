@@ -116,6 +116,7 @@
 						<backup
 							v-for="backup in backups"
 							v-bind:backup="backup"
+							:key="backup.id"
 						></backup>
 					</div>
 					<button
@@ -152,7 +153,27 @@
 				<div
 					class="h-14 flex content-center items-center space-x-2 mx-5"
 				>
-					<img src="@/assets/syncIcon.png" class="w-8 h-8" />
+					<span class="group">
+						<div
+							class="
+								hidden
+								group-hover:flex
+								text-sm text-gray-800
+								absolute
+								bg-gray-50
+								rounded-lg
+								border border-gray-200
+								shadow
+								p-2
+								transform
+								-translate-y-10
+								w-40
+							"
+						>
+							Total files backed up.
+						</div>
+						<img src="@/assets/syncIcon.png" class="w-8 h-8" />
+					</span>
 					<p class="text-sm text-gray-800 font-bold">
 						{{ syncingFilesDisplay }}
 					</p>

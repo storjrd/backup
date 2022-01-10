@@ -45,6 +45,36 @@
 						class="w-5 h-5 font-bold text-gray-700 cursor-pointer"
 						v-on:click="createBackup"
 					/>
+					<span class="group">
+						<div
+							class="
+								hidden
+								group-hover:flex
+								text-sm text-gray-800
+								absolute
+								bg-gray-50
+								rounded-lg
+								border
+								shadow
+								p-2
+								transform
+								-translate-y-16 -translate-x-32
+								w-40
+							"
+						>
+							Restore this backup to your computer.
+						</div>
+						<ArrowCircleDownIcon
+							class="
+								w-5
+								h-5
+								font-bold
+								text-gray-700
+								cursor-pointer
+							"
+							v-on:click="restore"
+						/>
+					</span>
 				</div>
 			</div>
 		</div>

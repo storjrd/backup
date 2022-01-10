@@ -1,6 +1,9 @@
 import { InjectionKey } from "vue";
 import { Store, createStore, useStore as baseUseStore } from "vuex";
 import * as R from "ramda";
+
+import backend from "@/lib/backend.ts";
+
 import type {
 	Snapshot,
 	BackupEvent,
@@ -8,21 +11,9 @@ import type {
 	BackupSummaryEvent
 } from "@/types";
 
-interface Backend {
-	invoke: (fn: string, args?: any) => Promise<any>;
-}
-
-declare global {
-	interface Window {
-		backend: Backend;
-	}
-}
-
-const { backend } = window;
-
 export interface State {
 	snapshots: Snapshot[] | null;
-	backupEvents: any[];
+	backupEvents: BackupEvent[];
 	loginStatus: boolean;
 
 	// todo: remove
@@ -222,9 +213,8 @@ export const store = createStore<State>({
 (async () => {
 	if (await backend.invoke("loginStatus")) {
 		store.commit("login");
+		store.dispatch("getBucketName");
 	}
-
-	store.dispatch("getBucketName");
 })();
 
 export const useStore = () => baseUseStore(key);
