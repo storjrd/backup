@@ -116,6 +116,7 @@
 						<backup
 							v-for="backup in backups"
 							v-bind:backup="backup"
+							@handleBackupUpdate="handleBackupUpdate"
 							:key="backup.id"
 						></backup>
 					</div>
@@ -182,7 +183,8 @@
 		</div>
 		<div v-if="modalOpen" class="unclickable">
 			<my-backup-modal
-				v-bind="modalOpen"
+				v-bind:modalOpen="modalOpen"
+				v-bind:modalConfig="modalConfig"
 				v-on:closeModal="closeModal"
 			></my-backup-modal>
 		</div>
@@ -197,7 +199,8 @@ import type {
 	Snapshot,
 	IBackup,
 	BackupStatusEvent,
-	BackupSummaryEvent
+	BackupSummaryEvent,
+	ModalConfig
 } from "@/types";
 import MyBackupModal from "@/components/MyBackupModal.vue";
 import Backup from "@/components/Backup.vue";
@@ -221,12 +224,14 @@ interface Properties {
 	backupsExist: Ref<boolean>;
 	displayBackups: Ref<boolean>;
 	modalOpen: Ref<boolean>;
+	modalConfig: Ref<ModalConfig>;
 	displayWelcomeScreen: Ref<boolean>;
 	areFilesSyncing: Ref<boolean>;
 	syncingFilesDisplay: Ref<string>;
 
 	openModal: () => void;
 	closeModal: () => void;
+	handleBackupUpdate: (backupName: string) => void;
 	goToSettingsPage: () => void;
 	goToAccountPage: () => void;
 }
@@ -278,6 +283,11 @@ const setupBackups = (): Properties => {
 
 	const modalOpen = ref(false);
 
+	const modalConfig = ref({
+		backupId: "",
+		view: "SELECT_FOLDER"
+	});
+
 	const areFilesSyncing = computed(() => store.getters.backupStarted);
 
 	const displayBackups = computed(
@@ -307,6 +317,22 @@ const setupBackups = (): Properties => {
 
 	const closeModal = () => {
 		modalOpen.value = false;
+		resetModalConfig();
+	};
+
+	const resetModalConfig = () => {
+		modalConfig.value = {
+			backupId: "",
+			view: "SELECT_FOLDER"
+		};
+	};
+
+	const handleBackupUpdate = (backupId: string) => {
+		modalOpen.value = true;
+		modalConfig.value = {
+			backupId,
+			view: "FREQUENCY"
+		};
 	};
 
 	const goToSettingsPage = () => {
@@ -324,12 +350,14 @@ const setupBackups = (): Properties => {
 		displayBackups,
 
 		modalOpen,
+		modalConfig,
 		displayWelcomeScreen,
 		areFilesSyncing,
 		syncingFilesDisplay,
 
 		openModal,
 		closeModal,
+		handleBackupUpdate,
 		goToSettingsPage,
 		goToAccountPage
 	};

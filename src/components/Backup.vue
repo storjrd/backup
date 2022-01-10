@@ -88,7 +88,7 @@
 			</p>
 			<p
 				class="text-storjBlue cursor-pointer hover:underline text-sm"
-				v-on:click=""
+				v-on:click="updateBackup"
 			>
 				See details
 			</p>
@@ -147,6 +147,7 @@ interface Properties {
 	backup: IBackup;
 	backupMetadata: Ref<string>;
 	restore: () => void;
+	updateBackup: () => void;
 	createBackup: () => void;
 }
 
@@ -163,7 +164,8 @@ export default defineComponent({
 		UserIcon
 	},
 	props: ["backup"],
-	setup: (props): Properties => {
+	emits: ["handleBackupUpdate"],
+	setup: (props, { emit }): Properties => {
 		const store = useStore();
 
 		const backup = reactive<IBackup>(props.backup);
@@ -176,6 +178,8 @@ export default defineComponent({
 			router.push(`/app/restore/${backup.id}`);
 		};
 
+		const updateBackup = () => emit("handleBackupUpdate", backup.id);
+
 		const createBackup = () => {
 			store.dispatch("backup", {
 				directories: [backup.name]
@@ -186,6 +190,7 @@ export default defineComponent({
 			backup,
 			backupMetadata,
 			restore,
+			updateBackup,
 			createBackup
 		};
 	}
