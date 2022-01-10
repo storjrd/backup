@@ -116,6 +116,7 @@
 						<backup
 							v-for="backup in backups"
 							v-bind:backup="backup"
+							:key="backup.id"
 						></backup>
 					</div>
 					<button
