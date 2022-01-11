@@ -372,7 +372,19 @@ export default defineComponent({
 		const selectedFrequency = ref("Daily");
 		const passphrase = ref("");
 
-		const foldersArr = computed(() => Object.keys(folders));
+		const foldersArr = computed(() => {
+			const foldersName = Object.keys(folders);
+
+			if (
+				foldersName.some(
+					(folderName) => typeof folderName === "undefined"
+				)
+			) {
+				throw new Error("Folder does not exist.");
+			}
+
+			return foldersName;
+		});
 		const foldersExist = computed(() => foldersArr.value.length > 0);
 		const selectFolderView = computed(() => view.value === "SELECT_FOLDER");
 		const frequencyView = computed(() => view.value === "FREQUENCY");
