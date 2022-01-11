@@ -23,7 +23,7 @@
 		"autoprefixer": "9.8.8",
 		"electron-serve": "1.1.0",
 		"execa": "5.1.1",
-		"postcss": "7.0.39",
+		"postcss": "8.2.13",
 		"pretty-bytes": "5.6.0",
 		"ramda": "0.27.1",
 		"tailwindcss": "npm:@tailwindcss/postcss7-compat@2.2.17",
