@@ -187,8 +187,17 @@ export const store = createStore<State>({
 		},
 
 		// prompt user for directory
-		async getDirectory() {
-			return backend.invoke("get-directory");
+		async getDirectory(): Promise<{
+			canceled: boolean;
+			filePaths: string[];
+		}> {
+			const directory = await backend.invoke("get-directory");
+
+			if (typeof directory === "undefined") {
+				throw new Error("Directory does not exist.");
+			}
+
+			return directory;
 		},
 
 		async openSignup() {

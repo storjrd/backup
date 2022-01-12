@@ -33,7 +33,9 @@ type Restore = (
 	}
 ) => Promise<void>;
 
-type GetDirectory = (arg0: "get-directory") => Promise<void>;
+type GetDirectory = (
+	arg0: "get-directory"
+) => Promise<{ canceled: boolean; filePaths: string[] } | undefined>;
 
 type OpenSignup = (arg0: "openSignup") => Promise<void>;
 
