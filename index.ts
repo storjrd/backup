@@ -1,15 +1,15 @@
-const os = require("os");
-const net = require("net");
-const { app, dialog, BrowserWindow, ipcMain, shell } = require("electron");
-const serve = require("electron-serve");
+import os from "os";
+import net from "net";
+import { app, dialog, BrowserWindow, ipcMain, shell } from "electron";
+import serve from "electron-serve";
 
-const config = require("./lib/config");
-const createRestic = require("./lib/createRestic");
+import * as config from "./lib/config";
+import { createRestic, Restic, BackupEvent } from "./lib/createRestic";
 
 const loadURL = serve({ directory: `${__dirname}/dist` });
 
 (async () => {
-	const handleRestic = async (restic) => {
+	const handleRestic = async (restic: Restic) => {
 		try {
 			await restic.init();
 		} catch (err) {
@@ -18,7 +18,7 @@ const loadURL = serve({ directory: `${__dirname}/dist` });
 
 		ipcMain.handle("snapshots", async () => restic.snapshots());
 
-		const backupEvents = [];
+		const backupEvents: BackupEvent[] = [];
 
 		ipcMain.handle("backup", async (event, { directories }) => {
 			console.log({ directories });

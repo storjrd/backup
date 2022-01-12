@@ -1,11 +1,11 @@
-const fs = require("fs/promises");
-const path = require("path");
-const { app } = require("electron");
+import fs from "fs/promises";
+import path from "path";
+import { app } from "electron";
 
 const whenAvailable = (() => {
-	let tail = Promise.resolve();
+	let tail: Promise<any> = Promise.resolve();
 
-	return (fn) => {
+	return <Type>(fn: () => Promise<Type>): Promise<Type> => {
 		tail = tail.then(fn);
 
 		return tail;
@@ -15,7 +15,7 @@ const whenAvailable = (() => {
 const configDirectory = path.join(app.getPath("appData"), "storjrdbackup");
 const configFile = path.join(configDirectory, "config.json");
 
-const tryAccess = async (path) => {
+const tryAccess = async (path: string) => {
 	try {
 		await fs.access(path);
 
@@ -45,12 +45,26 @@ whenAvailable(async () => {
 	}
 });
 
-const get = () =>
-	whenAvailable(async () => JSON.parse(await fs.readFile(configFile)));
+export type Config = Partial<{
+	credentials: {
+		endpoint: string;
+		bucket: string;
+		accessKey: string;
+		secretKey: string;
+	};
+	resticPassphrase: string;
+}>;
 
-const set = (params) =>
+export const get = (): Promise<Config> =>
+	whenAvailable(
+		async () => JSON.parse(await fs.readFile(configFile, "utf8")) as Config
+	);
+
+export const set = (params: Config): Promise<void> =>
 	whenAvailable(async () => {
-		const config = JSON.parse(await fs.readFile(configFile));
+		const config = JSON.parse(
+			await fs.readFile(configFile, "utf8")
+		) as Config;
 
 		await fs.writeFile(
 			configFile,
@@ -60,5 +74,3 @@ const set = (params) =>
 			})
 		);
 	});
-
-module.exports = { get, set };

@@ -6,7 +6,9 @@
 	"author": "",
 	"scripts": {
 		"serve": "vue-cli-service serve",
-		"build": "vue-cli-service build",
+		"build-frontend": "vue-cli-service build",
+		"build-backend": "tsc --project tsconfig-backend.json",
+		"build": "npm run build-backend && npm run build-frontend",
 		"start": "electron .",
 		"test": "echo \"Error: no test specified\" && exit 1",
 		"pack": "electron-builder --dir",
@@ -32,6 +34,8 @@
 		"vuex": "4.0.2"
 	},
 	"devDependencies": {
+		"@types/execa": "^2.0.0",
+		"@types/node": "^17.0.8",
 		"@typescript-eslint/parser": "^5.6.0",
 		"@vue/cli-plugin-router": "4.5.15",
 		"@vue/cli-plugin-typescript": "4.5.15",
