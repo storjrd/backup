@@ -142,6 +142,8 @@
 import { defineComponent, ref, Ref, computed } from "vue";
 import { useRouter, useRoute } from "vue-router";
 import { useStore } from "@/store";
+import debug from "@/lib/debug";
+const log = debug("restore-component");
 
 import { ArrowLeftIcon } from "@heroicons/vue/solid";
 import { DownloadIcon } from "@heroicons/vue/outline";
@@ -226,8 +228,7 @@ export default defineComponent({
 		};
 
 		const restore = async () => {
-			console.log("restore()");
-			completed.value = false;
+			log("restore()");
 			loading.value = true;
 
 			await store.dispatch("restore", {
