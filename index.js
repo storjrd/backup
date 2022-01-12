@@ -2,6 +2,8 @@ const os = require("os");
 const net = require("net");
 const { app, dialog, BrowserWindow, ipcMain, shell } = require("electron");
 const serve = require("electron-serve");
+const debug = require("./debug");
+const log = debug("index-electron");
 
 const config = require("./lib/config");
 const createRestic = require("./lib/createRestic");
@@ -21,7 +23,8 @@ const loadURL = serve({ directory: `${__dirname}/dist` });
 		const backupEvents = [];
 
 		ipcMain.handle("backup", async (event, { directories }) => {
-			console.log({ directories });
+			console.log("DIRECTORIES", directories)
+			log({ directories });
 
 			for await (const event of restic.backup(directories[0])) {
 				backupEvents.push(event);
@@ -31,9 +34,9 @@ const loadURL = serve({ directory: `${__dirname}/dist` });
 		ipcMain.handle("get-backup-events", () => backupEvents.splice(0));
 
 		ipcMain.handle("restore", async (event, { snapshotId, target }) => {
-			console.log({ snapshotId, target });
+			log({ snapshotId, target });
 			const output = await restic.restore(snapshotId, target);
-			console.log({ output });
+			log({ output });
 
 			return output;
 		});
@@ -49,7 +52,7 @@ const loadURL = serve({ directory: `${__dirname}/dist` });
 
 	const { credentials } = await config.get();
 
-	console.log({ credentials });
+	log({ credentials });
 
 	let loginStatus = false;
 	ipcMain.handle("loginStatus", () => loginStatus);
@@ -68,7 +71,7 @@ const loadURL = serve({ directory: `${__dirname}/dist` });
 		ipcMain.handle(
 			"setup",
 			async function (event, { endpoint, bucket, accessKey, secretKey }) {
-				console.log("setup()", ...arguments);
+				log("setup()", ...arguments);
 
 				const credentials = {
 					endpoint,
