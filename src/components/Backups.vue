@@ -194,6 +194,8 @@
 <script lang="ts">
 import { defineComponent, ref, Ref, computed } from "vue";
 import prettyBytes from "pretty-bytes";
+import debug from "@/lib/debug";
+const log = debug("backups-component");
 
 import type {
 	Snapshot,
@@ -306,7 +308,7 @@ const setupBackups = (): Properties => {
 			return "0";
 		}
 
-		console.log("syncingfilesdisplay", event);
+		log("syncingfilesdisplay", event);
 
 		return `${event.files_done} / ${event.total_files}`;
 	});

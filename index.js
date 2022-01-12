@@ -23,7 +23,6 @@ const loadURL = serve({ directory: `${__dirname}/dist` });
 		const backupEvents = [];
 
 		ipcMain.handle("backup", async (event, { directories }) => {
-			console.log("DIRECTORIES", directories)
 			log({ directories });
 
 			for await (const event of restic.backup(directories[0])) {
