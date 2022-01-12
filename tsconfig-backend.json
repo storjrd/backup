@@ -1,13 +1,13 @@
 {
 	"compilerOptions": {
-		"target": "es2017",
-		"module": "esnext",
+		"target": "es2018",
+		"module": "commonjs",
 		"strict": true,
 		"jsx": "preserve",
 		"importHelpers": true,
 		"moduleResolution": "node",
 		"skipLibCheck": true,
-		"esModuleInterop": false,
+		"esModuleInterop": true,
 		"allowSyntheticDefaultImports": true,
 		"downlevelIteration": true,
 		"sourceMap": true,
