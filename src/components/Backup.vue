@@ -37,24 +37,51 @@
 						class="w-5 h-5 font-bold text-gray-700"
 					/>
 					<XCircleIcon class="w-5 h-5font-bold text-gray-700" /> -->
-					<ArrowCircleUpIcon
-						class="w-5 h-5 font-bold text-gray-700 cursor-pointer"
-						v-on:click="createBackup"
-					/>
-					<span class="group">
+					<div class="relative">
 						<div
+							v-if="backupTooltip"
 							class="
-								hidden
-								group-hover:flex
-								text-sm text-gray-800
 								absolute
+								text-sm text-gray-800
+								bg-gray-50
+								rounded-lg
+								border
+								shadow
+								p-2
+								-my-4
+								-mx-40
+								w-40
+							"
+						>
+							Backup this directory.
+						</div>
+						<ArrowCircleUpIcon
+							class="
+								w-5
+								h-5
+								font-bold
+								text-gray-700
+								cursor-pointer
+							"
+							v-on:click="createBackup"
+							@mouseover="backupArrowOver"
+							@mouseleave="backupArrowLeave"
+						/>
+					</div>
+					<div class="relative">
+						<div
+							v-if="restoreTooltip"
+							class="
+								absolute
+								text-sm text-gray-800
 								bg-gray-50
 								rounded-lg
 								border
 								shadow
 								p-2
 								transform
-								-translate-y-16 -translate-x-32
+								-my-4
+								-mx-40
 								w-40
 							"
 						>
@@ -69,8 +96,10 @@
 								cursor-pointer
 							"
 							v-on:click="restore"
+							@mouseover="restoreArrowOver"
+							@mouseleave="restoreArrowLeave"
 						/>
-					</span>
+					</div>
 				</div>
 			</div>
 		</div>
@@ -121,7 +150,7 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, Ref, reactive, computed } from "vue";
+import { defineComponent, Ref, ref, reactive, computed } from "vue";
 
 import type { IBackup } from "@/types";
 import MyBackupModal from "@/components/MyBackupModal.vue";
@@ -142,9 +171,15 @@ import { useStore } from "@/store";
 interface Properties {
 	backup: IBackup;
 	backupMetadata: Ref<string>;
+	backupTooltip: Ref<boolean>;
+	restoreTooltip: Ref<boolean>;
 	restore: () => void;
 	updateBackup: () => void;
 	createBackup: () => void;
+	backupArrowOver: () => void;
+	backupArrowLeave: () => void;
+	restoreArrowOver: () => void;
+	restoreArrowLeave: () => void;
 }
 
 export default defineComponent({
@@ -166,6 +201,10 @@ export default defineComponent({
 
 		const backup = reactive<IBackup>(props.backup);
 
+		const backupTooltip = ref(false);
+
+		const restoreTooltip = ref(false);
+
 		const backupMetadata = computed<string>(() =>
 			backup.progress === 100 ? "Synced" : "Syncing"
 		);
@@ -182,12 +221,34 @@ export default defineComponent({
 			});
 		};
 
+		const backupArrowOver = () => {
+			backupTooltip.value = true;
+		};
+
+		const backupArrowLeave = () => {
+			backupTooltip.value = false;
+		};
+
+		const restoreArrowOver = () => {
+			restoreTooltip.value = true;
+		};
+
+		const restoreArrowLeave = () => {
+			restoreTooltip.value = false;
+		};
+
 		return {
 			backup,
+			backupTooltip,
+			restoreTooltip,
 			backupMetadata,
 			restore,
 			updateBackup,
-			createBackup
+			createBackup,
+			backupArrowOver,
+			backupArrowLeave,
+			restoreArrowOver,
+			restoreArrowLeave
 		};
 	}
 });
