@@ -1,6 +1,6 @@
-function assert(condition: boolean): asserts condition {
+function assert(condition: boolean, message: string): asserts condition {
 	if (!condition) {
-		throw new Error("Assertion Error");
+		throw new Error(`Assertion Error: ${message}`);
 	}
 }
 
