@@ -138,8 +138,12 @@ export default defineComponent({
 				filePaths: string[];
 			} = await store.dispatch("getDirectory");
 
-			location.value = response.filePaths[0];
-			completed.value = false;
+			const filePath = response.filePaths[0];
+
+			if (typeof filePath === "string") {
+				location.value = filePath;
+				completed.value = false;
+			}
 		};
 
 		const restore = async () => {

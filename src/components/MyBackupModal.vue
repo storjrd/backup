@@ -300,10 +300,13 @@ import {
 	computed,
 	ComputedRef
 } from "vue";
+
 import prettyBytes from "pretty-bytes";
 import { CheckIcon, XIcon } from "@heroicons/vue/solid";
 import { PlusCircleIcon } from "@heroicons/vue/outline";
+
 import { useStore } from "@/store";
+import { assert } from "@/lib/assert";
 import type { ModalConfig } from "@/types";
 
 interface IMediaTypes {
@@ -456,10 +459,13 @@ export default defineComponent({
 			// Replace the first folder for backup with the newly selected one if attempting to add more than one folder for backup.
 			if (Object.keys(folders)) {
 				const key = Object.keys(folders)[0];
+
+				assert(key !== undefined);
 				delete folders[key];
 			}
 
 			const path = response.filePaths[0];
+			assert(path !== undefined);
 
 			folders[path] = {
 				mediaTypes: {
