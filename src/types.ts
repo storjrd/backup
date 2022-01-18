@@ -11,7 +11,7 @@ export interface Snapshot {
 	short_id: string;
 }
 
-export interface IBackup {
+export interface Backup {
 	id: string;
 	name: string;
 	progress: number;
