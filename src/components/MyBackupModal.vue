@@ -306,7 +306,6 @@ import { CheckIcon, XIcon } from "@heroicons/vue/solid";
 import { PlusCircleIcon } from "@heroicons/vue/outline";
 
 import { useStore } from "@/store";
-import { assert } from "@/lib/assert";
 import type { ModalConfig } from "@/types";
 
 interface IMediaTypes {
@@ -457,25 +456,25 @@ export default defineComponent({
 			} = await store.dispatch("getDirectory");
 
 			// Replace the first folder for backup with the newly selected one if attempting to add more than one folder for backup.
-			if (Object.keys(folders)) {
-				const key = Object.keys(folders)[0];
+			const [key] = Object.keys(folders);
 
-				assert(key !== undefined);
+			if (typeof key === "string") {
 				delete folders[key];
 			}
 
 			const path = response.filePaths[0];
-			assert(path !== undefined);
 
-			folders[path] = {
-				mediaTypes: {
-					photosOrVideos: 0,
-					otherFiles: 0
-				},
-				displaySize: 0,
-				filesAlreadyAdded: {},
-				absolutePath: path
-			};
+			if (typeof path === "string") {
+				folders[path] = {
+					mediaTypes: {
+						photosOrVideos: 0,
+						otherFiles: 0
+					},
+					displaySize: 0,
+					filesAlreadyAdded: {},
+					absolutePath: path
+				};
+			}
 		};
 
 		const folderUploadMetaData = (folderName: string) => {
