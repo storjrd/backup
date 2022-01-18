@@ -113,12 +113,12 @@
 					<div
 						class="max-h-60 overflow-auto space-y-2 pb-4 pt-2 px-7"
 					>
-						<backup
+						<backup-component
 							v-for="backup in backups"
 							v-bind:backup="backup"
 							@handleBackupUpdate="handleBackupUpdate"
 							:key="backup.id"
-						></backup>
+						></backup-component>
 					</div>
 					<button
 						v-on:click="openModal"
@@ -197,13 +197,13 @@ import prettyBytes from "pretty-bytes";
 
 import type {
 	Snapshot,
-	IBackup,
+	Backup,
 	BackupStatusEvent,
 	BackupSummaryEvent,
 	ModalConfig
 } from "@/types";
 import MyBackupModal from "@/components/MyBackupModal.vue";
-import Backup from "@/components/Backup.vue";
+import BackupComponent from "@/components/Backup.vue";
 
 import {
 	PlusCircleIcon,
@@ -218,7 +218,7 @@ import router from "@/router";
 import { useStore } from "@/store";
 
 interface Properties {
-	backups: Ref<IBackup[]>;
+	backups: Ref<Backup[]>;
 
 	isLoading: Ref<boolean>;
 	backupsExist: Ref<boolean>;
@@ -245,8 +245,8 @@ const setupBackups = (): Properties => {
 		store.state.snapshots === null ? [] : store.state.snapshots
 	);
 
-	const backups = computed<IBackup[]>((): IBackup[] => {
-		const arr: IBackup[] = [];
+	const backups = computed<Backup[]>((): Backup[] => {
+		const arr: Backup[] = [];
 
 		if (store.getters.backupStarted && !store.getters.backupFinished) {
 			arr.push({
@@ -261,7 +261,7 @@ const setupBackups = (): Properties => {
 			arr.push(
 				...snapshots.value
 					.map(
-						(snapshot: Snapshot): IBackup => ({
+						(snapshot: Snapshot): Backup => ({
 							id: snapshot.id,
 							name: snapshot.paths.join(", "),
 							progress: 100,
@@ -367,7 +367,7 @@ export default defineComponent({
 	name: "Backups",
 	components: {
 		MyBackupModal,
-		Backup,
+		BackupComponent,
 
 		PlusCircleIcon,
 		ExclamationCircleIcon,

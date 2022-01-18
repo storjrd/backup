@@ -152,7 +152,7 @@
 <script lang="ts">
 import { defineComponent, Ref, ref, reactive, computed } from "vue";
 
-import type { IBackup } from "@/types";
+import type { Backup } from "@/types";
 import MyBackupModal from "@/components/MyBackupModal.vue";
 
 import {
@@ -169,7 +169,7 @@ import router from "@/router";
 import { useStore } from "@/store";
 
 interface Properties {
-	backup: IBackup;
+	backup: Backup;
 	backupMetadata: Ref<string>;
 	backupTooltip: Ref<boolean>;
 	restoreTooltip: Ref<boolean>;
@@ -199,7 +199,7 @@ export default defineComponent({
 	setup: (props, { emit }): Properties => {
 		const store = useStore();
 
-		const backup = reactive<IBackup>(props.backup);
+		const backup = reactive<Backup>(props.backup);
 
 		const backupTooltip = ref(false);
 
