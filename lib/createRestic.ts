@@ -22,7 +22,7 @@ async function* parseJSONStream(stream: Readable) {
 	let raw: string | undefined = "";
 
 	for await (const chunk of stream) {
-		assert(typeof chunk === "string");
+		assert(typeof chunk === "object");
 		assert(typeof raw === "string");
 
 		raw += chunk;
