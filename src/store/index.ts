@@ -117,26 +117,30 @@ export const store = createStore<State>({
 				accessKey,
 				secretKey,
 				endpoint,
-				bucket
+				bucket,
+				resticPassword
 			}: {
 				accessKey: string;
 				secretKey: string;
 				endpoint: string;
 				bucket: string;
+				resticPassword: string;
 			}
 		) {
 			console.log({
 				endpoint,
 				bucket,
 				accessKey,
-				secretKey
+				secretKey,
+				resticPassword
 			});
 
 			await backend.invoke("setup", {
 				endpoint,
 				bucket,
 				accessKey,
-				secretKey
+				secretKey,
+				resticPassword
 			});
 
 			commit("login");

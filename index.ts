@@ -67,17 +67,21 @@ const loadURL = serve({ directory: `${__dirname}/dist` });
 	const handleSetup = () =>
 		ipcMain.handle(
 			"setup",
-			async function (event, { endpoint, bucket, accessKey, secretKey }) {
+			async function (
+				event,
+				{ endpoint, bucket, accessKey, secretKey, resticPassword }
+			) {
 				console.log("setup()", ...arguments);
 
 				const credentials = {
 					endpoint,
 					bucket,
 					accessKey,
-					secretKey
+					secretKey,
+					resticPassword
 				};
 
-				const resticPassphrase = "a";
+				const resticPassphrase = resticPassword || "a";
 
 				const restic = createRestic({
 					...credentials,
