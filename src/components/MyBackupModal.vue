@@ -194,29 +194,6 @@
 						</option>
 					</select>
 				</div>
-				<div class="flex justify-between mt-6">
-					<p class="text-left">Create a passphrase to encrypt it:</p>
-					<p class="text-sm text-gray-300">(optional)</p>
-				</div>
-				<div class="mt-1 h-24">
-					<input
-						v-model="passphrase"
-						type="text"
-						name="passphrase"
-						id="passphrase"
-						class="
-							shadow-sm
-							focus:ring-storjBlue focus:border-storjBlue
-							block
-							w-full
-							sm:text-sm
-							border-gray-300
-							rounded-md
-							placeholder-gray-300
-						"
-						placeholder="Ex: secureP4ssphrase678#"
-					/>
-				</div>
 			</div>
 			<div class="flex justify-start space-x-2 mt-2">
 				<button
@@ -326,7 +303,6 @@ interface Properties {
 	temporaryBackupName: Ref<string>;
 	backupNameInputOpen: Ref<boolean>;
 	selectedFrequency: Ref<string>;
-	passphrase: Ref<string>;
 
 	foldersArr: ComputedRef<string[]>;
 	foldersExist: ComputedRef<boolean>;
@@ -372,7 +348,6 @@ export default defineComponent({
 		const backupNameInputOpen = ref(false);
 		const view = ref(props.modalConfig.view);
 		const selectedFrequency = ref("Daily");
-		const passphrase = ref("");
 
 		const foldersArr = computed(() => Object.keys(folders));
 		const foldersExist = computed(() => foldersArr.value.length > 0);
@@ -498,7 +473,6 @@ export default defineComponent({
 			temporaryBackupName,
 			backupNameInputOpen,
 			selectedFrequency,
-			passphrase,
 
 			foldersArr,
 			foldersExist,
