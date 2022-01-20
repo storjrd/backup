@@ -111,12 +111,12 @@
 
 				<i>{{ backup.hostname }}</i>
 			</p>
-			<p
+			<!-- <p
 				class="text-storjBlue cursor-pointer hover:underline text-sm"
 				v-on:click="updateBackup"
 			>
 				See details
-			</p>
+			</p> -->
 		</div>
 		<div class="relative pt-1">
 			<div
