@@ -117,7 +117,7 @@
 							v-for="backup in backups"
 							v-bind:backup="backup"
 							@handleBackupUpdate="handleBackupUpdate"
-							:key="backup.id"
+							:key="backup.name"
 						></backup-component>
 					</div>
 					<button
@@ -245,35 +245,7 @@ const setupBackups = (): Properties => {
 		store.state.snapshots === null ? [] : store.state.snapshots
 	);
 
-	const backups = computed<Backup[]>((): Backup[] => {
-		const arr: Backup[] = [];
-
-		if (store.getters.backupStarted && !store.getters.backupFinished) {
-			arr.push({
-				id: "",
-				name: "",
-				progress: store.getters.lastStatusEvent.percent_done * 100,
-				hostname: ""
-			});
-		}
-
-		if (snapshots.value !== null) {
-			arr.push(
-				...snapshots.value
-					.map(
-						(snapshot: Snapshot): Backup => ({
-							id: snapshot.id,
-							name: snapshot.paths.join(", "),
-							progress: 100,
-							hostname: snapshot.hostname
-						})
-					)
-					.reverse()
-			);
-		}
-
-		return arr;
-	});
+	const backups = computed<Backup[]>((): Backup[] => store.getters.backups);
 
 	const isLoading = computed(() => store.state.snapshots === null);
 
