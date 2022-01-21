@@ -239,7 +239,7 @@
 						focus:outline-none focus:ring-2 focus:ring-offset-2
 					"
 				>
-					Next
+					{{ nextButtonText() }}
 				</button>
 				<button
 					v-else
@@ -316,6 +316,7 @@ interface Properties {
 	saveBackupNameChange: () => void;
 	changeBackupName: (arg0: string) => void;
 	closeModal: () => void;
+	nextButtonText: () => string;
 	nextButton: () => void;
 	addFolderButton: () => void;
 	folderUploadMetaData: (arg0: string) => void;
@@ -406,6 +407,14 @@ export default defineComponent({
 
 		const store = useStore();
 
+		const nextButtonText = () => {
+			if (selectFolderView.value === true) {
+				return "Next";
+			} else {
+				return "Done";
+			}
+		};
+
 		const nextButton = () => {
 			if (selectFolderView.value === true) {
 				view.value = "FREQUENCY";
@@ -486,6 +495,7 @@ export default defineComponent({
 			saveBackupNameChange,
 			changeBackupName,
 			closeModal,
+			nextButtonText,
 			nextButton,
 			addFolderButton,
 			folderUploadMetaData,
