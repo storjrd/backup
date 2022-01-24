@@ -311,12 +311,12 @@ interface Properties {
 	nextEnabled: ComputedRef<boolean>;
 	validBackupName: ComputedRef<boolean>;
 	backupNameInputClass: ComputedRef<string>;
+	nextButtonText: ComputedRef<string>;
 
 	cancelBackupNameChange: () => void;
 	saveBackupNameChange: () => void;
 	changeBackupName: (arg0: string) => void;
 	closeModal: () => void;
-	nextButtonText: () => string;
 	nextButton: () => void;
 	addFolderButton: () => void;
 	folderUploadMetaData: (arg0: string) => void;
@@ -385,6 +385,10 @@ export default defineComponent({
 				`
 		);
 
+		const nextButtonText = computed(
+			() => selectFolderView.value === true ? "Next" : "Done"
+		);
+
 		const cancelBackupNameChange = () => {
 			temporaryBackupName.value = backupName.value;
 			backupNameInputOpen.value = false;
@@ -406,14 +410,6 @@ export default defineComponent({
 		};
 
 		const store = useStore();
-
-		const nextButtonText = () => {
-			if (selectFolderView.value === true) {
-				return "Next";
-			} else {
-				return "Done";
-			}
-		};
 
 		const nextButton = () => {
 			if (selectFolderView.value === true) {
@@ -490,12 +486,12 @@ export default defineComponent({
 			nextEnabled,
 			validBackupName,
 			backupNameInputClass,
+			nextButtonText,
 
 			cancelBackupNameChange,
 			saveBackupNameChange,
 			changeBackupName,
 			closeModal,
-			nextButtonText,
 			nextButton,
 			addFolderButton,
 			folderUploadMetaData,
