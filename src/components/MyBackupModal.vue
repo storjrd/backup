@@ -94,9 +94,10 @@
 							<div
 								class="
 									flex
-									justify-start
+									justify-center
 									content-center
 									items-center
+									break-words
 								"
 							>
 								<img
