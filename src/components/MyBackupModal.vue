@@ -239,7 +239,7 @@
 						focus:outline-none focus:ring-2 focus:ring-offset-2
 					"
 				>
-					{{ nextButtonText() }}
+					{{ nextButtonText }}
 				</button>
 				<button
 					v-else
