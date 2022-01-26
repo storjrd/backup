@@ -28,7 +28,7 @@ type GetBackupEvents = (arg0: "get-backup-events") => Promise<BackupEvent[]>;
 type Restore = (
 	arg0: "restore",
 	arg1: {
-		snapshotId: string;
+		snapshot: Snapshot;
 		target: string;
 	}
 ) => Promise<void>;
