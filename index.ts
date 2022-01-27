@@ -81,16 +81,18 @@ const loadURL = serve({ directory: `${__dirname}/dist` });
 					resticPassword
 				};
 
-				const resticPassphrase = resticPassword || "a";
+				if (resticPassword.length < 3) {
+					throw new Error("Password needs to be longer than three characters.");
+				}
 
 				const restic = createRestic({
 					...credentials,
-					password: resticPassphrase
+					password: resticPassword
 				});
 
 				config.set({
 					credentials,
-					resticPassphrase
+					resticPassword
 				});
 
 				await handleRestic(restic);

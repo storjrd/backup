@@ -135,6 +135,10 @@ export const store = createStore<State>({
 				resticPassword
 			});
 
+			if (resticPassword.length < 3) {
+				throw new Error("Password needs to be longer than three characters.");
+			}
+
 			await backend.invoke("setup", {
 				endpoint,
 				bucket,
