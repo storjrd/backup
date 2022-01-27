@@ -92,7 +92,7 @@ const loadURL = serve({ directory: `${__dirname}/dist` });
 
 				config.set({
 					credentials,
-					resticPassword
+					resticPassphrase: resticPassword
 				});
 
 				await handleRestic(restic);
