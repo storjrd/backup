@@ -240,7 +240,7 @@
 						focus:outline-none focus:ring-2 focus:ring-offset-2
 					"
 				>
-					Next
+					{{ nextButtonText }}
 				</button>
 				<button
 					v-else
@@ -312,6 +312,7 @@ interface Properties {
 	nextEnabled: ComputedRef<boolean>;
 	validBackupName: ComputedRef<boolean>;
 	backupNameInputClass: ComputedRef<string>;
+	nextButtonText: ComputedRef<string>;
 
 	folderName: (arg0: string) => string;
 	cancelBackupNameChange: () => void;
@@ -384,6 +385,11 @@ export default defineComponent({
 					rounded-md
 					w-1/3
 				`
+		);
+
+
+		const nextButtonText = computed(
+			() => selectFolderView.value === true ? "Next" : "Done"
 		);
 
 		const folderName = (folder: string) => {
@@ -504,6 +510,7 @@ export default defineComponent({
 			nextEnabled,
 			validBackupName,
 			backupNameInputClass,
+			nextButtonText,
 
 			folderName,
 			cancelBackupNameChange,
