@@ -1,6 +1,8 @@
 import { InjectionKey } from "vue";
 import { Store, createStore, useStore as baseUseStore } from "vuex";
 import * as R from "ramda";
+import debug from "@/lib/debug";
+const log = debug("index-store");
 
 import backend from "@/lib/backend.ts";
 
@@ -182,7 +184,7 @@ export const store = createStore<State>({
 				bucket: string;
 			}
 		) {
-			console.log({
+			log({
 				endpoint,
 				bucket,
 				accessKey,
@@ -215,7 +217,7 @@ export const store = createStore<State>({
 
 			commit("clearBackupEvents");
 
-			console.log("events", getters.lastSummaryEvent);
+			log("events", getters.lastSummaryEvent);
 
 			while (getters.lastSummaryEvent === undefined) {
 				commit(
@@ -223,12 +225,12 @@ export const store = createStore<State>({
 					await backend.invoke("get-backup-events")
 				);
 
-				console.log("summary event", getters.lastSummaryEvent);
+				log("summary event", getters.lastSummaryEvent);
 
 				await new Promise((resolve) => setTimeout(resolve, 100));
 			}
 
-			console.log("backup finished");
+			log("backup finished");
 
 			dispatch("getSnapshots");
 		},
