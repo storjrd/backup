@@ -109,14 +109,14 @@
 
 				<br />
 
-				<i>{{ backup.hostname }}</i>
+				<i>{{ backup.historic[0].hostname }}</i>
 			</p>
-			<p
+			<!-- <p
 				class="text-storjBlue cursor-pointer hover:underline text-sm"
 				v-on:click="updateBackup"
 			>
 				See details
-			</p>
+			</p> -->
 		</div>
 		<div class="relative pt-1">
 			<div
@@ -132,7 +132,7 @@
 			>
 				<div
 					v-bind:style="{
-						width: `${backup.progress}%`
+						width: `${backup.historic[0].progress}%`
 					}"
 					class="
 						shadow-none
@@ -206,14 +206,16 @@ export default defineComponent({
 		const restoreTooltip = ref(false);
 
 		const backupMetadata = computed<string>(() =>
-			backup.progress === 100 ? "Synced" : "Syncing"
+			backup.historic[0]?.progress === 100 ? "Synced" : "Syncing"
 		);
 
 		const restore = () => {
-			router.push(`/app/restore/${backup.id}`);
+			const regex = /\//g;
+			router.push(`/app/restore/${backup.name.replace(regex, ".")}`);
 		};
 
-		const updateBackup = () => emit("handleBackupUpdate", backup.id);
+		const updateBackup = () =>
+			emit("handleBackupUpdate", backup.historic[0]?.id);
 
 		const createBackup = () => {
 			store.dispatch("backup", {

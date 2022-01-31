@@ -117,7 +117,7 @@
 							v-for="backup in backups"
 							v-bind:backup="backup"
 							@handleBackupUpdate="handleBackupUpdate"
-							:key="backup.id"
+							:key="backup.name"
 						></backup-component>
 					</div>
 					<button
@@ -194,6 +194,8 @@
 <script lang="ts">
 import { defineComponent, ref, Ref, computed } from "vue";
 import prettyBytes from "pretty-bytes";
+import debug from "@/lib/debug";
+const log = debug("backups-component");
 
 import type {
 	Snapshot,
@@ -245,35 +247,7 @@ const setupBackups = (): Properties => {
 		store.state.snapshots === null ? [] : store.state.snapshots
 	);
 
-	const backups = computed<Backup[]>((): Backup[] => {
-		const arr: Backup[] = [];
-
-		if (store.getters.backupStarted && !store.getters.backupFinished) {
-			arr.push({
-				id: "",
-				name: "",
-				progress: store.getters.lastStatusEvent.percent_done * 100,
-				hostname: ""
-			});
-		}
-
-		if (snapshots.value !== null) {
-			arr.push(
-				...snapshots.value
-					.map(
-						(snapshot: Snapshot): Backup => ({
-							id: snapshot.id,
-							name: snapshot.paths.join(", "),
-							progress: 100,
-							hostname: snapshot.hostname
-						})
-					)
-					.reverse()
-			);
-		}
-
-		return arr;
-	});
+	const backups = computed<Backup[]>((): Backup[] => store.getters.backups);
 
 	const isLoading = computed(() => store.state.snapshots === null);
 
@@ -306,7 +280,7 @@ const setupBackups = (): Properties => {
 			return "0";
 		}
 
-		console.log("syncingfilesdisplay", event);
+		log("syncingfilesdisplay", event);
 
 		return `${event.files_done} / ${event.total_files}`;
 	});
