@@ -6,6 +6,7 @@ import backend from "@/lib/backend.ts";
 
 import type {
 	Snapshot,
+	Backup,
 	BackupEvent,
 	BackupStatusEvent,
 	BackupSummaryEvent
@@ -75,7 +76,63 @@ export const store = createStore<State>({
 			getters.lastStatusEvent !== undefined,
 
 		backupFinished: (state, getters): boolean =>
-			getters.lastSummaryEvent !== undefined
+			getters.lastSummaryEvent !== undefined,
+
+		backups: (state, getters): Backup[] => {
+			const arr: Backup[] = [];
+
+			if (getters.backupStarted && !getters.backupFinished) {
+				arr.push({
+					name: "",
+					historic: [
+						{
+							id: "",
+							time: Date.now().toString(),
+							name: "",
+							progress:
+								getters.lastStatusEvent.percent_done * 100,
+							hostname: ""
+						}
+					]
+				});
+			}
+
+			if (state.snapshots !== null) {
+				const backupsArr = state.snapshots
+					.map(
+						(snapshot: Snapshot): Backup => ({
+							name: snapshot.paths.join(", "),
+							historic: [
+								{
+									id: snapshot.id,
+									time: snapshot.time,
+									name: snapshot.paths.join(", "),
+									progress: 100,
+									hostname: snapshot.hostname
+								}
+							]
+						})
+					)
+					.reverse();
+
+				backupsArr.forEach((backup) => {
+					const backupFound = arr.find(
+						(item) => item.name === backup.name
+					);
+
+					if (backupFound && backup.historic[0]) {
+						backupFound.historic.push(backup.historic[0]);
+					} else if (backup.historic[0]) {
+						arr.push({
+							name: backup.name,
+							historic: [backup.historic[0]]
+						});
+					}
+				});
+			}
+
+			return arr;
+		}
 	},
 	mutations: {
 		login(state) {

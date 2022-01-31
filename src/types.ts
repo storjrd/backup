@@ -12,10 +12,14 @@ export interface Snapshot {
 }
 
 export interface Backup {
-	id: string;
 	name: string;
-	progress: number;
-	hostname: string;
+	historic: {
+		id: string;
+		time: string;
+		name: string;
+		progress: number;
+		hostname: string;
+	}[];
 }
 
 export interface BackupEvent {

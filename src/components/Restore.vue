@@ -90,6 +90,51 @@
 			<p v-if="loading">Restoring...</p>
 			<p v-if="completed">Restore complete!</p>
 		</div>
+		<div
+			class="
+				h-52
+				overflow-auto
+				shadow-sm
+				border border-gray-200
+				rounded
+				p-1
+			"
+		>
+			<ul class="space-y-2">
+				<li
+					v-for="backup in backups.historic"
+					class="relative flex items-start"
+				>
+					<div class="flex items-center h-5">
+						<input
+							type="checkbox"
+							class="
+								focus:ring-storjBlue
+								h-4
+								w-4
+								text-storjBlue
+								border-gray-300
+								rounded
+							"
+							v-bind:id="backup.id"
+							v-bind:name="backup.id"
+							v-bind:checked="backupToRestore === backup.id"
+							v-on:click="selectBackup(backup.id)"
+						/>
+					</div>
+					<div class="ml-3 text-sm">
+						<label
+							v-bind:for="backup.id"
+							class="font-medium text-gray-700"
+							>{{ formatBackupDate(backup.time) }}</label
+						>
+						<p id="comments-description" class="text-gray-500">
+							{{ formatBackupTime(backup.time) }}
+						</p>
+					</div>
+				</li>
+			</ul>
+		</div>
 	</div>
 </template>
 
@@ -101,6 +146,8 @@ import { useStore } from "@/store";
 import { ArrowLeftIcon } from "@heroicons/vue/solid";
 import { DownloadIcon } from "@heroicons/vue/outline";
 
+import type { Backup } from "@/types";
+
 interface Properties {
 	locationInputElement: Ref<null | HTMLInputElement>;
 
@@ -111,7 +158,12 @@ interface Properties {
 
 	chooseLocation: () => void;
 	goBackToBackups: () => void;
+	backups: Ref<Backup>;
+	backupToRestore: Ref<string | undefined>;
+	selectBackup: (id: string) => void;
 	restore: () => void;
+	formatBackupDate: (dateTime: string) => string;
+	formatBackupTime: (dateTime: string) => string;
 }
 
 export default defineComponent({
@@ -146,12 +198,40 @@ export default defineComponent({
 			}
 		};
 
+		const backups = computed<Backup>((): Backup => {
+			const allBackups: Backup[] = store.getters.backups;
+
+			const currentBackups = allBackups.find((backup: Backup) => {
+				let name = route.params.name;
+				const regex = /\./g;
+
+				if (typeof name === "object") {
+					name = name.join("");
+				}
+
+				return backup.name === name?.replace(regex, "/");
+			});
+
+			if (typeof currentBackups === "undefined") {
+				throw new Error("Backups for current restore not found.");
+			}
+
+			return currentBackups;
+		});
+
+		const backupToRestore = ref(backups.value.historic[0]?.id);
+
+		const selectBackup = (id: string) => {
+			backupToRestore.value = id;
+		};
+
 		const restore = async () => {
 			console.log("restore()");
+			completed.value = false;
 			loading.value = true;
 
 			await store.dispatch("restore", {
-				snapshotId: route.params.id,
+				snapshotId: backupToRestore.value,
 				target: location.value
 			});
 
@@ -163,6 +243,16 @@ export default defineComponent({
 			router.push("/app/backups");
 		};
 
+		const formatBackupDate = (dateTime: string) => {
+			const date = new Date(dateTime);
+			return `${date.toDateString()}`;
+		};
+
+		const formatBackupTime = (dateTime: string) => {
+			const date = new Date(dateTime);
+			return `${date.toTimeString()}`;
+		};
+
 		return {
 			location,
 			loading,
@@ -171,7 +261,12 @@ export default defineComponent({
 			locationInputElement,
 			chooseLocation,
 			goBackToBackups,
-			restore
+			backups,
+			backupToRestore,
+			selectBackup,
+			restore,
+			formatBackupDate,
+			formatBackupTime
 		};
 	}
 });
