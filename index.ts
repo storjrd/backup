@@ -5,6 +5,7 @@ import serve from "electron-serve";
 
 import * as config from "./lib/config";
 import { createRestic, Restic, BackupEvent } from "./lib/createRestic";
+import customRestore from "./lib/customRestore";
 
 const loadURL = serve({ directory: `${__dirname}/dist` });
 
@@ -30,13 +31,11 @@ const loadURL = serve({ directory: `${__dirname}/dist` });
 
 		ipcMain.handle("get-backup-events", () => backupEvents.splice(0));
 
-		ipcMain.handle("restore", async (event, { snapshotId, target }) => {
-			console.log({ snapshotId, target });
-			const output = await restic.restore(snapshotId, target);
-			console.log({ output });
-
-			return output;
-		});
+		ipcMain.handle("restore", async (event, { snapshot, target }) => {
+			await customRestore(restic, {
+				snapshot,
+				directory: target
+			});
 	};
 
 	ipcMain.handle("openSignup", async () => {

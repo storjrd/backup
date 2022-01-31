@@ -244,11 +244,27 @@ export const store = createStore<State>({
 		},
 
 		async restore(
-			{ commit },
+			{ commit, state },
 			{ snapshotId, target }: { snapshotId: string; target: string }
 		) {
+			const snapshots = state.snapshots;
+
+			if (snapshots === null) {
+				throw new Error("Cannot restore snapshot before loaded");
+			}
+
+			const snapshot = snapshots.find(
+				(snapshot) => snapshot.id === snapshotId
+			);
+
+			if (snapshot === undefined) {
+				throw new Error(
+					`Cannot find snapshot JSON.stringify(snapshotId)`
+				);
+			}
+
 			await backend.invoke("restore", {
-				snapshotId,
+				snapshot: JSON.parse(JSON.stringify(snapshot)) as Snapshot,
 				target
 			});
 		},

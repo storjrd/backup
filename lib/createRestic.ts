@@ -36,7 +36,7 @@ async function* parseJSONStream(stream: Readable) {
 	}
 }
 
-type Snapshot = {
+export type Snapshot = {
 	time: string;
 	parent: string;
 	tree: string;

@@ -6,9 +6,13 @@ jobs:
     build:
         runs-on: self-hosted
         steps:
+            - run: curl --proto '=https' --tlsv1.2 -sSf https://just.systems/install.sh | sudo bash -s -- --to /usr/local/bin
+
             - uses: actions/checkout@v2
               with:
                   submodules: "recursive"
+
+            - run: just download-restic
 
             - run: docker run --rm -i -v ${PWD}:/project -v ${PWD##*/}-node-modules:/project/node_modules electronuserland/builder:wine bash -c 'npm install; npm run build; npm run dist'
 
