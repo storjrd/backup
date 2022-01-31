@@ -7,6 +7,7 @@ type Setup = (
 		bucket: string;
 		accessKey: string;
 		secretKey: string;
+		resticPassword: string;
 	}
 ) => Promise<void>;
 

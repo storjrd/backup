@@ -1,7 +1,9 @@
-import os from "os";
-import net from "net";
-import { app, dialog, BrowserWindow, ipcMain, shell } from "electron";
-import serve from "electron-serve";
+const os = require("os");
+const net = require("net");
+const { app, dialog, BrowserWindow, ipcMain, shell } = require("electron");
+const serve = require("electron-serve");
+const debug = require("./debug");
+const log = debug("index-electron");
 
 import * as config from "./lib/config";
 import { createRestic, Restic, BackupEvent } from "./lib/createRestic";
@@ -22,7 +24,7 @@ const loadURL = serve({ directory: `${__dirname}/dist` });
 		const backupEvents: BackupEvent[] = [];
 
 		ipcMain.handle("backup", async (event, { directories }) => {
-			console.log({ directories });
+			log({ directories });
 
 			for await (const event of restic.backup(directories[0])) {
 				backupEvents.push(event);
@@ -36,7 +38,6 @@ const loadURL = serve({ directory: `${__dirname}/dist` });
 				snapshot,
 				directory: target
 			});
-		});
 	};
 
 	ipcMain.handle("openSignup", async () => {
@@ -49,7 +50,7 @@ const loadURL = serve({ directory: `${__dirname}/dist` });
 
 	const { credentials } = await config.get();
 
-	console.log({ credentials });
+	log({ credentials });
 
 	let loginStatus = false;
 	ipcMain.handle("loginStatus", () => loginStatus);
@@ -67,26 +68,32 @@ const loadURL = serve({ directory: `${__dirname}/dist` });
 	const handleSetup = () =>
 		ipcMain.handle(
 			"setup",
-			async function (event, { endpoint, bucket, accessKey, secretKey }) {
-				console.log("setup()", ...arguments);
+			async function (
+				event,
+				{ endpoint, bucket, accessKey, secretKey, resticPassword }
+			) {
+				log("setup()", ...arguments);
 
 				const credentials = {
 					endpoint,
 					bucket,
 					accessKey,
-					secretKey
+					secretKey,
+					resticPassword
 				};
 
-				const resticPassphrase = "a";
+				if (resticPassword.length < 3) {
+					throw new Error("Password needs to be longer than three characters.");
+				}
 
 				const restic = createRestic({
 					...credentials,
-					password: resticPassphrase
+					password: resticPassword
 				});
 
 				config.set({
 					credentials,
-					resticPassphrase
+					resticPassphrase: resticPassword
 				});
 
 				await handleRestic(restic);

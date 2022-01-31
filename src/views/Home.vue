@@ -1,5 +1,5 @@
 <template>
-	<div class="grid grid-cols-2 mt-20">
+	<div class="grid grid-cols-2 mt-16">
 		<div class="mt-8 mr-10">
 			<img class="w-auto h-auto" src="@/assets/artifacts.svg" />
 		</div>
@@ -246,7 +246,7 @@
 						class="
 							relative
 							border border-gray-300
-							rounded-md rounded-t-none
+							rounded-md rounded-t-none rounded-b-none
 							px-3
 							py-2
 							focus-within:z-10
@@ -282,6 +282,48 @@
 								sm:text-sm
 							"
 							placeholder="my-bucket"
+						/>
+					</div>
+					<div
+						class="
+							relative
+							border border-gray-300
+							rounded-md rounded-t-none
+							px-3
+							py-2
+							focus-within:z-10
+							focus-within:ring-1
+							focus-within:ring-storjBlue
+							focus-within:border-storjBlue
+						"
+					>
+						<label
+							for="resticPassword"
+							class="
+								block
+								w-full
+								text-xs
+								font-medium
+								text-gray-700
+							"
+							>Optional Restic Password</label
+						>
+						<input
+							v-model="resticPassword"
+							type="password"
+							name="resticPassword"
+							id="resticPassword"
+							class="
+								block
+								w-full
+								border-0
+								p-0
+								text-gray-900
+								placeholder-gray-400
+								focus:ring-0
+								sm:text-sm
+							"
+							placeholder="••••••••••••"
 						/>
 					</div>
 				</div>
@@ -378,6 +420,7 @@ const setupLogin = () => {
 	const secretKey = ref<string>("");
 	const endpoint = ref<string>("");
 	const bucket = ref<string>("");
+	const resticPassword = ref<string>("");
 
 	const isLoading = ref<boolean>(false);
 
@@ -388,7 +431,8 @@ const setupLogin = () => {
 			accessKey: accessKey.value,
 			secretKey: secretKey.value,
 			endpoint: endpoint.value,
-			bucket: bucket.value
+			bucket: bucket.value,
+			resticPassword: resticPassword.value
 		});
 
 		isLoading.value = false;
@@ -399,6 +443,7 @@ const setupLogin = () => {
 		secretKey,
 		endpoint,
 		bucket,
+		resticPassword,
 		isLoading,
 		login
 	};
