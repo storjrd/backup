@@ -1,11 +1,14 @@
 import { InjectionKey } from "vue";
 import { Store, createStore, useStore as baseUseStore } from "vuex";
 import * as R from "ramda";
+import debug from "@/lib/debug";
+const log = debug("index-store");
 
 import backend from "@/lib/backend.ts";
 
 import type {
 	Snapshot,
+	Backup,
 	BackupEvent,
 	BackupStatusEvent,
 	BackupSummaryEvent
@@ -75,7 +78,63 @@ export const store = createStore<State>({
 			getters.lastStatusEvent !== undefined,
 
 		backupFinished: (state, getters): boolean =>
-			getters.lastSummaryEvent !== undefined
+			getters.lastSummaryEvent !== undefined,
+
+		backups: (state, getters): Backup[] => {
+			const arr: Backup[] = [];
+
+			if (getters.backupStarted && !getters.backupFinished) {
+				arr.push({
+					name: "",
+					historic: [
+						{
+							id: "",
+							time: Date.now().toString(),
+							name: "",
+							progress:
+								getters.lastStatusEvent.percent_done * 100,
+							hostname: ""
+						}
+					]
+				});
+			}
+
+			if (state.snapshots !== null) {
+				const backupsArr = state.snapshots
+					.map(
+						(snapshot: Snapshot): Backup => ({
+							name: snapshot.paths.join(", "),
+							historic: [
+								{
+									id: snapshot.id,
+									time: snapshot.time,
+									name: snapshot.paths.join(", "),
+									progress: 100,
+									hostname: snapshot.hostname
+								}
+							]
+						})
+					)
+					.reverse();
+
+				backupsArr.forEach((backup) => {
+					const backupFound = arr.find(
+						(item) => item.name === backup.name
+					);
+
+					if (backupFound && backup.historic[0]) {
+						backupFound.historic.push(backup.historic[0]);
+					} else if (backup.historic[0]) {
+						arr.push({
+							name: backup.name,
+							historic: [backup.historic[0]]
+						});
+					}
+				});
+			}
+
+			return arr;
+		}
 	},
 	mutations: {
 		login(state) {
@@ -117,26 +176,34 @@ export const store = createStore<State>({
 				accessKey,
 				secretKey,
 				endpoint,
-				bucket
+				bucket,
+				resticPassword
 			}: {
 				accessKey: string;
 				secretKey: string;
 				endpoint: string;
 				bucket: string;
+				resticPassword: string;
 			}
 		) {
-			console.log({
+			log({
 				endpoint,
 				bucket,
 				accessKey,
-				secretKey
+				secretKey,
+				resticPassword
 			});
+
+			if (resticPassword.length < 3) {
+				throw new Error("Password needs to be longer than three characters.");
+			}
 
 			await backend.invoke("setup", {
 				endpoint,
 				bucket,
 				accessKey,
-				secretKey
+				secretKey,
+				resticPassword
 			});
 
 			commit("login");
@@ -158,7 +225,7 @@ export const store = createStore<State>({
 
 			commit("clearBackupEvents");
 
-			console.log("events", getters.lastSummaryEvent);
+			log("events", getters.lastSummaryEvent);
 
 			while (getters.lastSummaryEvent === undefined) {
 				commit(
@@ -166,12 +233,12 @@ export const store = createStore<State>({
 					await backend.invoke("get-backup-events")
 				);
 
-				console.log("summary event", getters.lastSummaryEvent);
+				log("summary event", getters.lastSummaryEvent);
 
 				await new Promise((resolve) => setTimeout(resolve, 100));
 			}
 
-			console.log("backup finished");
+			log("backup finished");
 
 			dispatch("getSnapshots");
 		},

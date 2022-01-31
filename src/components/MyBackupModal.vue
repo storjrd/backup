@@ -94,16 +94,17 @@
 							<div
 								class="
 									flex
-									justify-start
+									justify-center
 									content-center
 									items-center
+									break-words
 								"
 							>
 								<img
 									class="w-5 h-5 fill-current text-black mr-2"
 									src="@/assets/folderIcon.svg"
 								/>
-								<p class="text-lg">{{ folder }}</p>
+								<p class="text-lg">{{ folderName(folder) }}</p>
 							</div>
 							<p
 								class="
@@ -313,6 +314,7 @@ interface Properties {
 	backupNameInputClass: ComputedRef<string>;
 	nextButtonText: ComputedRef<string>;
 
+	folderName: (arg0: string) => string;
 	cancelBackupNameChange: () => void;
 	saveBackupNameChange: () => void;
 	changeBackupName: (arg0: string) => void;
@@ -385,9 +387,31 @@ export default defineComponent({
 				`
 		);
 
+
 		const nextButtonText = computed(
 			() => selectFolderView.value === true ? "Next" : "Done"
 		);
+
+		const folderName = (folder: string) => {
+			if (folder.length <= 42) {
+				return folder;
+			}
+
+			const folders = folder.split("/");
+			const lastFolder = folders.slice(-1)[0];
+
+			if (typeof lastFolder === "undefined") {
+				throw new Error("Unable to truncate folder name.");
+			}
+
+			if (lastFolder.length >= 38) {
+				return `.../${lastFolder.substring(0, 37)}`;
+			}
+
+			const beginning = folder.substring(0, 37 - lastFolder.length);
+
+			return `${beginning}.../${lastFolder}`;
+		};
 
 		const cancelBackupNameChange = () => {
 			temporaryBackupName.value = backupName.value;
@@ -488,6 +512,7 @@ export default defineComponent({
 			backupNameInputClass,
 			nextButtonText,
 
+			folderName,
 			cancelBackupNameChange,
 			saveBackupNameChange,
 			changeBackupName,
