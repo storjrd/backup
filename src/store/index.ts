@@ -176,26 +176,34 @@ export const store = createStore<State>({
 				accessKey,
 				secretKey,
 				endpoint,
-				bucket
+				bucket,
+				resticPassword
 			}: {
 				accessKey: string;
 				secretKey: string;
 				endpoint: string;
 				bucket: string;
+				resticPassword: string;
 			}
 		) {
 			log({
 				endpoint,
 				bucket,
 				accessKey,
-				secretKey
+				secretKey,
+				resticPassword
 			});
+
+			if (resticPassword.length < 3) {
+				throw new Error("Password needs to be longer than three characters.");
+			}
 
 			await backend.invoke("setup", {
 				endpoint,
 				bucket,
 				accessKey,
-				secretKey
+				secretKey,
+				resticPassword
 			});
 
 			commit("login");

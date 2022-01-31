@@ -69,26 +69,32 @@ const loadURL = serve({ directory: `${__dirname}/dist` });
 	const handleSetup = () =>
 		ipcMain.handle(
 			"setup",
-			async function (event, { endpoint, bucket, accessKey, secretKey }) {
+			async function (
+				event,
+				{ endpoint, bucket, accessKey, secretKey, resticPassword }
+			) {
 				log("setup()", ...arguments);
 
 				const credentials = {
 					endpoint,
 					bucket,
 					accessKey,
-					secretKey
+					secretKey,
+					resticPassword
 				};
 
-				const resticPassphrase = "a";
+				if (resticPassword.length < 3) {
+					throw new Error("Password needs to be longer than three characters.");
+				}
 
 				const restic = createRestic({
 					...credentials,
-					password: resticPassphrase
+					password: resticPassword
 				});
 
 				config.set({
 					credentials,
-					resticPassphrase
+					resticPassphrase: resticPassword
 				});
 
 				await handleRestic(restic);
