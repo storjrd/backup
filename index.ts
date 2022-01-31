@@ -1,9 +1,7 @@
-const os = require("os");
-const net = require("net");
-const { app, dialog, BrowserWindow, ipcMain, shell } = require("electron");
-const serve = require("electron-serve");
-const debug = require("./debug");
-const log = debug("index-electron");
+import os from "os";
+import net from "net";
+import { app, dialog, BrowserWindow, ipcMain, shell } from "electron";
+import serve from "electron-serve";
 
 import * as config from "./lib/config";
 import { createRestic, Restic, BackupEvent } from "./lib/createRestic";
@@ -23,7 +21,7 @@ const loadURL = serve({ directory: `${__dirname}/dist` });
 		const backupEvents: BackupEvent[] = [];
 
 		ipcMain.handle("backup", async (event, { directories }) => {
-			log({ directories });
+			console.log({ directories });
 
 			for await (const event of restic.backup(directories[0])) {
 				backupEvents.push(event);
@@ -33,9 +31,9 @@ const loadURL = serve({ directory: `${__dirname}/dist` });
 		ipcMain.handle("get-backup-events", () => backupEvents.splice(0));
 
 		ipcMain.handle("restore", async (event, { snapshotId, target }) => {
-			log({ snapshotId, target });
+			console.log({ snapshotId, target });
 			const output = await restic.restore(snapshotId, target);
-			log({ output });
+			console.log({ output });
 
 			return output;
 		});
@@ -51,7 +49,7 @@ const loadURL = serve({ directory: `${__dirname}/dist` });
 
 	const { credentials } = await config.get();
 
-	log({ credentials });
+	console.log({ credentials });
 
 	let loginStatus = false;
 	ipcMain.handle("loginStatus", () => loginStatus);
@@ -73,7 +71,7 @@ const loadURL = serve({ directory: `${__dirname}/dist` });
 				event,
 				{ endpoint, bucket, accessKey, secretKey, resticPassword }
 			) {
-				log("setup()", ...arguments);
+				console.log("setup()", ...arguments);
 
 				const credentials = {
 					endpoint,
@@ -84,7 +82,9 @@ const loadURL = serve({ directory: `${__dirname}/dist` });
 				};
 
 				if (resticPassword.length < 3) {
-					throw new Error("Password needs to be longer than three characters.");
+					throw new Error(
+						"Password needs to be longer than three characters."
+					);
 				}
 
 				const restic = createRestic({
