@@ -387,9 +387,8 @@ export default defineComponent({
 				`
 		);
 
-
-		const nextButtonText = computed(
-			() => selectFolderView.value === true ? "Next" : "Done"
+		const nextButtonText = computed(() =>
+			selectFolderView.value === true ? "Next" : "Done"
 		);
 
 		const folderName = (folder: string) => {
