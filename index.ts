@@ -36,6 +36,7 @@ const loadURL = serve({ directory: `${__dirname}/dist` });
 				snapshot,
 				directory: target
 			});
+		});
 	};
 
 	ipcMain.handle("openSignup", async () => {
