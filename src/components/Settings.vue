@@ -98,6 +98,10 @@ export default defineComponent({
 		const store = useStore();
 		const router = useRouter();
 
+		const goToBackups = () => {
+			router.push("/app/backups");
+		};
+
 		return {
 			bucketName: computed(() => {
 				return store.state.bucket;
@@ -105,11 +109,11 @@ export default defineComponent({
 
 			preferences: computed(() => store.state.preferences),
 
-			goToBackups: () => {
-				router.push("/app/backups");
-			},
+			goToBackups,
 
-			save: () => {}
+			save: () => {
+				goToBackups();
+			}
 		};
 	}
 });
