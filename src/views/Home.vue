@@ -306,7 +306,7 @@
 								font-medium
 								text-gray-700
 							"
-							>Optional Restic Password</label
+							>Restic Password</label
 						>
 						<input
 							v-model="resticPassword"
