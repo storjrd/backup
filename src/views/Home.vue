@@ -328,6 +328,28 @@
 					</div>
 				</div>
 				<button
+					v-on:click="openGetStarted"
+					type="button"
+					class="
+						mr-3
+						inline-flex
+						items-center
+						justify-center
+						px-4
+						py-2
+						border border-gray-300
+						text-sm
+						font-medium
+						rounded-md
+						shadow-sm
+						text-gray-700
+						bg-white
+						focus:outline-none focus:ring-2 focus:ring-offset-2
+					"
+				>
+					How to Get Started
+				</button>
+				<button
 					v-on:click="login"
 					type="button"
 					class="
@@ -401,6 +423,10 @@ const setupViews = () => {
 		store.dispatch("openSignup");
 	};
 
+	const openGetStarted = () => {
+		store.dispatch("openGetStarted");
+	};
+
 	return {
 		signInView,
 		signUpView,
@@ -408,7 +434,8 @@ const setupViews = () => {
 		subheadingText,
 		buttonText,
 		toggleView,
-		openHomepage
+		openHomepage,
+		openGetStarted
 	};
 };
 
