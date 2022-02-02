@@ -47,6 +47,10 @@ const loadURL = serve({ directory: `${__dirname}/dist` });
 		shell.openExternal("https://storj.io/pricing");
 	});
 
+	ipcMain.handle("openGetStarted", async () => {
+		shell.openExternal("https://universe.storj.io/#/start");
+	});
+
 	const { credentials } = await config.get();
 
 	console.log({ credentials });

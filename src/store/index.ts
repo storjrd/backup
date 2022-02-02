@@ -291,6 +291,10 @@ export const store = createStore<State>({
 			backend.invoke("openUpgradePlan");
 		},
 
+		async openGetStarted() {
+			backend.invoke("openGetStarted");
+		},
+
 		async getBucketName({ commit }) {
 			const bucketName = await backend.invoke("getBucketName");
 
