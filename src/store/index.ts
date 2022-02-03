@@ -152,7 +152,7 @@ export const store = createStore<State>({
 		},
 
 		setEndpoint(state, endpoint) {
-			console.log("ENDPOINT", endpoint)
+			console.log("ENDPOINT", endpoint);
 			state.endpoint = endpoint;
 		},
 
