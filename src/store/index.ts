@@ -18,7 +18,7 @@ export interface State {
 	loginStatus: boolean;
 
 	// todo: remove
-	account: string;
+	endpoint: string;
 	plan: number;
 	bucket: string;
 	accountType: string;
@@ -38,7 +38,7 @@ export const store = createStore<State>({
 		backupEvents: [],
 		loginStatus: false,
 
-		account: "example@storj.io",
+		endpoint: "",
 		plan: 1.5e11,
 		bucket: "",
 		accountType: "Free",
@@ -149,6 +149,11 @@ export const store = createStore<State>({
 
 		setSnapshots(state, snapshots) {
 			state.snapshots = snapshots;
+		},
+
+		setEndpoint(state, endpoint) {
+			console.log("ENDPOINT", endpoint)
+			state.endpoint = endpoint;
 		},
 
 		pushBackupEvents(state, events) {
@@ -295,6 +300,14 @@ export const store = createStore<State>({
 			backend.invoke("openGetStarted");
 		},
 
+		async getEndpoint({ commit }) {
+			const endpoint = await backend.invoke("getEndpoint");
+
+			if (endpoint) {
+				commit("setEndpoint", endpoint);
+			}
+		},
+
 		async getBucketName({ commit }) {
 			const bucketName = await backend.invoke("getBucketName");
 
@@ -310,6 +323,7 @@ export const store = createStore<State>({
 	if (await backend.invoke("loginStatus")) {
 		store.commit("login");
 		store.dispatch("getBucketName");
+		store.dispatch("getEndpoint");
 	}
 })();
 

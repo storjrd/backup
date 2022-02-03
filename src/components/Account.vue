@@ -8,10 +8,10 @@
 			<h1 class="text-lg font-bold">Account</h1>
 		</div>
 		<div class="mt-5 border-b border-gray-100 pb-3">
-			<h2 class="text-lg font-medium">Your account</h2>
+			<h2 class="text-lg font-medium">Your satellite</h2>
 			<div class="flex justify-between">
 				<div class="flex items-center">
-					<p class="text-gray-700 text-sm">{{ account }}</p>
+					<p class="text-gray-700 text-sm">{{ endpoint }}</p>
 				</div>
 				<p
 					class="text-storjBlue cursor-pointer text-sm"
@@ -171,7 +171,7 @@ import { ArrowLeftIcon } from "@heroicons/vue/solid";
 import prettyBytes from "pretty-bytes";
 
 interface Properties {
-	account: Ref<string>;
+	endpoint: Ref<string>;
 	videosUsage: Ref<number>;
 	picturesUsage: Ref<number>;
 	documentsUsage: Ref<number>;
@@ -191,7 +191,7 @@ interface Properties {
 const setupAccount = (): Properties => {
 	const store = useStore();
 
-	const account = computed((): string => store.state.account);
+	const endpoint = computed((): string => store.state.endpoint);
 
 	const accountType = computed((): string => store.state.accountType);
 
@@ -266,7 +266,7 @@ const setupAccount = (): Properties => {
 	};
 
 	return {
-		account,
+		endpoint,
 		videosUsage,
 		picturesUsage,
 		documentsUsage,
