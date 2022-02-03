@@ -7,7 +7,7 @@ interface RestoreInput {
 	directory: string;
 }
 
-const temporaryDirectoryName = ".pending-restore";
+const temporaryDirectoryName = "pending-restore";
 
 export default async (
 	restic: Restic,
