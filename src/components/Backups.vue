@@ -148,7 +148,6 @@
 				</div>
 			</div>
 			<div
-				v-if="areFilesSyncing"
 				class="absolute inset-x-0 bottom-0 border-t"
 			>
 				<div
@@ -275,7 +274,7 @@ const setupBackups = (): Properties => {
 			store.getters.lastStatusEvent;
 
 		if (event === undefined) {
-			return "0";
+			return "Synced";
 		}
 
 		console.log("syncingfilesdisplay", event);
