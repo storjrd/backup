@@ -9,6 +9,15 @@ interface RestoreInput {
 
 const temporaryDirectoryName = "pending-restore";
 
+const makePathWindowsSafe = (path: string) => 
+	path.split("\\")
+		.map(part =>
+			part.endsWith(":")
+				? part.slice(0, -1)
+				: part
+		)
+		.join("\\");
+
 export default async (
 	restic: Restic,
 	{ snapshot, directory }: RestoreInput
@@ -20,7 +29,7 @@ export default async (
 	// ".pending-restore"
 	const restoreDirectory = path.join(directory, temporaryDirectoryName);
 	// intended restore directory
-	const deepRestoreDirectory = path.join(restoreDirectory, snapshot.paths[0]);
+	const deepRestoreDirectory = makePathWindowsSafe(path.join(restoreDirectory, snapshot.paths[0]));
 	// final directory after move
 	const finalDirectory = path.join(
 		directory,
