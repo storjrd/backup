@@ -1,12 +1,16 @@
 <template>
-	<div class="grid grid-cols-2 mt-16">
+	<div class="grid grid-cols-2 mt-9">
 		<div class="mt-8 mr-10">
-			<img class="w-auto h-auto" src="@/assets/artifacts.svg" />
+			<img
+				class="absolute p-5 inset-0 h-auto w-20"
+				src="@/assets/logo.png"
+			/>
+			<img class="w-auto h-auto mt-10" src="@/assets/artifacts.svg" />
 		</div>
 		<div>
 			<div class="space-y-1 mb-4">
-				<h1 class="font-bold text-lg">{{ headerText }}</h1>
-				<p class="text-sm">
+				<h1 class="text-lg font-inter-bold">{{ headerText }}</h1>
+				<p class="text-sm font-inter">
 					Or
 					<!-- <span
 						class="underline cursor-pointer"
@@ -137,7 +141,12 @@
 					>
 						<label
 							for="accessKey"
-							class="block text-xs font-medium text-gray-700"
+							class="
+								block
+								text-xs
+								font-inter-medium
+								text-gray-700
+							"
 							>Access Key</label
 						>
 						<input
@@ -177,7 +186,7 @@
 								block
 								w-full
 								text-xs
-								font-medium
+								font-inter-medium
 								text-gray-700
 							"
 							>Secret Key</label
@@ -219,7 +228,7 @@
 								block
 								w-full
 								text-xs
-								font-medium
+								font-inter-medium
 								text-gray-700
 							"
 							>Endpoint</label
@@ -261,7 +270,7 @@
 								block
 								w-full
 								text-xs
-								font-medium
+								font-inter-medium
 								text-gray-700
 							"
 							>Bucket</label
@@ -303,7 +312,7 @@
 								block
 								w-full
 								text-xs
-								font-medium
+								font-inter-medium
 								text-gray-700
 							"
 							>Restic Password</label
@@ -327,65 +336,67 @@
 						/>
 					</div>
 				</div>
-				<button
-					v-on:click="openGetStarted"
-					type="button"
-					class="
-						mr-3
-						inline-flex
-						items-center
-						justify-center
-						px-4
-						py-2
-						border border-gray-300
-						text-sm
-						font-medium
-						rounded-md
-						shadow-sm
-						text-gray-700
-						bg-white
-						focus:outline-none focus:ring-2 focus:ring-offset-2
-					"
-				>
-					How to Get Started
-				</button>
-				<button
-					v-on:click="login"
-					type="button"
-					class="
-						inline-flex
-						items-center
-						justify-center
-						px-4
-						py-2
-						border border-transparent
-						text-sm
-						font-medium
-						rounded-md
-						shadow-sm
-						text-white
-						bg-storjBlue
-						focus:outline-none focus:ring-2 focus:ring-offset-2
-					"
-				>
-					{{ buttonText }}
-
-					<div
-						v-if="isLoading"
-						class="flex justify-center items-center"
+				<div class="flex">
+					<button
+						v-on:click="openGetStarted"
+						type="button"
+						class="
+							mr-3
+							inline-flex
+							items-center
+							justify-center
+							px-4
+							py-2
+							border border-gray-300
+							text-sm
+							font-inter-medium
+							rounded-md
+							shadow-sm
+							text-gray-700
+							bg-white
+							focus:outline-none focus:ring-2 focus:ring-offset-2
+						"
 					>
+						How to Get Started
+					</button>
+					<button
+						v-on:click="login"
+						type="button"
+						class="
+							flex-1 flex
+							items-center
+							justify-center
+							px-4
+							py-2
+							border border-transparent
+							text-sm
+							font-inter-medium
+							rounded-md
+							shadow-sm
+							text-white
+							bg-storjBlue
+							focus:outline-none focus:ring-2 focus:ring-offset-2
+						"
+					>
+						{{ buttonText }}
+
 						<div
-							class="
-								animate-spin
-								rounded-full
-								h-2
-								w-2
-								border-b-2 border-green
-								ml-3
-							"
-						></div>
-					</div>
-				</button>
+							v-if="isLoading"
+							class="flex justify-center items-center"
+						>
+							<div
+								class="
+									animate-spin
+									rounded-full
+									h-2
+									w-2
+									border-b-2 border-green
+									ml-3
+								"
+							></div>
+						</div>
+					</button>
+				</div>
 			</div>
 		</div>
 	</div>

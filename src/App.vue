@@ -1,9 +1,9 @@
 <template>
-	<div class="overflow-hidden h-screen">
+	<div class="overflow-hidden h-screen font-inter">
 		<img
 			v-if="logoPath"
-			class="absolute p-5 inset-0 h-auto w-1/3"
-			src="@/assets/logo.svg"
+			class="absolute p-5 inset-0 h-auto w-20"
+			src="@/assets/logo.png"
 		/>
 		<router-view></router-view>
 	</div>
@@ -35,7 +35,7 @@ export default defineComponent({
 		const logoPath = computed<boolean>(
 			() =>
 				typeof route.name === "string" &&
-				["Home", "Backups"].includes(route.name)
+				["Backups"].includes(route.name)
 		);
 
 		return {

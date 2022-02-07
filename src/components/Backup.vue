@@ -59,7 +59,7 @@
 							class="
 								w-5
 								h-5
-								font-bold
+								font-inter-bold
 								text-gray-700
 								cursor-pointer
 							"
@@ -91,7 +91,7 @@
 							class="
 								w-5
 								h-5
-								font-bold
+								font-inter-bold
 								text-gray-700
 								cursor-pointer
 							"
