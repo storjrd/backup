@@ -44,6 +44,8 @@ type OpenUpgradePlan = (arg0: "openUpgradePlan") => Promise<void>;
 
 type OpenGetStarted = (arg0: "openGetStarted") => Promise<void>;
 
+type GetEndpoint = (arg0: "getEndpoint") => Promise<string>;
+
 type GetBucketName = (arg0: "getBucketName") => Promise<string>;
 
 type SetBucketName = (arg0: "setBucketName", arg1: string) => Promise<void>;
@@ -62,6 +64,7 @@ interface Backend {
 		OpenSignup &
 		OpenUpgradePlan &
 		OpenGetStarted &
+		GetEndpoint &
 		GetBucketName &
 		SetBucketName &
 		LoginStatus;
