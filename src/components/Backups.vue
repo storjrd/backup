@@ -120,14 +120,52 @@
 							:key="backup.name"
 						></backup-component>
 					</div>
+				</div>
+			</div>
+			<div class="absolute inset-x-0 bottom-0 border-t">
+				<div
+					class="
+						h-14
+						flex
+						items-center
+						space-x-2
+						mx-5
+						justify-between
+					"
+				>
+					<span class="flex items-center">
+						<span class="group mr-1">
+							<div
+								class="
+									hidden
+									group-hover:flex
+									text-sm text-gray-800
+									absolute
+									bg-gray-50
+									rounded-lg
+									border border-gray-200
+									shadow
+									p-2
+									transform
+									-translate-y-10
+									w-40
+								"
+							>
+								Total files backed up.
+							</div>
+							<img src="@/assets/syncIcon.png" class="w-8 h-8" />
+						</span>
+						<p class="text-sm text-gray-800 font-bold">
+							{{ syncingFilesDisplay }}
+						</p>
+					</span>
 					<button
 						v-on:click="openModal"
 						type="button"
 						class="
 							inline-flex
 							items-center
-							mx-7
-							mt-4
+							h-9
 							px-4
 							py-2
 							border border-transparent
@@ -145,36 +183,6 @@
 						/>
 						Add new job
 					</button>
-				</div>
-			</div>
-			<div class="absolute inset-x-0 bottom-0 border-t">
-				<div
-					class="h-14 flex content-center items-center space-x-2 mx-5"
-				>
-					<span class="group">
-						<div
-							class="
-								hidden
-								group-hover:flex
-								text-sm text-gray-800
-								absolute
-								bg-gray-50
-								rounded-lg
-								border border-gray-200
-								shadow
-								p-2
-								transform
-								-translate-y-10
-								w-40
-							"
-						>
-							Total files backed up.
-						</div>
-						<img src="@/assets/syncIcon.png" class="w-8 h-8" />
-					</span>
-					<p class="text-sm text-gray-800 font-bold">
-						{{ syncingFilesDisplay }}
-					</p>
 				</div>
 			</div>
 		</div>
