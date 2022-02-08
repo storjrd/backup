@@ -23,8 +23,9 @@
 		</div>
 		<div class="mt-5 border-b border-gray-100 pb-3">
 			<h2 class="text-lg font-medium">Storage usage</h2>
-			<div class="flex justify-start">
-				<p class="text-gray-700 text-sm">{{ usingDisplay }}</p>
+			<div class="flex justify-between mb-1">
+				<p class="text-gray-700 text-sm">{{ totalUsageDisplay }}</p>
+				<p class="text-gray-700 text-sm">{{ totalUsageLeftDisplay }}</p>
 			</div>
 			<div class="relative pt-1">
 				<div
@@ -39,6 +40,20 @@
 					"
 				>
 					<div
+						v-bind:style="{
+							width: `${totalUsagePercentage}%`
+						}"
+						class="
+							shadow-none
+							flex flex-col
+							text-center
+							whitespace-nowrap
+							text-white
+							justify-center
+							bg-storjBlue
+						"
+					></div>
+					<!-- <div
 						v-bind:style="{
 							width: `${videosUsagePercentage}%`
 						}"
@@ -93,10 +108,10 @@
 							justify-center
 							bg-green-400
 						"
-					></div>
+					></div> -->
 				</div>
 			</div>
-			<div class="grid grid-cols-3">
+			<!-- <div class="grid grid-cols-3">
 				<div>
 					<div class="flex space-x-2 items-center">
 						<div class="h-3 w-3 rounded-sm bg-storjBlue"></div>
@@ -124,7 +139,7 @@
 					</div>
 					<div></div>
 				</div>
-			</div>
+			</div> -->
 		</div>
 		<div class="mt-5 border-b border-gray-100 pb-3">
 			<h2 class="text-lg font-medium">Charges</h2>
@@ -172,15 +187,18 @@ import prettyBytes from "pretty-bytes";
 
 interface Properties {
 	endpoint: Ref<string>;
-	videosUsage: Ref<number>;
-	picturesUsage: Ref<number>;
-	documentsUsage: Ref<number>;
-	othersUsage: Ref<number>;
-	videosUsagePercentage: Ref<number>;
-	picturesUsagePercentage: Ref<number>;
-	documentsUsagePercentage: Ref<number>;
-	othersUsagePercentage: Ref<number>;
-	usingDisplay: Ref<string>;
+	// videosUsage: Ref<number>;
+	// picturesUsage: Ref<number>;
+	// documentsUsage: Ref<number>;
+	// othersUsage: Ref<number>;
+	// videosUsagePercentage: Ref<number>;
+	// picturesUsagePercentage: Ref<number>;
+	// documentsUsagePercentage: Ref<number>;
+	// othersUsagePercentage: Ref<number>;
+	// usingDisplay: Ref<string>;
+	totalUsagePercentage: Ref<number>;
+	totalUsageDisplay: Ref<string>;
+	totalUsageLeftDisplay: Ref<string>;
 	chargesDisplay: Ref<string>;
 	goBackToBackups: () => void;
 	usagePercentage: (arg0: number) => number;
@@ -197,46 +215,66 @@ const setupAccount = (): Properties => {
 
 	const plan = computed((): number => store.state.plan);
 
-	const videosUsage = computed((): number => store.state.videosUsage);
+	// const videosUsage = computed((): number => store.state.videosUsage);
 
-	const picturesUsage = computed((): number => store.state.picturesUsage);
+	// const picturesUsage = computed((): number => store.state.picturesUsage);
 
-	const documentsUsage = computed((): number => store.state.documentsUsage);
+	// const documentsUsage = computed((): number => store.state.documentsUsage);
 
-	const othersUsage = computed((): number => store.state.othersUsage);
+	// const othersUsage = computed((): number => store.state.othersUsage);
 
-	const videosUsagePercentage = computed((): number => {
-		return usagePercentage(videosUsage.value);
+	const totalUsage = computed((): number => store.state.totalUsage);
+
+	// const videosUsagePercentage = computed((): number => {
+	// 	return usagePercentage(videosUsage.value);
+	// });
+
+	// const picturesUsagePercentage = computed((): number => {
+	// 	return usagePercentage(picturesUsage.value);
+	// });
+
+	// const documentsUsagePercentage = computed((): number => {
+	// 	return usagePercentage(documentsUsage.value);
+	// });
+
+	// const othersUsagePercentage = computed((): number => {
+	// 	return usagePercentage(othersUsage.value);
+	// });
+
+	const totalUsagePercentage = computed((): number => {
+		return usagePercentage(totalUsage.value);
 	});
 
-	const picturesUsagePercentage = computed((): number => {
-		return usagePercentage(picturesUsage.value);
+	const totalUsageAvailablePercentage = computed((): number => {
+		return 100 - totalUsagePercentage.value;
 	});
 
-	const documentsUsagePercentage = computed((): number => {
-		return usagePercentage(documentsUsage.value);
-	});
+	// const using = computed((): number => {
+	// 	return (
+	// 		videosUsage.value +
+	// 		picturesUsage.value +
+	// 		documentsUsage.value +
+	// 		othersUsage.value
+	// 	);
+	// });
 
-	const othersUsagePercentage = computed((): number => {
-		return usagePercentage(othersUsage.value);
-	});
+	// const usingDisplay = computed((): string => {
+	// 	return `Using ${prettyBytes(using.value)} of ${prettyBytes(
+	// 		plan.value
+	// 	)}`;
+	// });
 
-	const using = computed((): number => {
-		return (
-			videosUsage.value +
-			picturesUsage.value +
-			documentsUsage.value +
-			othersUsage.value
-		);
-	});
-
-	const usingDisplay = computed((): string => {
-		return `Using ${prettyBytes(using.value)} of ${prettyBytes(
+	const totalUsageDisplay = computed((): string => {
+		return `Using ${prettyBytes(totalUsage.value)} of ${prettyBytes(
 			plan.value
 		)}`;
 	});
 
-	const availableSpace = computed((): number => plan.value - using.value);
+	const totalUsageLeftDisplay = computed((): string => {
+		return `${totalUsageAvailablePercentage.value}% Available`;
+	});
+
+	// const availableSpace = computed((): number => plan.value - using.value);
 
 	// retrieve this info from store
 	const charges = computed((): number => 0);
@@ -254,7 +292,7 @@ const setupAccount = (): Properties => {
 	};
 
 	const usagePercentage = (usage: number): number => {
-		return (usage / plan.value) * 100;
+		return parseFloat(((usage / plan.value) * 100).toFixed(2));
 	};
 
 	const logout = (): void => {
@@ -267,15 +305,18 @@ const setupAccount = (): Properties => {
 
 	return {
 		endpoint,
-		videosUsage,
-		picturesUsage,
-		documentsUsage,
-		othersUsage,
-		videosUsagePercentage,
-		picturesUsagePercentage,
-		documentsUsagePercentage,
-		othersUsagePercentage,
-		usingDisplay,
+		// videosUsage,
+		// picturesUsage,
+		// documentsUsage,
+		// othersUsage,
+		// videosUsagePercentage,
+		// picturesUsagePercentage,
+		// documentsUsagePercentage,
+		// othersUsagePercentage,
+		// usingDisplay,
+		totalUsagePercentage,
+		totalUsageDisplay,
+		totalUsageLeftDisplay,
 		chargesDisplay,
 		goBackToBackups,
 		usagePercentage,

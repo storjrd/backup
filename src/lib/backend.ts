@@ -48,6 +48,8 @@ type GetEndpoint = (arg0: "getEndpoint") => Promise<string>;
 
 type GetBucketName = (arg0: "getBucketName") => Promise<string>;
 
+type GetTotalUsage = (arg0: "getTotalUsage") => Promise<void>;
+
 type SetBucketName = (arg0: "setBucketName", arg1: string) => Promise<void>;
 
 type LoginStatus = (arg0: "loginStatus") => Promise<boolean>;
@@ -66,6 +68,7 @@ interface Backend {
 		OpenGetStarted &
 		GetEndpoint &
 		GetBucketName &
+		GetTotalUsage &
 		SetBucketName &
 		LoginStatus;
 }
