@@ -108,10 +108,22 @@
 		<div v-if="displayBackups" class="flex h-screen">
 			<div class="w-screen m-auto mt-20 h-screen">
 				<div class="h-full overflow-hidden">
-					<h1 class="px-7">Last activities</h1>
+					<h1 class="px-7 pb-2">Last activities</h1>
 
 					<div
-						class="max-h-60 overflow-auto space-y-2 pb-4 pt-2 px-7"
+						class="
+							max-h-72
+							overflow-auto
+							space-y-2
+							pb-4
+							px-7
+							scrollbar-thin
+							scrollbar-thumb-gray-300
+							scrollbar-track-gray-100
+							scrollbar-thumb-rounded-full
+							scrollbar-track-rounded-full
+							mr-2
+						"
 					>
 						<backup-component
 							v-for="backup in backups"
