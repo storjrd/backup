@@ -155,7 +155,7 @@
 							</div>
 							<img src="@/assets/syncIcon.png" class="w-8 h-8" />
 						</span>
-						<p class="text-sm text-gray-800 font-bold">
+						<p class="text-sm text-gray-800 font-inter-bold">
 							{{ syncingFilesDisplay }}
 						</p>
 					</span>
@@ -183,37 +183,6 @@
 						/>
 						Add new job
 					</button>
-				</div>
-			</div>
-
-			<div class="absolute inset-x-0 bottom-0 border-t">
-				<div
-					class="h-14 flex content-center items-center space-x-2 mx-5"
-				>
-					<span class="group">
-						<div
-							class="
-								hidden
-								group-hover:flex
-								text-sm text-gray-800
-								absolute
-								bg-gray-50
-								rounded-lg
-								border border-gray-200
-								shadow
-								p-2
-								transform
-								-translate-y-10
-								w-40
-							"
-						>
-							Total files backed up.
-						</div>
-						<img src="@/assets/syncIcon.png" class="w-8 h-8" />
-					</span>
-					<p class="text-sm text-gray-800 font-inter-bold">
-						{{ syncingFilesDisplay }}
-					</p>
 				</div>
 			</div>
 
