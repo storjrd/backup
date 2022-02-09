@@ -1,4 +1,5 @@
 import os from "os";
+import fs from "fs";
 import net from "net";
 import { app, BrowserWindow, ipcMain } from "electron";
 import serve from "electron-serve";

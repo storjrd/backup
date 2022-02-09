@@ -38,4 +38,5 @@ export type Api = {
 	getTotalUsage: () => Promisable<void>;
 	// setBucketName: (arg0: string) => Promisable<void>;
 	loginStatus: () => Promisable<boolean>;
+	"get-file-count": (arg0: { path: string }) => Promisable<number>;
 };

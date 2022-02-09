@@ -19,6 +19,7 @@ export interface Backup {
 		name: string;
 		progress: number;
 		hostname: string;
+		fileCount?: number;
 	}[];
 }
 
