@@ -12,9 +12,10 @@ module.exports = {
 		}
 	},
 	variants: {
+		scrollbar: ["rounded"],
 		extend: {
 			display: ["group-hover"]
 		}
 	},
-	plugins: [require("@tailwindcss/forms")]
+	plugins: [require("@tailwindcss/forms"), require("tailwind-scrollbar")]
 };

@@ -111,7 +111,20 @@
 					<h1 class="px-7">Last activities</h1>
 
 					<div
-						class="max-h-60 overflow-auto space-y-2 pb-4 pt-2 px-7"
+						class="
+							max-h-60
+							overflow-auto
+							space-y-2
+							pb-4
+							pt-2
+							px-7
+							scrollbar-thin
+							scrollbar-thumb-gray-300
+							scrollbar-track-gray-100
+							scrollbar-thumb-rounded-full
+							scrollbar-track-rounded-full
+							mr-2
+						"
 					>
 						<backup-component
 							v-for="backup in backups"
