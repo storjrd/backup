@@ -32,8 +32,7 @@ const loadURL = serve({ directory: `${__dirname}/dist` });
 		ipcMain.handle("get-backup-events", () => backupEvents.splice(0));
 
 		ipcMain.handle("restore", async (event, { snapshot, target }) => {
-			console.log({ snapshotId, target });
-			const output = await restic.restore(snapshotId, target);
+			const output = await restic.restore(snapshot.id, target);
 			console.log({ output });
 
 			return output;
