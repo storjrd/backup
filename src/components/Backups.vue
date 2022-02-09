@@ -185,7 +185,6 @@
 					</button>
 				</div>
 			</div>
-
 		</div>
 		<div v-if="modalOpen" class="unclickable">
 			<my-backup-modal
