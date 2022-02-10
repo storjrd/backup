@@ -1,3 +1,59 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+@layer base {
+	@font-face {
+		font-family: "Inter-black";
+		src: url("./assets/fonts/Inter/static/Inter-Black.ttf")
+			format("truetype");
+	}
+
+	@font-face {
+		font-family: "Inter-bold";
+		src: url("./assets/fonts/Inter/static/Inter-Bold.ttf")
+			format("truetype");
+	}
+
+	@font-face {
+		font-family: "Inter-extrabold";
+		src: url("./assets/fonts/Inter/static/Inter-ExtraBold.ttf")
+			format("truetype");
+	}
+
+	@font-face {
+		font-family: "Inter-extralight";
+		src: url("./assets/fonts/Inter/static/Inter-ExtraLight.ttf")
+			format("truetype");
+	}
+
+	@font-face {
+		font-family: "Inter-light";
+		src: url("./assets/fonts/Inter/static/Inter-Light.ttf")
+			format("truetype");
+	}
+
+	@font-face {
+		font-family: "Inter-medium";
+		src: url("./assets/fonts/Inter/static/Inter-Medium.ttf")
+			format("truetype");
+	}
+
+	@font-face {
+		font-family: Inter;
+		src: url("./assets/fonts/Inter/static/Inter-Regular.ttf")
+			format("truetype");
+	}
+
+	@font-face {
+		font-family: "Inter-semibold";
+		src: url("./assets/fonts/Inter/static/Inter-SemiBold.ttf")
+			format("truetype");
+	}
+
+	@font-face {
+		font-family: "Inter-thin";
+		src: url("./assets/fonts/Inter/static/Inter-Thin.ttf")
+			format("truetype");
+	}
+}
