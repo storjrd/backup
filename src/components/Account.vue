@@ -5,10 +5,10 @@
 				class="w-4 h-4 cursor-pointer"
 				v-on:click="goBackToBackups"
 			/>
-			<h1 class="text-lg font-bold">Account</h1>
+			<h1 class="text-lg font-inter-bold">Account</h1>
 		</div>
 		<div class="mt-5 border-b border-gray-100 pb-3">
-			<h2 class="text-lg font-medium">Your satellite</h2>
+			<h2 class="text-lg font-inter-medium">Your satellite</h2>
 			<div class="flex justify-between">
 				<div class="flex items-center">
 					<p class="text-gray-700 text-sm">{{ endpoint }}</p>
@@ -57,7 +57,7 @@
 			</div>
 		</div>
 		<div class="mt-5 border-b border-gray-100 pb-3">
-			<h2 class="text-lg font-medium">Charges</h2>
+			<h2 class="text-lg font-inter-medium">Charges</h2>
 			<div class="flex justify-start">
 				<p class="text-gray-700 text-sm">{{ chargesDisplay }}</p>
 			</div>
@@ -74,7 +74,7 @@
 				border border-transparent
 				text-sm
 				leading-4
-				font-medium
+				font-inter-medium
 				rounded-md
 				shadow-sm
 				text-white
