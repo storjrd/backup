@@ -9,8 +9,8 @@
 		</div>
 		<div>
 			<div class="space-y-1 mb-4">
-				<h1 class="text-lg font-inter-bold">{{ headerText }}</h1>
-				<p class="text-sm font-inter">
+				<h1 class="text-lg font-bold">{{ headerText }}</h1>
+				<p class="text-sm">
 					Or
 					<!-- <span
 						class="underline cursor-pointer"
@@ -144,7 +144,7 @@
 							class="
 								block
 								text-xs
-								font-inter-medium
+								font-medium
 								text-gray-700
 							"
 							>Access Key</label
@@ -186,7 +186,7 @@
 								block
 								w-full
 								text-xs
-								font-inter-medium
+								font-medium
 								text-gray-700
 							"
 							>Secret Key</label
@@ -228,7 +228,7 @@
 								block
 								w-full
 								text-xs
-								font-inter-medium
+								font-medium
 								text-gray-700
 							"
 							>Endpoint</label
@@ -270,7 +270,7 @@
 								block
 								w-full
 								text-xs
-								font-inter-medium
+								font-medium
 								text-gray-700
 							"
 							>Bucket</label
@@ -312,7 +312,7 @@
 								block
 								w-full
 								text-xs
-								font-inter-medium
+								font-medium
 								text-gray-700
 							"
 							>Restic Password</label
@@ -349,7 +349,7 @@
 							py-2
 							border border-gray-300
 							text-sm
-							font-inter-medium
+							font-medium
 							rounded-md
 							shadow-sm
 							text-gray-700
@@ -370,7 +370,7 @@
 							py-2
 							border border-transparent
 							text-sm
-							font-inter-medium
+							font-medium
 							rounded-md
 							shadow-sm
 							text-white

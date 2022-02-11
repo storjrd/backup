@@ -62,7 +62,7 @@
 					</div>
 				</div>
 				<div v-else class="flex space-x-2">
-					<h1 class="text-left font-inter-bold text-xl">
+					<h1 class="text-left font-bold text-xl">
 						{{ backupName }}
 					</h1>
 					<div
@@ -151,7 +151,7 @@
 							shadow-sm
 							text-sm
 							leading-4
-							font-inter-medium
+							font-medium
 							rounded-md
 							text-gray-700
 							bg-white
@@ -160,7 +160,7 @@
 						"
 					>
 						<PlusCircleIcon
-							class="w-5 h-5 mr-2 font-inter-bold text-gray-500"
+							class="w-5 h-5 mr-2 font-bold text-gray-500"
 						/>
 						Add folder
 					</button>
@@ -210,7 +210,7 @@
 						shadow-sm
 						text-sm
 						leading-4
-						font-inter-medium
+						font-medium
 						rounded-md
 						text-gray-700
 						bg-white
@@ -232,7 +232,7 @@
 						border border-transparent
 						text-sm
 						leading-4
-						font-inter-medium
+						font-medium
 						rounded-md
 						shadow-sm
 						text-white
@@ -253,7 +253,7 @@
 						border border-transparent
 						text-sm
 						leading-4
-						font-inter-medium
+						font-medium
 						rounded-md
 						shadow-sm
 						text-white

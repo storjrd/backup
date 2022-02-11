@@ -5,11 +5,11 @@
 				class="w-4 h-4 cursor-pointer"
 				v-on:click="goBackToBackups"
 			/>
-			<h1 class="text-lg font-inter-bold">Restore</h1>
+			<h1 class="text-lg font-bold">Restore</h1>
 		</div>
 
 		<div class="mt-5">
-			<p class="text-lg font-inter-medium">Location</p>
+			<p class="text-lg font-medium">Location</p>
 			<p class="text-sm text-gray-700 mt-1">
 				Folder where your backup will be restored to
 			</p>
@@ -45,7 +45,7 @@
 					shadow-sm
 					text-sm
 					leading-4
-					font-inter-semibold
+					font-semibold
 					rounded-md
 					text-gray-700
 					bg-white
@@ -69,7 +69,7 @@
 					shadow-sm
 					text-sm
 					leading-4
-					font-inter-semibold
+					font-semibold
 					rounded-md
 					text-white
 					bg-storjBlue
@@ -82,7 +82,7 @@
 				v-if="!restoreDisabled"
 				v-on:click="restore"
 			>
-				<DownloadIcon class="w-4 h-4 mr-2 font-inter-bold text-white" />
+				<DownloadIcon class="w-4 h-4 mr-2 font-bold text-white" />
 				Restore
 			</button>
 		</div>
@@ -125,7 +125,7 @@
 					<div class="ml-3 text-sm">
 						<label
 							v-bind:for="backup.id"
-							class="font-inter-medium text-gray-700"
+							class="font-medium text-gray-700"
 							>{{ formatBackupDate(backup.time) }}</label
 						>
 						<p id="comments-description" class="text-gray-500">

@@ -5,7 +5,7 @@
 				class="w-4 h-4 cursor-pointer"
 				v-on:click="goToBackups"
 			/>
-			<h1 class="text-lg font-inter-bold">Settings</h1>
+			<h1 class="text-lg font-bold">Settings</h1>
 		</div>
 		<div class="mt-5 border-b border-gray-100 pb-3">
 			<h2 class="text-lg">Bucket</h2>
@@ -57,7 +57,7 @@
 				border border-transparent
 				text-sm
 				leading-4
-				font-inter-medium
+				font-medium
 				rounded-md
 				shadow-sm
 				text-white

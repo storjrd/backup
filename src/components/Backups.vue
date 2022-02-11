@@ -67,7 +67,7 @@
 			class="flex h-screen justify-center items-center"
 		>
 			<div class="m-auto">
-				<h1 class="text-2xl font-inter-bold text-center mb-2">
+				<h1 class="text-2xl font-bold text-center mb-2">
 					Welcome to Storj
 				</h1>
 				<p class="text-center">
@@ -87,7 +87,7 @@
 							py-2
 							border border-transparent
 							text-sm
-							font-inter-medium
+							font-medium
 							rounded-md
 							shadow-sm
 							text-white
@@ -167,7 +167,7 @@
 							</div>
 							<img src="@/assets/syncIcon.png" class="w-8 h-8" />
 						</span>
-						<p class="text-sm text-gray-800 font-inter-bold">
+						<p class="text-sm text-gray-800 font-bold">
 							{{ syncingFilesDisplay }}
 						</p>
 					</span>
@@ -182,7 +182,7 @@
 							py-2
 							border border-transparent
 							text-sm
-							font-inter-medium
+							font-medium
 							rounded-md
 							shadow-sm
 							text-white
@@ -191,7 +191,7 @@
 						"
 					>
 						<PlusCircleIcon
-							class="w-5 h-5 mr-2 font-inter-bold text-white"
+							class="w-5 h-5 mr-2 font-bold text-white"
 						/>
 						Add new job
 					</button>
