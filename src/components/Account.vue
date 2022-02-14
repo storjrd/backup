@@ -22,9 +22,10 @@
 			</div>
 		</div>
 		<div class="mt-5 border-b border-gray-100 pb-3">
-			<h2 class="text-lg font-inter-medium">Storage usage</h2>
-			<div class="flex justify-start">
-				<p class="text-gray-700 text-sm">{{ usingDisplay }}</p>
+			<h2 class="text-lg font-medium">Storage usage</h2>
+			<div class="flex justify-between mb-1">
+				<p class="text-gray-700 text-sm">{{ totalUsageDisplay }}</p>
+				<p class="text-gray-700 text-sm">{{ totalUsageLeftDisplay }}</p>
 			</div>
 			<div class="relative pt-1">
 				<div
@@ -40,7 +41,7 @@
 				>
 					<div
 						v-bind:style="{
-							width: `${videosUsagePercentage}%`
+							width: `${totalUsagePercentage}%`
 						}"
 						class="
 							shadow-none
@@ -52,77 +53,6 @@
 							bg-storjBlue
 						"
 					></div>
-					<div
-						v-bind:style="{
-							width: `${picturesUsagePercentage}%`
-						}"
-						class="
-							shadow-none
-							flex flex-col
-							text-center
-							whitespace-nowrap
-							text-white
-							justify-center
-							bg-yellow-400
-						"
-					></div>
-					<div
-						v-bind:style="{
-							width: `${documentsUsagePercentage}%`
-						}"
-						class="
-							shadow-none
-							flex flex-col
-							text-center
-							whitespace-nowrap
-							text-white
-							justify-center
-							bg-pink-500
-						"
-					></div>
-					<div
-						v-bind:style="{
-							width: `${othersUsagePercentage}%`
-						}"
-						class="
-							shadow-none
-							flex flex-col
-							text-center
-							whitespace-nowrap
-							text-white
-							justify-center
-							bg-green-400
-						"
-					></div>
-				</div>
-			</div>
-			<div class="grid grid-cols-3">
-				<div>
-					<div class="flex space-x-2 items-center">
-						<div class="h-3 w-3 rounded-sm bg-storjBlue"></div>
-						<p class="text-sm">Videos</p>
-					</div>
-					<div class="flex space-x-2 items-center">
-						<div class="h-3 w-3 rounded-sm bg-yellow-400"></div>
-						<p class="text-sm">Pictures</p>
-					</div>
-				</div>
-				<div>
-					<div class="flex space-x-2 items-center">
-						<div class="h-3 w-3 rounded-sm bg-pink-500"></div>
-						<p class="text-sm">Documents</p>
-					</div>
-					<div class="flex space-x-2 items-center">
-						<div class="h-3 w-3 rounded-sm bg-green-400"></div>
-						<p class="text-sm">Others</p>
-					</div>
-				</div>
-				<div>
-					<div class="flex space-x-2 items-center">
-						<div class="h-3 w-3 rounded-sm bg-gray-200"></div>
-						<p class="text-sm">Available space</p>
-					</div>
-					<div></div>
 				</div>
 			</div>
 		</div>
@@ -172,15 +102,9 @@ import prettyBytes from "pretty-bytes";
 
 interface Properties {
 	endpoint: Ref<string>;
-	videosUsage: Ref<number>;
-	picturesUsage: Ref<number>;
-	documentsUsage: Ref<number>;
-	othersUsage: Ref<number>;
-	videosUsagePercentage: Ref<number>;
-	picturesUsagePercentage: Ref<number>;
-	documentsUsagePercentage: Ref<number>;
-	othersUsagePercentage: Ref<number>;
-	usingDisplay: Ref<string>;
+	totalUsagePercentage: Ref<number>;
+	totalUsageDisplay: Ref<string>;
+	totalUsageLeftDisplay: Ref<string>;
 	chargesDisplay: Ref<string>;
 	goBackToBackups: () => void;
 	usagePercentage: (arg0: number) => number;
@@ -197,46 +121,25 @@ const setupAccount = (): Properties => {
 
 	const plan = computed((): number => store.state.plan);
 
-	const videosUsage = computed((): number => store.state.videosUsage);
+	const totalUsage = computed((): number => store.state.totalUsage);
 
-	const picturesUsage = computed((): number => store.state.picturesUsage);
-
-	const documentsUsage = computed((): number => store.state.documentsUsage);
-
-	const othersUsage = computed((): number => store.state.othersUsage);
-
-	const videosUsagePercentage = computed((): number => {
-		return usagePercentage(videosUsage.value);
+	const totalUsagePercentage = computed((): number => {
+		return usagePercentage(totalUsage.value);
 	});
 
-	const picturesUsagePercentage = computed((): number => {
-		return usagePercentage(picturesUsage.value);
+	const totalUsageAvailablePercentage = computed((): number => {
+		return 100 - totalUsagePercentage.value;
 	});
 
-	const documentsUsagePercentage = computed((): number => {
-		return usagePercentage(documentsUsage.value);
-	});
-
-	const othersUsagePercentage = computed((): number => {
-		return usagePercentage(othersUsage.value);
-	});
-
-	const using = computed((): number => {
-		return (
-			videosUsage.value +
-			picturesUsage.value +
-			documentsUsage.value +
-			othersUsage.value
-		);
-	});
-
-	const usingDisplay = computed((): string => {
-		return `Using ${prettyBytes(using.value)} of ${prettyBytes(
+	const totalUsageDisplay = computed((): string => {
+		return `Using ${prettyBytes(totalUsage.value)} of ${prettyBytes(
 			plan.value
 		)}`;
 	});
 
-	const availableSpace = computed((): number => plan.value - using.value);
+	const totalUsageLeftDisplay = computed((): string => {
+		return `${totalUsageAvailablePercentage.value}% Available`;
+	});
 
 	// retrieve this info from store
 	const charges = computed((): number => 0);
@@ -254,7 +157,7 @@ const setupAccount = (): Properties => {
 	};
 
 	const usagePercentage = (usage: number): number => {
-		return (usage / plan.value) * 100;
+		return parseFloat(((usage / plan.value) * 100).toFixed(2));
 	};
 
 	const logout = (): void => {
@@ -267,15 +170,9 @@ const setupAccount = (): Properties => {
 
 	return {
 		endpoint,
-		videosUsage,
-		picturesUsage,
-		documentsUsage,
-		othersUsage,
-		videosUsagePercentage,
-		picturesUsagePercentage,
-		documentsUsagePercentage,
-		othersUsagePercentage,
-		usingDisplay,
+		totalUsagePercentage,
+		totalUsageDisplay,
+		totalUsageLeftDisplay,
 		chargesDisplay,
 		goBackToBackups,
 		usagePercentage,

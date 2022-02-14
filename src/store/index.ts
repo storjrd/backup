@@ -23,6 +23,7 @@ export interface State {
 	bucket: string;
 	accountType: string;
 	accountTypes: object;
+	totalUsage: number;
 	videosUsage: number;
 	picturesUsage: number;
 	documentsUsage: number;
@@ -45,6 +46,7 @@ export const store = createStore<State>({
 		accountTypes: {
 			freeAccount: "Free"
 		},
+		totalUsage: 0.8e11,
 		videosUsage: 0,
 		picturesUsage: 0,
 		documentsUsage: 0,
@@ -152,7 +154,6 @@ export const store = createStore<State>({
 		},
 
 		setEndpoint(state, endpoint) {
-			console.log("ENDPOINT", endpoint);
 			state.endpoint = endpoint;
 		},
 
@@ -166,6 +167,10 @@ export const store = createStore<State>({
 
 		clearBackupEvents(state) {
 			state.backupEvents.splice(0);
+		},
+
+		setTotalUsage(state, usage) {
+			state.totalUsage = usage;
 		}
 	},
 	actions: {
@@ -314,6 +319,13 @@ export const store = createStore<State>({
 			if (bucketName) {
 				commit("setBucketName", bucketName);
 			}
+		},
+
+		async getTotalUsage({ commit }) {
+			// get total usage
+			//...
+			// set total usage
+			// commit("setTotalUsage")
 		}
 	},
 	modules: {}
