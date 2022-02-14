@@ -24,10 +24,6 @@ export interface State {
 	accountType: string;
 	accountTypes: object;
 	totalUsage: number;
-	videosUsage: number;
-	picturesUsage: number;
-	documentsUsage: number;
-	othersUsage: number;
 	preferences: boolean;
 }
 
@@ -47,10 +43,6 @@ export const store = createStore<State>({
 			freeAccount: "Free"
 		},
 		totalUsage: 0.8e11,
-		videosUsage: 0,
-		picturesUsage: 0,
-		documentsUsage: 0,
-		othersUsage: 0,
 		preferences: true
 	},
 	getters: {
