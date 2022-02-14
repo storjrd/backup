@@ -115,34 +115,30 @@ interface Properties {
 const setupAccount = (): Properties => {
 	const store = useStore();
 
-	const endpoint = computed((): string => store.state.endpoint);
+	const endpoint = computed(() => store.state.endpoint);
+	const accountType = computed(() => store.state.accountType);
+	const plan = computed(() => store.state.plan);
+	const totalUsage = computed(() => store.state.totalUsage);
 
-	const accountType = computed((): string => store.state.accountType);
-
-	const plan = computed((): number => store.state.plan);
-
-	const totalUsage = computed((): number => store.state.totalUsage);
-
-	const totalUsagePercentage = computed((): number => {
+	const totalUsagePercentage = computed(() => {
 		return usagePercentage(totalUsage.value);
 	});
 
-	const totalUsageAvailablePercentage = computed((): number => {
+	const totalUsageAvailablePercentage = computed(() => {
 		return 100 - totalUsagePercentage.value;
 	});
 
-	const totalUsageDisplay = computed((): string => {
+	const totalUsageDisplay = computed(() => {
 		return `Using ${prettyBytes(totalUsage.value)} of ${prettyBytes(
 			plan.value
 		)}`;
 	});
 
-	const totalUsageLeftDisplay = computed((): string => {
+	const totalUsageLeftDisplay = computed(() => {
 		return `${totalUsageAvailablePercentage.value}% Available`;
 	});
 
-	// retrieve this info from store
-	const charges = computed((): number => 0);
+	const charges = computed(() => 0);
 
 	const chargesDisplay = computed((): string => {
 		if (accountType.value === store.getters["accountTypes"].freeAccount) {

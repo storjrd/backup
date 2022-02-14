@@ -22,20 +22,18 @@ export interface Backup {
 	}[];
 }
 
-export interface BackupEvent {
-	message_type: string;
-}
-
-export interface BackupStatusEvent extends BackupEvent {
+export type BackupStatusEvent = {
+	message_type: "status";
 	bytes_done: number;
 	files_done: number;
 	percent_done: number;
 	total_bytes: number;
 	total_files: number;
 	current_files: string[] | undefined;
-}
+};
 
-export interface BackupSummaryEvent extends BackupEvent {
+export type BackupSummaryEvent = {
+	message_type: "summary";
 	data_added: number;
 	data_blobs: number;
 	dirs_changed: number;
@@ -47,7 +45,9 @@ export interface BackupSummaryEvent extends BackupEvent {
 	total_duration: number;
 	total_files_processed: number;
 	tree_blobs: number;
-}
+};
+
+export type BackupEvent = BackupStatusEvent | BackupSummaryEvent;
 
 export interface ModalConfig {
 	backupId: string;
