@@ -49,21 +49,19 @@ export const store = createStore<State>({
 		accountTypes: (state) => state.accountTypes,
 
 		lastStatusEvent: (state): BackupStatusEvent | undefined => {
-			const isStatusEvent = (event: BackupEvent): boolean =>
-				event.message_type === "status";
+			const isStatusEvent = (
+				event: BackupEvent
+			): event is BackupStatusEvent => event.message_type === "status";
 
-			const event = R.findLast(isStatusEvent)(state.backupEvents);
-
-			return event as unknown as BackupStatusEvent | undefined;
+			return R.reverse(state.backupEvents).find(isStatusEvent);
 		},
 
 		lastSummaryEvent: (state): BackupSummaryEvent | undefined => {
-			const isSummaryEvent = (event: BackupEvent): boolean =>
-				event.message_type === "summary";
+			const isSummaryEvent = (
+				event: BackupEvent
+			): event is BackupSummaryEvent => event.message_type === "summary";
 
-			const event = R.findLast(isSummaryEvent)(state.backupEvents);
-
-			return event as unknown as BackupSummaryEvent | undefined;
+			return R.reverse(state.backupEvents).find(isSummaryEvent);
 		},
 
 		backupStarted: (state, getters): boolean =>
