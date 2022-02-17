@@ -208,6 +208,7 @@ export const store = createStore<State>({
 
 			commit("login");
 			dispatch("getBucketName");
+			dispatch("getEndpoint");
 		},
 
 		async logout({ commit }) {
