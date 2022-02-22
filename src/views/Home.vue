@@ -141,12 +141,7 @@
 					>
 						<label
 							for="accessKey"
-							class="
-								block
-								text-xs
-								font-medium
-								text-gray-700
-							"
+							class="block text-xs font-medium text-gray-700"
 							>Access Key</label
 						>
 						<input
