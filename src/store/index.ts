@@ -380,4 +380,4 @@ export const store = createStore<State>({
 	}
 })();
 
-export const useStore = () => baseUseStore(key);
+export const useStore = () => baseUseStore(key) as ActionContext;
