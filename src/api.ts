@@ -19,7 +19,7 @@ export type Api = {
 		bucket: string;
 		accessKey: string;
 		secretKey: string;
-		resticPassword: string;
+		resticPassphrase: string;
 	}) => Promisable<LoginResponse>;
 	// setSnapshots: (arg0: any[]) => Promisable<void>;
 	snapshots: () => Promisable<Snapshot[]>;

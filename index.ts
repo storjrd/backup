@@ -38,15 +38,18 @@ const loadURL = serve({ directory: `${__dirname}/dist` });
 		mainWindow
 	});
 
-	const { credentials } = await config.get();
+	const { credentials, resticPassphrase } = await config.get();
 
-	if (typeof credentials === "object") {
-		const resticPassphrase = "a";
-
-		await api.setup({
+	if (
+		typeof credentials === "object" &&
+		typeof resticPassphrase === "string"
+	) {
+		const response = await api.setup({
 			...credentials,
-			resticPassword: resticPassphrase
+			resticPassphrase
 		});
+
+		console.log("auto login response", response);
 	}
 
 	addApiHandlers(api);

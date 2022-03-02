@@ -28,19 +28,18 @@ const createApi: CreateApi = ({ mainWindow }) => {
 			bucket,
 			accessKey,
 			secretKey,
-			resticPassword
+			resticPassphrase
 		}) => {
 			const credentials = {
 				endpoint,
 				bucket,
 				accessKey,
-				secretKey,
-				resticPassword
+				secretKey
 			};
 
 			if (
-				typeof resticPassword !== "string" ||
-				resticPassword.length <= 3
+				typeof resticPassphrase !== "string" ||
+				resticPassphrase.length <= 3
 			) {
 				return {
 					success: false,
@@ -50,24 +49,35 @@ const createApi: CreateApi = ({ mainWindow }) => {
 
 			restic = createRestic({
 				...credentials,
-				password: resticPassword
+				password: resticPassphrase
 			});
 
 			try {
 				await restic.init();
 			} catch (err) {
-				restic = undefined;
+				const isAlreadyInitialized = () =>
+					typeof err.stderr === "string" &&
+					err.stderr.includes(
+						"repository master key and config already initialized"
+					);
 
-				return {
-					success: false,
-					error: "Failed to initialized Restic. Likely bad credentials."
-				};
+				// if any error except being already initialized
+				if (!isAlreadyInitialized()) {
+					console.log(err);
+
+					restic = undefined;
+
+					return {
+						success: false,
+						error: "Failed to initialized Restic. Likely bad credentials."
+					};
+				}
 			}
 
 			try {
 				await config.set({
 					credentials,
-					resticPassphrase: resticPassword
+					resticPassphrase
 				});
 			} catch (err) {
 				return {
