@@ -12,6 +12,7 @@
 		"downlevelIteration": true,
 		"noUncheckedIndexedAccess": true,
 		"sourceMap": true,
+		"noImplicitReturns": true,
 		"baseUrl": ".",
 		"types": ["webpack-env"],
 		"paths": {

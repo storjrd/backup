@@ -1,5 +1,7 @@
 // Types shared between both back and front end
-import type { Snapshot, BackupEvent } from "@/types";
+import type { Snapshot, BackupEvent } from "./types";
+
+type Promisable<T> = T | PromiseLike<T>;
 
 // This type is transformed into backend.invoke() form in src/lib/backend
 export type Api = {
@@ -9,22 +11,22 @@ export type Api = {
 		accessKey: string;
 		secretKey: string;
 		resticPassword: string;
-	}) => Promise<void>;
-	setSnapshots: (arg0: any[]) => Promise<void>;
-	snapshots: () => Promise<Snapshot[]>;
-	logout: () => Promise<void>;
-	backup: (arg0: { directories: string[] }) => Promise<void>;
-	"get-backup-events": () => Promise<BackupEvent[]>;
-	restore: (arg0: { snapshot: Snapshot; target: string }) => Promise<void>;
-	"get-directory": () => Promise<
+	}) => Promisable<void>;
+	// setSnapshots: (arg0: any[]) => Promisable<void>;
+	snapshots: () => Promisable<Snapshot[]>;
+	logout: () => Promisable<void>;
+	backup: (arg0: { directories: string[] }) => Promisable<void>;
+	"get-backup-events": () => Promisable<BackupEvent[]>;
+	restore: (arg0: { snapshot: Snapshot; target: string }) => Promisable<void>;
+	"get-directory": () => Promisable<
 		{ canceled: boolean; filePaths: string[] } | undefined
 	>;
-	openSignup: () => Promise<void>;
-	openUpgradePlan: () => Promise<void>;
-	openGetStarted: () => Promise<void>;
-	getEndpoint: () => Promise<string>;
-	getBucketName: () => Promise<string>;
-	getTotalUsage: () => Promise<void>;
-	setBucketName: (arg0: string) => Promise<void>;
-	loginStatus: () => Promise<boolean>;
+	openSignup: () => Promisable<void>;
+	openUpgradePlan: () => Promisable<void>;
+	openGetStarted: () => Promisable<void>;
+	getEndpoint: () => Promisable<string>;
+	getBucketName: () => Promisable<string>;
+	getTotalUsage: () => Promisable<void>;
+	// setBucketName: (arg0: string) => Promisable<void>;
+	loginStatus: () => Promisable<boolean>;
 };

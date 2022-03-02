@@ -1,6 +1,6 @@
 import type { Api } from "../api";
 
-type ApiFn = (...params: any[]) => Promise<any>;
+type ApiFn = (...params: any[]) => any;
 type ApiT = { [key: string]: ApiFn };
 
 type TransformFunction<Key, Fn extends ApiFn> = (

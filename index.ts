@@ -1,156 +1,22 @@
 import os from "os";
 import net from "net";
-import { app, dialog, BrowserWindow, ipcMain, shell } from "electron";
+import { app, BrowserWindow, ipcMain } from "electron";
 import serve from "electron-serve";
 
+import type { Api } from "./src/api";
+import createApi from "./lib/createApi";
 import * as config from "./lib/config";
-import { createRestic, Restic, BackupEvent } from "./lib/createRestic";
-import customRestore from "./lib/customRestore";
+
+const addApiHandlers = (api: Api) => {
+	for (const key in api) {
+		// @ts-ignore
+		ipcMain.handle(key, api[key]);
+	}
+};
 
 const loadURL = serve({ directory: `${__dirname}/dist` });
 
 (async () => {
-	const handleRestic = async (restic: Restic) => {
-		try {
-			await restic.init();
-		} catch (err) {
-			// console.warn(err);
-		}
-
-		ipcMain.handle("snapshots", async () => restic.snapshots());
-
-		const backupEvents: BackupEvent[] = [];
-
-		ipcMain.handle("backup", async (event, { directories }) => {
-			console.log({ directories });
-
-			for await (const event of restic.backup(directories[0])) {
-				backupEvents.push(event);
-			}
-		});
-
-		ipcMain.handle("get-backup-events", () => backupEvents.splice(0));
-
-		ipcMain.handle("restore", async (event, { snapshot, target }) => {
-			const output = await restic.restore(snapshot.id, target);
-			console.log({ output });
-
-			return output;
-		});
-	};
-
-	ipcMain.handle("openSignup", async () => {
-		shell.openExternal("https://storj.io");
-	});
-
-	ipcMain.handle("openUpgradePlan", async () => {
-		shell.openExternal("https://storj.io/pricing");
-	});
-
-	ipcMain.handle("openGetStarted", async () => {
-		shell.openExternal("https://universe.storj.io/#/start");
-	});
-
-	const { credentials } = await config.get();
-
-	console.log({ credentials });
-
-	let loginStatus = false;
-	ipcMain.handle("loginStatus", () => loginStatus);
-
-	ipcMain.handle("getEndpoint", async () => {
-		const { credentials } = await config.get();
-
-		if (typeof credentials !== "object") {
-			return null;
-		}
-
-		return credentials.endpoint;
-	});
-
-	ipcMain.handle("getBucketName", async () => {
-		const { credentials } = await config.get();
-
-		if (typeof credentials !== "object") {
-			return null;
-		}
-
-		return credentials.bucket;
-	});
-
-	const handleSetup = () =>
-		ipcMain.handle(
-			"setup",
-			async function (
-				event,
-				{ endpoint, bucket, accessKey, secretKey, resticPassword }
-			) {
-				console.log("setup()", ...arguments);
-
-				const credentials = {
-					endpoint,
-					bucket,
-					accessKey,
-					secretKey,
-					resticPassword
-				};
-
-				if (resticPassword.length < 3) {
-					throw new Error(
-						"Password needs to be longer than three characters."
-					);
-				}
-
-				const restic = createRestic({
-					...credentials,
-					password: resticPassword
-				});
-
-				config.set({
-					credentials,
-					resticPassphrase: resticPassword
-				});
-
-				await handleRestic(restic);
-				loginStatus = true;
-			}
-		);
-
-	// auto login
-	if (typeof credentials === "object") {
-		const resticPassphrase = "a";
-
-		const restic = createRestic({
-			...credentials,
-			password: resticPassphrase
-		});
-
-		await handleRestic(restic);
-		loginStatus = true;
-	} else {
-		handleSetup();
-	}
-
-	ipcMain.handle("logout", async () => {
-		ipcMain.removeHandler("snapshots");
-		ipcMain.removeHandler("backup");
-		ipcMain.removeHandler("get-backup-events");
-		ipcMain.removeHandler("restore");
-
-		await config.set({
-			credentials: undefined,
-			resticPassphrase: undefined
-		});
-
-		handleSetup();
-	});
-
-	await app.whenReady();
-
-	app.setLoginItemSettings({
-		openAtLogin: true
-	});
-
 	const mainWindow = new BrowserWindow({
 		width: 700,
 		height: 500,
@@ -165,10 +31,27 @@ const loadURL = serve({ directory: `${__dirname}/dist` });
 		}
 	});
 
-	ipcMain.handle("get-directory", async () => {
-		return dialog.showOpenDialog(mainWindow, {
-			properties: ["openDirectory"]
+	const api = createApi({
+		mainWindow
+	});
+
+	const { credentials } = await config.get();
+
+	if (typeof credentials === "object") {
+		const resticPassphrase = "a";
+
+		api.setup({
+			...credentials,
+			resticPassword: resticPassphrase
 		});
+	}
+
+	addApiHandlers(api);
+
+	await app.whenReady();
+
+	app.setLoginItemSettings({
+		openAtLogin: true
 	});
 
 	if (process.env.STORJ_BACKUP_DEV !== "true") {
