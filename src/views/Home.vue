@@ -473,7 +473,7 @@ const setupLogin = () => {
 			secretKey: secretKey.value,
 			endpoint: endpoint.value,
 			bucket: bucket.value,
-			resticPassword: resticPassword.value
+			resticPassphrase: resticPassword.value
 		});
 
 		isLoading.value = false;

@@ -185,7 +185,7 @@ type Actions = {
 			secretKey: string;
 			endpoint: string;
 			bucket: string;
-			resticPassword: string;
+			resticPassphrase: string;
 		}
 	) => Promise<LoginResponse>;
 	logout: (arg0: ActionContext) => void;
@@ -220,14 +220,14 @@ const actions: Actions = {
 
 	async login(
 		{ commit, dispatch }: ActionContext,
-		{ accessKey, secretKey, endpoint, bucket, resticPassword }
+		{ accessKey, secretKey, endpoint, bucket, resticPassphrase }
 	) {
 		console.log({
 			endpoint,
 			bucket,
 			accessKey,
 			secretKey,
-			resticPassword
+			resticPassphrase
 		});
 
 		const response = await backend.invoke("setup", {
@@ -235,7 +235,7 @@ const actions: Actions = {
 			bucket,
 			accessKey,
 			secretKey,
-			resticPassword
+			resticPassphrase
 		});
 
 		if (response.success === true) {
