@@ -361,6 +361,7 @@
 					</button>
 					<button
 						v-on:click="login"
+						v-bind:disabled="isLoading"
 						type="button"
 						class="
 							flex-1 flex
@@ -405,7 +406,6 @@
 <script lang="ts">
 import { defineComponent, ref, computed, watch } from "vue";
 import { useStore } from "@/store";
-import { useRouter } from "vue-router";
 
 const setupViews = () => {
 	const store = useStore();
@@ -462,6 +462,10 @@ const setupLogin = () => {
 	const isLoading = ref<boolean>(false);
 
 	const login = async () => {
+		if (isLoading.value === true) {
+			return;
+		}
+
 		isLoading.value = true;
 
 		const response = await store.dispatch("login", {
