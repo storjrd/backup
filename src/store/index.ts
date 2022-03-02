@@ -7,7 +7,7 @@ import {
 	CreateActionContext,
 	CreateDispatch
 } from "@/lib/typed-store";
-import backend from "@/lib/backend.ts";
+import backend from "@/lib/backend";
 
 import type {
 	AccountTypes,
@@ -17,6 +17,8 @@ import type {
 	BackupStatusEvent,
 	BackupSummaryEvent
 } from "@/types";
+
+import type { LoginResponse } from "@/api";
 
 export interface State {
 	snapshots: Snapshot[] | null;
@@ -185,7 +187,7 @@ type Actions = {
 			bucket: string;
 			resticPassword: string;
 		}
-	) => void;
+	) => Promise<LoginResponse>;
 	logout: (arg0: ActionContext) => void;
 	backup: (arg0: ActionContext, arg1: { directories: string[] }) => void;
 	restore: (
@@ -228,13 +230,7 @@ const actions: Actions = {
 			resticPassword
 		});
 
-		if (resticPassword.length < 3) {
-			throw new Error(
-				"Password needs to be longer than three characters."
-			);
-		}
-
-		await backend.invoke("setup", {
+		const response = await backend.invoke("setup", {
 			endpoint,
 			bucket,
 			accessKey,
@@ -242,8 +238,12 @@ const actions: Actions = {
 			resticPassword
 		});
 
-		commit("login");
-		dispatch("getBucketName");
+		if (response.success === true) {
+			commit("login");
+			dispatch("getBucketName");
+		}
+
+		return response;
 	},
 
 	async logout({ commit }) {

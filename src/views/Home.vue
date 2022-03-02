@@ -361,6 +361,7 @@
 					</button>
 					<button
 						v-on:click="login"
+						v-bind:disabled="isLoading"
 						type="button"
 						class="
 							flex-1 flex
@@ -405,7 +406,6 @@
 <script lang="ts">
 import { defineComponent, ref, computed, watch } from "vue";
 import { useStore } from "@/store";
-import { useRouter } from "vue-router";
 
 const setupViews = () => {
 	const store = useStore();
@@ -452,7 +452,6 @@ const setupViews = () => {
 
 const setupLogin = () => {
 	const store = useStore();
-	const router = useRouter();
 
 	const accessKey = ref<string>("");
 	const secretKey = ref<string>("");
@@ -463,9 +462,13 @@ const setupLogin = () => {
 	const isLoading = ref<boolean>(false);
 
 	const login = async () => {
+		if (isLoading.value === true) {
+			return;
+		}
+
 		isLoading.value = true;
 
-		await store.dispatch("login", {
+		const response = await store.dispatch("login", {
 			accessKey: accessKey.value,
 			secretKey: secretKey.value,
 			endpoint: endpoint.value,
@@ -474,6 +477,10 @@ const setupLogin = () => {
 		});
 
 		isLoading.value = false;
+
+		if (response.success === false) {
+			window.alert(response.error);
+		}
 	};
 
 	return {

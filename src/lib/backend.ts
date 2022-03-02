@@ -1,76 +1,31 @@
-import type { Snapshot, BackupEvent } from "@/types";
+import type { Api } from "../api";
 
-type Setup = (
-	arg0: "setup",
-	arg1: {
-		endpoint: string;
-		bucket: string;
-		accessKey: string;
-		secretKey: string;
-		resticPassword: string;
-	}
-) => Promise<void>;
+type ApiFn = (...params: any[]) => any;
+type ApiT = { [key: string]: ApiFn };
 
-type SetSnapshots = (arg0: "setSnapshots", arg1: any[]) => Promise<void>;
+type TransformFunction<Key, Fn extends ApiFn> = (
+	arg0: Key,
+	...args: Parameters<Fn>
+) => ReturnType<Fn>;
 
-type Snapshots = (arg0: "snapshots") => Promise<Snapshot[]>;
+type TransformProperties<T extends ApiT> = {
+	[K in keyof T]: TransformFunction<K, T[K]>;
+};
 
-type Logout = (arg0: "logout") => Promise<void>;
+type UnionOfProperties<T> = T[keyof T];
 
-type Backup = (
-	arg0: "backup",
-	arg1: {
-		directories: string[];
-	}
-) => Promise<void>;
+type UnionToIntersection<U> = (U extends any ? (k: U) => void : never) extends (
+	k: infer I
+) => void
+	? I
+	: never;
 
-type GetBackupEvents = (arg0: "get-backup-events") => Promise<BackupEvent[]>;
-
-type Restore = (
-	arg0: "restore",
-	arg1: {
-		snapshot: Snapshot;
-		target: string;
-	}
-) => Promise<void>;
-
-type GetDirectory = (
-	arg0: "get-directory"
-) => Promise<{ canceled: boolean; filePaths: string[] } | undefined>;
-
-type OpenSignup = (arg0: "openSignup") => Promise<void>;
-
-type OpenUpgradePlan = (arg0: "openUpgradePlan") => Promise<void>;
-
-type OpenGetStarted = (arg0: "openGetStarted") => Promise<void>;
-
-type GetEndpoint = (arg0: "getEndpoint") => Promise<string>;
-
-type GetBucketName = (arg0: "getBucketName") => Promise<string>;
-
-type GetTotalUsage = (arg0: "getTotalUsage") => Promise<void>;
-
-type SetBucketName = (arg0: "setBucketName", arg1: string) => Promise<void>;
-
-type LoginStatus = (arg0: "loginStatus") => Promise<boolean>;
+type CreateInvoke<T extends ApiT> = UnionToIntersection<
+	UnionOfProperties<TransformProperties<T>>
+>;
 
 interface Backend {
-	invoke: Setup &
-		SetSnapshots &
-		Snapshots &
-		Logout &
-		Backup &
-		GetBackupEvents &
-		Restore &
-		GetDirectory &
-		OpenSignup &
-		OpenUpgradePlan &
-		OpenGetStarted &
-		GetEndpoint &
-		GetBucketName &
-		GetTotalUsage &
-		SetBucketName &
-		LoginStatus;
+	invoke: CreateInvoke<Api>;
 }
 
 const { backend } = window as unknown as { backend: Backend };
