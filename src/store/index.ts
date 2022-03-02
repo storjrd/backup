@@ -7,7 +7,7 @@ import {
 	CreateActionContext,
 	CreateDispatch
 } from "@/lib/typed-store";
-import backend from "@/lib/backend.ts";
+import backend from "@/lib/backend";
 
 import type {
 	AccountTypes,
