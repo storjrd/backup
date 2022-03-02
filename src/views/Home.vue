@@ -479,7 +479,7 @@ const setupLogin = () => {
 		isLoading.value = false;
 
 		if (response.success === false) {
-			alert(response.error);
+			window.alert(response.error);
 		}
 	};
 
