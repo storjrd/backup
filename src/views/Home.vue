@@ -452,7 +452,6 @@ const setupViews = () => {
 
 const setupLogin = () => {
 	const store = useStore();
-	const router = useRouter();
 
 	const accessKey = ref<string>("");
 	const secretKey = ref<string>("");
@@ -465,7 +464,7 @@ const setupLogin = () => {
 	const login = async () => {
 		isLoading.value = true;
 
-		await store.dispatch("login", {
+		const response = await store.dispatch("login", {
 			accessKey: accessKey.value,
 			secretKey: secretKey.value,
 			endpoint: endpoint.value,
@@ -474,6 +473,10 @@ const setupLogin = () => {
 		});
 
 		isLoading.value = false;
+
+		if (response.success === false) {
+			alert(response.error);
+		}
 	};
 
 	return {

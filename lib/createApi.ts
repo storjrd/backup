@@ -38,10 +38,14 @@ const createApi: CreateApi = ({ mainWindow }) => {
 				resticPassword
 			};
 
-			if (resticPassword.length < 3) {
-				throw new Error(
-					"Password needs to be longer than three characters."
-				);
+			if (
+				typeof resticPassword !== "string" ||
+				resticPassword.length <= 3
+			) {
+				return {
+					success: false,
+					error: "Password needs to be longer than three characters."
+				};
 			}
 
 			restic = createRestic({
@@ -49,10 +53,32 @@ const createApi: CreateApi = ({ mainWindow }) => {
 				password: resticPassword
 			});
 
-			await config.set({
-				credentials,
-				resticPassphrase: resticPassword
-			});
+			try {
+				await restic.init();
+			} catch (err) {
+				restic = undefined;
+
+				return {
+					success: false,
+					error: "Failed to initialized Restic. Likely bad credentials."
+				};
+			}
+
+			try {
+				await config.set({
+					credentials,
+					resticPassphrase: resticPassword
+				});
+			} catch (err) {
+				return {
+					success: false,
+					error: "Failed to set credentials"
+				};
+			}
+
+			return {
+				success: true
+			};
 		},
 
 		snapshots: async () => {

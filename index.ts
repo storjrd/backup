@@ -9,14 +9,17 @@ import * as config from "./lib/config";
 
 const addApiHandlers = (api: Api) => {
 	for (const key in api) {
+		// get params, excluding first event variable
 		// @ts-ignore
-		ipcMain.handle(key, api[key]);
+		ipcMain.handle(key, (...params: any[]) => api[key](...params.slice(1)));
 	}
 };
 
 const loadURL = serve({ directory: `${__dirname}/dist` });
 
 (async () => {
+	await app.whenReady();
+
 	const mainWindow = new BrowserWindow({
 		width: 700,
 		height: 500,
@@ -40,15 +43,13 @@ const loadURL = serve({ directory: `${__dirname}/dist` });
 	if (typeof credentials === "object") {
 		const resticPassphrase = "a";
 
-		api.setup({
+		await api.setup({
 			...credentials,
 			resticPassword: resticPassphrase
 		});
 	}
 
 	addApiHandlers(api);
-
-	await app.whenReady();
 
 	app.setLoginItemSettings({
 		openAtLogin: true

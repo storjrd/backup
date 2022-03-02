@@ -3,6 +3,15 @@ import type { Snapshot, BackupEvent } from "./types";
 
 type Promisable<T> = T | PromiseLike<T>;
 
+export type LoginResponse =
+	| {
+			success: true;
+	  }
+	| {
+			success: false;
+			error: string;
+	  };
+
 // This type is transformed into backend.invoke() form in src/lib/backend
 export type Api = {
 	setup: (arg0: {
@@ -11,7 +20,7 @@ export type Api = {
 		accessKey: string;
 		secretKey: string;
 		resticPassword: string;
-	}) => Promisable<void>;
+	}) => Promisable<LoginResponse>;
 	// setSnapshots: (arg0: any[]) => Promisable<void>;
 	snapshots: () => Promisable<Snapshot[]>;
 	logout: () => Promisable<void>;
