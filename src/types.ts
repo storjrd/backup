@@ -53,3 +53,7 @@ export interface ModalConfig {
 	backupId: string;
 	view: string;
 }
+
+export type AccountTypes = {
+	freeAccount: string;
+};

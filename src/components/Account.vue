@@ -141,7 +141,7 @@ const setupAccount = (): Properties => {
 	const charges = computed(() => 0);
 
 	const chargesDisplay = computed((): string => {
-		if (accountType.value === store.getters["accountTypes"].freeAccount) {
+		if (accountType.value === store.getters.accountTypes.freeAccount) {
 			return `${accountType.value} Account - no charges.`;
 		} else {
 			return `${accountType.value} - ${charges.value}`;

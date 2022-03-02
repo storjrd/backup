@@ -301,6 +301,10 @@ export default defineComponent({
 			completed.value = false;
 			loading.value = true;
 
+			if (backupToRestore.value === undefined) {
+				throw new Error("`backupToRestore` undefined");
+			}
+
 			await store.dispatch("restore", {
 				snapshotId: backupToRestore.value,
 				target: location.value

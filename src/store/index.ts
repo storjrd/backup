@@ -10,6 +10,7 @@ import {
 import backend from "@/lib/backend.ts";
 
 import type {
+	AccountTypes,
 	Snapshot,
 	Backup,
 	BackupEvent,
@@ -27,7 +28,7 @@ export interface State {
 	plan: number;
 	bucket: string;
 	accountType: string;
-	accountTypes: object;
+	accountTypes: AccountTypes;
 	videosUsage: number;
 	picturesUsage: number;
 	documentsUsage: number;
@@ -78,7 +79,7 @@ const mutations = {
 };
 
 type Getters = {
-	accountTypes: (state: State) => object;
+	accountTypes: (state: State) => AccountTypes;
 	lastStatusEvent: (state: State) => BackupStatusEvent | undefined;
 	lastSummaryEvent: (state: State) => BackupSummaryEvent | undefined;
 	backupStarted: (state: State, getters: GetterContext) => boolean;
@@ -380,4 +381,4 @@ export const store = createStore<State>({
 	}
 })();
 
-export const useStore = () => baseUseStore(key);
+export const useStore = () => baseUseStore(key) as ActionContext;
