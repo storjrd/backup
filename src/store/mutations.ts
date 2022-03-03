@@ -1,4 +1,5 @@
-import { Snapshot, BackupEvent } from "@/types";
+import { Snapshot, BackupSummaryEvent, BackupEvent } from "@/types";
+import { identical } from "ramda";
 import { State } from "./state";
 
 export type Mutations = typeof mutations;
@@ -18,6 +19,25 @@ export const mutations = {
 
 	setSnapshots(state: State, snapshots: Snapshot[]) {
 		state.snapshots = snapshots;
+
+		const isSummaryEvent = (
+			event: BackupEvent
+		): event is BackupSummaryEvent => event.message_type === "summary";
+
+		const summaryEvents = state.backupEvents.filter(isSummaryEvent);
+
+		// clear in-progress backup events if finished snapshot shows in list
+		for (const event of summaryEvents) {
+			const matchingSnapshot = snapshots.find(
+				(snapshot) => snapshot.short_id === event.snapshot_id
+			);
+
+			if (matchingSnapshot !== undefined) {
+				state.backupEvents = [];
+
+				return;
+			}
+		}
 	},
 
 	setEndpoint(state: State, endpoint: string) {

@@ -11,17 +11,26 @@ export interface Snapshot {
 	short_id: string;
 }
 
-export interface Backup {
+type HistoricBackup = {
+	id: string;
+	time: string;
 	name: string;
-	historic: {
-		id: string;
-		time: string;
-		name: string;
-		progress: number;
-		hostname: string;
-		fileCount?: number;
-	}[];
-}
+	progress: number;
+	hostname: string;
+	fileCount?: number;
+};
+
+export type SingleBackup = {
+	name: string;
+	// only has single backup
+	historic: [HistoricBackup];
+};
+
+export type Backup = {
+	name: string;
+	// must have at least one historic backup
+	historic: [first: HistoricBackup, ...rest: HistoricBackup[]];
+};
 
 export type BackupStatusEvent = {
 	message_type: "status";
