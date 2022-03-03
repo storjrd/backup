@@ -292,10 +292,8 @@ interface IMediaTypes {
 }
 
 interface IFolder {
-	mediaTypes: IMediaTypes;
-	displaySize: number;
-	filesAlreadyAdded: { [key: string]: boolean };
 	absolutePath: string;
+	fileCount: number;
 }
 
 interface Properties {
@@ -468,27 +466,21 @@ export default defineComponent({
 			const path = response.filePaths[0];
 
 			if (typeof path === "string") {
+				const { count } = await store.dispatch("getFileCount", {
+					path
+				});
+
 				folders[path] = {
-					mediaTypes: {
-						photosOrVideos: 0,
-						otherFiles: 0
-					},
-					displaySize: 0,
-					filesAlreadyAdded: {},
-					absolutePath: path
+					absolutePath: path,
+					fileCount: count
 				};
 			}
 		};
 
 		const folderUploadMetaData = (folderName: string) => {
 			const folder = folders[folderName] as unknown as IFolder;
-
-			const photosOrVideos = folder.mediaTypes.photosOrVideos;
-			const otherFiles = folder.mediaTypes.otherFiles;
-
-			return `${prettyBytes(folder.displaySize)} - ${photosOrVideos} ${
-				photosOrVideos > 1 ? "photos or videos" : "photo or video"
-			}, ${otherFiles} ${otherFiles > 1 ? "other files" : "other file"}`;
+			const fileCount = folder.fileCount;
+			return `${fileCount} ${fileCount > 1 ? "files" : "file"}`;
 		};
 
 		const deleteFolder = (folderName: string) => {

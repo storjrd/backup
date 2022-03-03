@@ -11,10 +11,6 @@ export interface State {
 	bucket: string;
 	accountType: string;
 	accountTypes: AccountTypes;
-	videosUsage: number;
-	picturesUsage: number;
-	documentsUsage: number;
-	othersUsage: number;
 	totalUsage: number;
 	preferences: boolean;
 }
@@ -31,10 +27,6 @@ export const state: State = {
 	accountTypes: {
 		freeAccount: "Free"
 	},
-	videosUsage: 0,
-	picturesUsage: 0,
-	documentsUsage: 0,
-	othersUsage: 0,
 	totalUsage: 0.8e11,
 	preferences: true
 };

@@ -165,10 +165,19 @@
 							>
 								Total files backed up.
 							</div>
-							<img src="@/assets/syncIcon.png" class="w-8 h-8" />
+							<img
+								v-if="syncingFilesDisplay"
+								src="@/assets/up-arrow-cloud.svg"
+								class="w-4 h-4"
+							/>
+							<img
+								v-else
+								src="@/assets/check-green-circle.svg"
+								class="w-4 h-4"
+							/>
 						</span>
 						<p class="text-sm text-gray-800 font-inter-bold">
-							{{ syncingFilesDisplay }}
+							{{ syncingFilesDisplayText }}
 						</p>
 					</span>
 					<button
@@ -177,8 +186,8 @@
 						class="
 							inline-flex
 							items-center
-							h-9
-							px-4
+							h-7
+							px-2
 							py-2
 							border border-transparent
 							text-sm
@@ -244,7 +253,8 @@ interface Properties {
 	modalConfig: Ref<ModalConfig>;
 	displayWelcomeScreen: Ref<boolean>;
 	areFilesSyncing: Ref<boolean>;
-	syncingFilesDisplay: Ref<string>;
+	syncingFilesDisplay: Ref<boolean>;
+	syncingFilesDisplayText: Ref<string>;
 
 	openModal: () => void;
 	closeModal: () => void;
@@ -287,18 +297,13 @@ const setupBackups = (): Properties => {
 		() => !isLoading.value && !displayBackups.value && !modalOpen.value
 	);
 
-	const syncingFilesDisplay = computed(() => {
-		const event: BackupStatusEvent | undefined =
-			store.getters.lastStatusEvent;
+	const syncingFilesDisplay = computed(
+		() => syncingFilesDisplayText.value === "Syncing"
+	);
 
-		if (event === undefined) {
-			return "Synced";
-		}
-
-		console.log("syncingfilesdisplay", event);
-
-		return `${event.files_done} / ${event.total_files}`;
-	});
+	const syncingFilesDisplayText = computed(() =>
+		store.getters.lastSummaryEvent !== undefined ? "All synced" : "Syncing"
+	);
 
 	const openModal = () => {
 		modalOpen.value = true;
@@ -343,6 +348,7 @@ const setupBackups = (): Properties => {
 		displayWelcomeScreen,
 		areFilesSyncing,
 		syncingFilesDisplay,
+		syncingFilesDisplayText,
 
 		openModal,
 		closeModal,

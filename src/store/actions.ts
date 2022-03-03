@@ -42,6 +42,12 @@ export type Actions = {
 	getEndpoint: (arg0: ActionContext) => void;
 	getBucketName: (arg0: ActionContext) => void;
 	getTotalUsage: (arg0: ActionContext) => void;
+	getFileCount: (
+		arg0: ActionContext,
+		arg1: { path: string }
+	) => Promise<{
+		count: number;
+	}>;
 };
 
 export const actions: Actions = {
@@ -175,5 +181,11 @@ export const actions: Actions = {
 		//...
 		// set total usage
 		// commit("setTotalUsage")
+	},
+
+	async getFileCount(context, { path }) {
+		const count = await backend.invoke("get-file-count", { path });
+
+		return { count };
 	}
 };

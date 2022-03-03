@@ -1,5 +1,5 @@
-import { BrowserWindow, shell } from "electron";
-import { dialog } from "electron";
+import fs from "fs";
+import { BrowserWindow, shell, dialog } from "electron";
 
 import { createRestic, Restic, BackupEvent } from "../lib/createRestic";
 // import customRestore from "../lib/customRestore";
@@ -165,7 +165,41 @@ const createApi: CreateApi = ({ mainWindow }) => {
 			});
 		},
 
-		getTotalUsage: () => {}
+		getTotalUsage: () => {},
+
+		"get-file-count": async ({
+			path
+		}: {
+			path: string;
+		}): Promise<number> => {
+			const getAllDirFilesCount = function (
+				dirPath: string,
+				count: number
+			) {
+				const files = fs.readdirSync(dirPath);
+
+				count = count || 0;
+
+				files.forEach(function (file) {
+					if (fs.statSync(dirPath + "/" + file).isDirectory()) {
+						count = getAllDirFilesCount(
+							dirPath + "/" + file,
+							count
+						);
+					} else {
+						count += 1;
+					}
+				});
+
+				return count;
+			};
+
+			try {
+				return getAllDirFilesCount(path, 0);
+			} catch {
+				return 0;
+			}
+		}
 	};
 };
 

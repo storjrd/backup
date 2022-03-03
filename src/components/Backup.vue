@@ -29,7 +29,17 @@
 					class="w-5 h-5 fill-current text-black mr-2"
 					src="@/assets/folderIcon.svg"
 				/>
-				<p class="text-lg">{{ backup.name }}</p>
+				<img
+					v-if="backupInProgress"
+					class="w-3 h-3 fill-current text-black -mb-3 -ml-4"
+					src="@/assets/arrow-up-pink-circle.svg"
+				/>
+				<img
+					v-else
+					class="w-3 h-3 fill-current text-black -mb-3 -ml-4"
+					src="@/assets/check-green-circle.svg"
+				/>
+				<p class="text-lg ml-2">{{ folderName }}</p>
 			</div>
 			<div class="self-center">
 				<div class="flex space-x-1">
@@ -105,11 +115,11 @@
 		</div>
 		<div class="flex justify-between">
 			<p class="text-left">
-				{{ backupMetadata }}
+				<!-- {{ backupMetadata }}
 
-				<br />
+				<br /> -->
 
-				<i>{{ backup.historic[0].hostname }}</i>
+				<span class="">{{ backupMetadata }}</span>
 			</p>
 			<!-- <p
 				class="text-storjBlue cursor-pointer hover:underline text-sm"
@@ -118,7 +128,7 @@
 				See details
 			</p> -->
 		</div>
-		<div class="relative pt-1">
+		<div v-if="backupInProgress" class="relative pt-1">
 			<div
 				class="
 					overflow-hidden
@@ -171,6 +181,8 @@ import { useStore } from "@/store";
 interface Properties {
 	backup: Backup;
 	backupMetadata: Ref<string>;
+	backupInProgress: Ref<boolean>;
+	folderName: Ref<string>;
 	backupTooltip: Ref<boolean>;
 	restoreTooltip: Ref<boolean>;
 	restore: () => void;
@@ -205,9 +217,54 @@ export default defineComponent({
 
 		const restoreTooltip = ref(false);
 
-		const backupMetadata = computed<string>(() =>
-			backup.historic[0]?.progress === 100 ? "Synced" : "Syncing"
+		const backupMetadata = computed<string>(() => {
+			const currentBackup = backup.historic[0];
+			const hostname = currentBackup?.hostname;
+			const fileCount = currentBackup?.fileCount;
+			const word =
+				typeof fileCount !== "undefined" && fileCount > 1
+					? "files"
+					: "file";
+
+			if (hostname) {
+				return hostname;
+			} else {
+				return `${fileCount ? fileCount : ""} ${
+					fileCount ? word : ""
+				} uploading`;
+			}
+		});
+
+		const backupInProgress = computed(
+			() => (backup?.historic[0]?.progress || 100) < 100
 		);
+
+		const folderName = computed(() => {
+			const folder = backup.historic[0]?.name;
+
+			if (!folder) {
+				return "";
+			}
+
+			if (folder.length <= 55) {
+				return folder;
+			}
+
+			const folders = folder.split("/");
+			const lastFolder = folders.slice(-1)[0];
+
+			if (typeof lastFolder === "undefined") {
+				throw new Error("Unable to truncate folder name.");
+			}
+
+			if (lastFolder.length >= 51) {
+				return `.../${lastFolder.substring(0, 50)}`;
+			}
+
+			const beginning = folder.substring(0, 50 - lastFolder.length);
+
+			return `${beginning}.../${lastFolder}`;
+		});
 
 		const restore = () => {
 			const regex = /\//g;
@@ -244,6 +301,8 @@ export default defineComponent({
 			backupTooltip,
 			restoreTooltip,
 			backupMetadata,
+			backupInProgress,
+			folderName,
 			restore,
 			updateBackup,
 			createBackup,
