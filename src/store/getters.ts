@@ -4,12 +4,14 @@ import { State } from "./state";
 
 import type {
 	AccountTypes,
+	SingleBackup,
 	Snapshot,
 	Backup,
 	BackupEvent,
 	BackupStatusEvent,
 	BackupSummaryEvent
 } from "@/types";
+import { mapGetters } from "vuex";
 
 export type Getters = {
 	accountTypes: (state: State) => AccountTypes;
@@ -21,6 +23,80 @@ export type Getters = {
 };
 
 export type GetterContext = CreateGetterContext<Getters>;
+
+const snapshotToSingleBackup = (snapshot: Snapshot): SingleBackup => ({
+	name: snapshot.paths.join(", "),
+	historic: [
+		{
+			id: snapshot.id,
+			time: snapshot.time,
+			name: snapshot.paths.join(", "),
+			progress: 100,
+			hostname: snapshot.hostname
+		}
+	]
+});
+
+const statusEventToBackup = (event: BackupStatusEvent): SingleBackup => ({
+	name: "",
+	historic: [
+		{
+			id: "",
+			time: Date.now().toString(),
+			name: "",
+			progress: event.percent_done * 100,
+			hostname: ""
+		}
+	]
+});
+
+const groupBackups = (ungrouped: SingleBackup[]): Backup[] => {
+	const grouped: Backup[] = [];
+
+	for (const backup of ungrouped) {
+		const backupFound = grouped.find((item) => item.name === backup.name);
+
+		if (backupFound !== undefined) {
+			backupFound.historic.push(backup.historic[0]);
+		} else {
+			// deep clone
+			grouped.push({
+				name: backup.name,
+				historic: [
+					{
+						...backup.historic[0]
+					}
+				]
+			});
+		}
+	}
+
+	return grouped;
+};
+
+const sortBackups = (backups: Backup[]): Backup[] => {
+	const mostRecentHistoric = (backup: Backup) =>
+		Math.max(
+			...backup.historic.map((historic) => Date.parse(historic.time))
+		);
+
+	return [
+		...backups.sort((a, b) => {
+			const aTime = mostRecentHistoric(a);
+			const bTime = mostRecentHistoric(b);
+
+			if (aTime > bTime) {
+				return -1;
+			}
+
+			if (aTime === bTime) {
+				return 0;
+			}
+
+			return 1;
+		})
+	];
+};
 
 export const getters: Getters = {
 	accountTypes: (state) => state.accountTypes,
@@ -48,61 +124,22 @@ export const getters: Getters = {
 	backupFinished: (state, getters) => getters.lastSummaryEvent !== undefined,
 
 	backups: (state, getters) => {
-		const arr: Backup[] = [];
+		const backups: Backup[] = [];
 
-		if (
-			getters.backupStarted &&
-			!getters.backupFinished &&
-			getters.lastStatusEvent !== undefined
-		) {
-			arr.push({
-				name: "",
-				historic: [
-					{
-						id: "",
-						time: Date.now().toString(),
-						name: "",
-						progress: getters.lastStatusEvent.percent_done * 100,
-						hostname: ""
-					}
-				]
-			});
+		// create Backup[] for in-progress snapshot
+		if (getters.lastStatusEvent !== undefined) {
+			backups.push(statusEventToBackup(getters.lastStatusEvent));
 		}
 
+		// transform raw restic snapshots into grouped backups
 		if (state.snapshots !== null) {
-			const backupsArr = state.snapshots
-				.map(
-					(snapshot: Snapshot): Backup => ({
-						name: snapshot.paths.join(", "),
-						historic: [
-							{
-								id: snapshot.id,
-								time: snapshot.time,
-								name: snapshot.paths.join(", "),
-								progress: 100,
-								hostname: snapshot.hostname
-							}
-						]
-					})
-				)
-				.reverse();
+			console.log(state.snapshots[0]);
 
-			backupsArr.forEach((backup) => {
-				const backupFound = arr.find(
-					(item) => item.name === backup.name
-				);
-
-				if (backupFound && backup.historic[0]) {
-					backupFound.historic.push(backup.historic[0]);
-				} else if (backup.historic[0]) {
-					arr.push({
-						name: backup.name,
-						historic: [backup.historic[0]]
-					});
-				}
-			});
+			backups.push(
+				...groupBackups(state.snapshots.map(snapshotToSingleBackup))
+			);
 		}
 
-		return arr;
+		return sortBackups(backups);
 	}
 };
